@@ -4,8 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
-
-// 프로필사진, 닉네임 변경.
+// login_~, users_~ 컨트롤러에서 호출하는 model임.
 
 class UsersModel {
   final _store = FirebaseFirestore.instance;
@@ -31,6 +30,8 @@ class UsersModel {
           'user_img': img,
           'user_name': name,
           'user_img_source': imgSource,
+          'review_create_truckid': [], // 푸드트럭의 리뷰를 작성하면, 해당 푸드트럭의 문서ID 저장.
+          'favorite_truckid': [],
         });
       }
 
@@ -52,28 +53,28 @@ class UsersModel {
         );
   }
 
-  // 사용자 회원 타입(구매자, 판매자) 체크
-  Future<bool> checkUserType() async {
-    User user = _auth.currentUser!;
-    uid = user.uid;
+  // 사용자 회원 타입 존재 체크
+  Future<int> checkUserType(String uid) async {
+    try {
+      final DocumentSnapshot documentSnapshot =
+          await _store.collection('Users').doc(uid).get();
 
-    final DocumentSnapshot documentSnapshot =
-        await _store.collection('Users').doc(uid).get();
+      Map<String, dynamic>? data =
+          documentSnapshot.data() as Map<String, dynamic>?;
 
-    Map<String, dynamic>? data =
-        documentSnapshot.data() as Map<String, dynamic>?;
-
-    if (data != null && data.containsKey('user_type')) {
-      return false;
-    } else {
-      return true;
+      if (data != null && data.containsKey('user_type')) {
+        return 0;
+      } else {
+        return 1;
+      }
+    } catch (e) {
+      print('유저 타입 존재 체크 오류 : $e');
+      return -1;
     }
   }
 
-  // 사용자 회원 타입(구매자, 판매자) 저장
-  Future<void> saveUserType(String type) async {
-    User user = _auth.currentUser!;
-    uid = user.uid;
+  // 사용자 회원 타입 저장
+  Future<void> saveUserType(String type, String uid) async {
     try {
       _store.collection("Users").doc(uid).update({'user_type': type});
     } catch (e) {
@@ -81,11 +82,10 @@ class UsersModel {
     }
   }
 
-  // 사용자 닉네임 변경 코드
-  Future<void> updateUserName(String name) async {
-    User user = _auth.currentUser!;
-    uid = user.uid;
+  //=================여기부터 users_controller.dart에서 호출==============
 
+  // 사용자 닉네임 변경 코드
+  Future<void> updateUserName(String name, String uid) async {
     try {
       _store.collection('Users').doc(uid).update({'user_name': name});
     } catch (e) {
@@ -139,6 +139,37 @@ class UsersModel {
           .collection("Users")
           .doc(uid)
           .update({'user_img_source': "storage"});
+    }
+  }
+
+  Future<Map<String, dynamic>?> getUserData(String uid) async {
+    try {
+      DocumentSnapshot documentSnapshot =
+          await _store.collection('Users').doc(uid).get();
+      return documentSnapshot.data() as Map<String, dynamic>?;
+    } catch (e) {
+      print('사용자 정보 가져오기 오류 : $e ');
+      return null;
+    }
+  }
+
+  Future<int> getUserType(String uid) async {
+    try {
+      DocumentSnapshot documentSnapshot =
+          await _store.collection('Users').doc(uid).get();
+      if (documentSnapshot.exists) {
+        Map<String, dynamic>? data =
+            documentSnapshot.data() as Map<String, dynamic>?;
+        if (data != null && data['user_img'] == '판매자') {
+          return 1; // 판매자
+        } else {
+          return 0; // 구매자
+        }
+      }
+      return -1;
+    } catch (e) {
+      print('타입 가져오기 오류 : $e');
+      return -1;
     }
   }
 }

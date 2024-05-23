@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_truck/controller/logincontroller.dart';
-import 'package:food_truck/model/usersmodel.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,7 +12,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final LoginController _authController = LoginController();
   late User curruntUser;
-  final UsersModel _userData = UsersModel(); // 사용자 타입 체크, 저장을 위한 선언.
+  final LoginController _loginController = LoginController();
   String? name = "";
   String? email = "";
   String? url = "";
@@ -45,13 +44,14 @@ class _LoginState extends State<Login> {
                       // 사용자 타입 받는 페이지로 이동하고, radiobutton 사용하는 코드 작성 후 아래의 .saveUserType(~) 코드를 작성해 타입 저장하게 후 지도(메인)페이지로.
                       // 만약 user_type이 정해져있다면(checktype이 false) 바로 지도(메인)페이지로 이동.
 
-                      bool checktype = await _userData.checkUserType();
+                      int checktype = await _loginController.checkUserType();
 
                       // 정해져있지 않으면(true)
-                      if (checktype) {
+                      if (checktype == 1) {
                         // radio button
-                        _userData.saveUserType("판매자");
+                        _loginController.saveUserType("판매자");
                       }
+                      // checktype == -1 <- 에러남.
                     }
                   },
                 )

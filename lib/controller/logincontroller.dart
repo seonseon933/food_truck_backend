@@ -37,6 +37,19 @@ class LoginController {
     return null;
   }
 
+  // 사용자 회원 타입(구매자, 판매자) 존재 체크-> 1이면 로그인 처음 했다는 거임.
+  Future<int> checkUserType() async {
+    User user = _auth.currentUser!;
+    return _usersModel.checkUserType(user.uid);
+  }
+
+  // 사용자 회원 타입(구매자, 판매자) 저장
+  Future<void> saveUserType(String type) async {
+    User user = _auth.currentUser!;
+    return _usersModel.saveUserType(type, user.uid);
+  }
+
+  // 로그아웃
   Future<void> signOutWithGoogle() async {
     try {
       await _auth.signOut();
@@ -46,6 +59,7 @@ class LoginController {
     }
   }
 
+  // 계정 삭제(탈퇴)
   Future<void> userDelete() async {
     User? user = _auth.currentUser;
 

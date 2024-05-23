@@ -30,6 +30,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  #네이버맵 api
+  flutter_naver_map: ^1.1.1
+  #Localization
+  http: ^1.2.1
+  flutter_localizations:  
+    sdk: flutter
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -42,7 +48,7 @@ dependencies:
   firebase_storage: ^11.7.5
   image_picker: ^1.1.1
   path: ^1.9.0
-  intl: ^0.19.0
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
