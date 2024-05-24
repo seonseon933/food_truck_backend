@@ -9,6 +9,11 @@ class FoodTruckController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
 
+  // 등록된 푸드트럭 데이터 가져오기
+  Future<List<Map<String, dynamic>>> getFoodTruckData() async {
+    return _foodTruckModel.getFoodTruckData();
+  }
+
   // 태그와 일치하는 푸드트럭 목록
   Future<List<Map<String, String>>> searchFoodTrucksByTag(String tag) async {
     return _foodTruckModel.searchFoodTrucksByTag(tag);

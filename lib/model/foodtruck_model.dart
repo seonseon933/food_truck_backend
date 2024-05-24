@@ -149,6 +149,18 @@ class FoodTruckModel {
     }
   }
 
+  // 등록된 푸드트럭 전체 데이터 불러오기
+  Future<List<Map<String, dynamic>>> getFoodTruckData() async {
+    QuerySnapshot querySnapshot = await _store.collection('FoodTruck').get();
+    List<Map<String, dynamic>> foodtrucks = [];
+    for (var doc in querySnapshot.docs) {
+      var data = doc.data() as Map<String, dynamic>;
+      data['foodtruck_id'] = doc.id;
+      foodtrucks.add(data);
+    }
+    return foodtrucks;
+  }
+
   // 찜한 푸드트럭 불러오기
   Future<List<String>> getFavoriteFoodTruck(String uid) async {
     DocumentSnapshot documentSnapshot =

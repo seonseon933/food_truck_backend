@@ -17,7 +17,7 @@ class ReviewModel {
       List<Map<String, dynamic>> review = [];
       for (var doc in querySnapshot.docs) {
         var data = doc.data() as Map<String, dynamic>;
-        data['id'] = doc.id; // 문서 ID를 포함
+        data['review_id'] = doc.id; // 문서 ID를 포함
         review.add(data);
       }
       return review;
@@ -172,6 +172,7 @@ class ReviewModel {
     }
   }
 
+  // 평균평점 계산
   Future<void> updateAvgRating(String foodtruckId) async {
     try {
       QuerySnapshot reviewSnapshot = await _store

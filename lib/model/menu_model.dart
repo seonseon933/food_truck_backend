@@ -26,7 +26,7 @@ class MenuModel {
     List<Map<String, dynamic>> menus = [];
     for (var doc in querySnapshot.docs) {
       var data = doc.data() as Map<String, dynamic>;
-      data['id'] = doc.id; // 문서 ID를 포함
+      data['menu_id'] = doc.id; // 문서 ID를 포함
       menus.add(data);
     }
     return menus;
