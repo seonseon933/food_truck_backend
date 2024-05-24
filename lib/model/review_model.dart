@@ -115,6 +115,9 @@ class ReviewModel {
       _store.collection('Users').doc(uid).update({
         'review_create_truckid': FieldValue.arrayUnion([foodtruckid]) // 중복X
       });
+
+      await updateAvgRating(foodtruckid);
+
       return foodtruckid;
     } catch (e) {
       print('리뷰 등록 에러 : $e');
@@ -137,6 +140,9 @@ class ReviewModel {
         'review_context': reviewContext,
         'update': 1,
       });
+
+      await updateAvgRating(foodtruckid);
+
       return foodtruckid;
     } catch (e) {
       print('리뷰 수정 에러 : $e');
@@ -156,10 +162,46 @@ class ReviewModel {
       await _store.collection('Users').doc(uid).update({
         'review_create_truckid': FieldValue.arrayRemove([foodtruckid])
       });
+
+      await updateAvgRating(foodtruckid);
+
       return foodtruckid;
     } catch (e) {
       print('리뷰 삭제 오류 : $e');
       return foodtruckid;
+    }
+  }
+
+  Future<void> updateAvgRating(String foodtruckId) async {
+    try {
+      QuerySnapshot reviewSnapshot = await _store
+          .collection('FoodTruck')
+          .doc(foodtruckId)
+          .collection('Review')
+          .get();
+      // 리뷰 존재
+      if (reviewSnapshot.docs.isNotEmpty) {
+        double totalRating = 0;
+        for (var doc in reviewSnapshot.docs) {
+          totalRating += doc['Rating'];
+        }
+        double averageRating = totalRating / reviewSnapshot.docs.length;
+
+        // 푸드트럭 문서에 평균 평점 업데이트
+        await _store
+            .collection('FoodTruck')
+            .doc(foodtruckId)
+            .update({'truck_avgrating': averageRating});
+      }
+      // 리뷰 없음
+      else {
+        await _store
+            .collection('FoodTruck')
+            .doc(foodtruckId)
+            .update({'truck_avgrating': 0});
+      }
+    } catch (e) {
+      print('푸드트럭 평균 평점 에러 : $e ');
     }
   }
 }

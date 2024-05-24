@@ -38,7 +38,10 @@ class FoodTruckModel {
         'truck_tag': truckTag,
         'truck_description': truckDescription,
         'truck_payment': paymentOptions,
-        'truck_img': file == null ? defaultImg : null
+        'truck_img': file == null ? defaultImg : null,
+        'truck_avgrating': 0
+        //'truck_latitude' : 경도
+        //'truck_longitude' : 위도
       };
 
       await docref.set(newFoodTruck);

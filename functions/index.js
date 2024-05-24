@@ -33,7 +33,7 @@ exports.cleanUpUserData = functions.firestore.document('Users/{uid}').onDelete(a
             }
             await FoodTruckDoc.ref.delete();
         }
-        // 해당 유저가 작성한 리뷰 일괄 삭제
+        // 해당 유저가 작성한 리뷰 일괄 삭제 및 평균 평점 업데이트
         const userDoc = await db.collection('Users').doc(uid).get();
         const reviewedTruckIds = userDoc.data()?.review_create_truckid || [];  // 사용자 문서에서 리뷰가 작성된 푸드트럭ID 배열 가져옴
 
@@ -43,6 +43,8 @@ exports.cleanUpUserData = functions.firestore.document('Users/{uid}').onDelete(a
                 const reviews = await db.collection('FoodTruck').doc(truckId).collection('Review').where('user_uid', '==', uid).get();
                 const deletePromises = reviews.docs.map(review => review.ref.delete());
                 await Promise.all(deletePromises);
+
+                await updateAvgRating(db, truckId);
             }
         }
 
@@ -88,5 +90,25 @@ async function deleteImg(oldImgUrl) {
         }
     } catch (e) {
         console.log('js에서 이미지 삭제 오류: ${e}');
+    }
+}
+
+// 평균 평점 업데이트 함수
+async function updateAvgRating(db, foodTruckId) {
+    try {
+        const reviewSnapshot = await db.collection('FoodTruck').doc(foodTruckId).collection('Review').get();
+
+        if (!reviewSnapshot.empty) {
+            let totalRating = 0;
+            for (const doc of reviewSnapshot.docs) {
+                totalRating += doc.data().Rating;
+            }
+            const averageRating = totalRating / reviewSnapshot.size;
+            await db.collection('FoodTruck').doc(foodTruckId).update({ 'truck_avgrating': averageRating });
+        } else {
+            await db.collection('FoodTruck').doc(foodTruckId).update({ 'truck_avgrating': 0 });
+        }
+    } catch (e) {
+        console.log('푸드트럭 평균 평점 갱신 오류오류: ', e);
     }
 }
