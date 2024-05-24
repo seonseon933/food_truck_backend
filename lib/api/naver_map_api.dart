@@ -3,10 +3,11 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:food_truck/model/testmap_model.dart';
 import 'package:http/http.dart' as http;
 
 class NaverMapApp extends StatefulWidget {
-  const NaverMapApp({Key? key}) : super(key: key);
+  const NaverMapApp({super.key});
 
   @override
   _NaverMapAppState createState() => _NaverMapAppState();
@@ -23,6 +24,10 @@ class _NaverMapAppState extends State<NaverMapApp> {
   final _searchController = TextEditingController();
   final String clientId = 'ujb8t157zt';
   final String clientSecret = 'TMdtyDoM6PImQk8pr16gUuzpTeFjr9AkO8Cm5n3d';
+
+  //add
+  final TestMap _testMap = TestMap();
+  NLatLng? _selectedPosition;
 
   Future<NLatLng> getLatLngFromAddress(String address) async {
     final requestUrl = Uri.parse(
@@ -58,6 +63,14 @@ class _NaverMapAppState extends State<NaverMapApp> {
     }
   }
 
+  //add : 클릭된 마커의 위도, 경도를 파이어베이스에 저장.
+  void _saveLocation() async {
+    if (_selectedPosition != null) {
+      await _testMap.saveLocationToFirestore(
+          _selectedPosition!.latitude, _selectedPosition!.longitude);
+    } else {}
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -69,41 +82,65 @@ class _NaverMapAppState extends State<NaverMapApp> {
             onSubmitted: (value) {
               addMarkerAtAddress(value);
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: '주소 검색',
             ),
           ),
         ),
-        body: NaverMap(
-          onMapReady: (controller) {
-            _controller = controller;
-          },
+        body: Stack(
+          children: [
+            NaverMap(
+              onMapReady: (controller) {
+                _controller = controller;
+              },
 
-          options: const NaverMapViewOptions(
-            initialCameraPosition: NCameraPosition(
-                target: NLatLng(35.139988984673806, 126.93423855903913),
-                zoom: 15,
-                bearing: 0,
-                tilt: 0),
-          ),
+              options: const NaverMapViewOptions(
+                initialCameraPosition: NCameraPosition(
+                    target: NLatLng(35.139988984673806, 126.93423855903913),
+                    zoom: 15,
+                    bearing: 0,
+                    tilt: 0),
+              ),
 
-          //클릭시 마커생성
-          onMapTapped: (point, latLng) async {
-            await _controller.clearOverlays();
-            final marker = NMarker(
-              id: 'marker_${latLng.latitude}_${latLng.longitude}',
-              position: latLng,
-            );
+              //클릭시 마커생성
+              onMapTapped: (point, latLng) async {
+                await _controller.clearOverlays();
+                final marker = NMarker(
+                  id: 'marker_${latLng.latitude}_${latLng.longitude}',
+                  position: latLng,
+                );
 
-            await _controller.addOverlay(marker);
+                await _controller.addOverlay(marker);
 
-            final infoWindow = NInfoWindow.onMarker(
-              id: marker.info.id,
-              text: "${latLng.latitude}, ${latLng.longitude}",
-            );
+                final infoWindow = NInfoWindow.onMarker(
+                  id: marker.info.id,
+                  text: "${latLng.latitude}, ${latLng.longitude}",
+                );
 
-            marker.openInfoWindow(infoWindow);
-          },
+                marker.openInfoWindow(infoWindow);
+                //add
+                setState(() {
+                  _selectedPosition = latLng;
+                });
+              },
+            ),
+            // 버튼 누르면 _saveLocation 함수 호출. (추가해야 할 점 : 마커 안 찍고 위치 지정 누르면 경고메시지 나오도록.)
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: SizedBox(
+                  width: 200, // 원하는 너비로 설정
+                  child: ElevatedButton(
+                    onPressed: _saveLocation,
+                    child: const Text('위치 지정'),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

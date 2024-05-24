@@ -25,12 +25,18 @@ Future<void> main() async {
 */
 
 // 지도 api 테스트
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:food_truck/api/naver_map_api.dart';
+import 'package:food_truck/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   await NaverMapApp.init();
   runApp(const NaverMapApp());
 }
