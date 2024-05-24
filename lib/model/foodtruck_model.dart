@@ -151,31 +151,41 @@ class FoodTruckModel {
 
   // 등록된 푸드트럭 전체 데이터 불러오기
   Future<List<Map<String, dynamic>>> getFoodTruckData() async {
-    QuerySnapshot querySnapshot = await _store.collection('FoodTruck').get();
-    List<Map<String, dynamic>> foodtrucks = [];
-    for (var doc in querySnapshot.docs) {
-      var data = doc.data() as Map<String, dynamic>;
-      data['foodtruck_id'] = doc.id;
-      foodtrucks.add(data);
+    try {
+      QuerySnapshot querySnapshot = await _store.collection('FoodTruck').get();
+      List<Map<String, dynamic>> foodtrucks = [];
+      for (var doc in querySnapshot.docs) {
+        var data = doc.data() as Map<String, dynamic>;
+        data['foodtruck_id'] = doc.id;
+        foodtrucks.add(data);
+      }
+      return foodtrucks;
+    } catch (e) {
+      print('푸드트럭 전체 데이터 불러오기 오류 : $e');
+      return [];
     }
-    return foodtrucks;
   }
 
   // 찜한 푸드트럭 불러오기
   Future<List<String>> getFavoriteFoodTruck(String uid) async {
-    DocumentSnapshot documentSnapshot =
-        await _store.collection('Users').doc(uid).get();
-    List<String> favoriteTrucks = [];
+    try {
+      DocumentSnapshot documentSnapshot =
+          await _store.collection('Users').doc(uid).get();
+      List<String> favoriteTrucks = [];
 
-    if (documentSnapshot.exists) {
-      Map<String, dynamic>? data =
-          documentSnapshot.data() as Map<String, dynamic>?;
-      if (data != null && data.containsKey('favorite_truckid')) {
-        favoriteTrucks = List<String>.from(data['favorite_truckid']);
+      if (documentSnapshot.exists) {
+        Map<String, dynamic>? data =
+            documentSnapshot.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('favorite_truckid')) {
+          favoriteTrucks = List<String>.from(data['favorite_truckid']);
+        }
       }
-    }
 
-    return favoriteTrucks;
+      return favoriteTrucks;
+    } catch (e) {
+      print('찜한 푸드트럭 데이터 불러오기 에러 :$e');
+      return [];
+    }
   }
 
 // 푸드트럭 태그를 기반으로 검색하는 함수
