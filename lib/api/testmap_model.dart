@@ -6,7 +6,7 @@ class TestMap {
   Future<void> saveLocationToFirestore(
       double latitude, double longitude) async {
     try {
-      await _store.collection('TestMap').doc('test').set({
+      await _store.collection('TestMap').doc('test222').set({
         'latitude': latitude,
         'longitude': longitude,
       });
@@ -25,6 +25,7 @@ class TestMap {
         data['testmap_id'] = doc.id;
         testmaps.add(data);
       }
+      print('끼아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ아아앙ㅇㄴㅇㄺ : $testmaps');
       return testmaps;
     } catch (e) {
       print('가져올 수 없다능 : $e');

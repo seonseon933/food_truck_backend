@@ -7,12 +7,12 @@ const db = admin.firestore();// admin sdk를 통해 firestore인스턴스에 접
 // 해당 경로에 리스너를 설치.
 exports.cleanUpUserData = functions.firestore.document('Users/{uid}').onDelete(async (snap, context) => {
     const uid = context.params.uid;
-    // where : 문서 필터링. 안의 필터링에 해당하는 문서만 반환. 이때 배열 형태로 반환.
     // 해당 사용자가 푸드트럭을 등록한 경우 일괄 삭제
     try {
         const userFoodTrucks = await db.collection('FoodTruck').where('user_uid', '==', uid).get();
         for (const FoodTruckDoc of userFoodTrucks.docs) {
             const truckId = FoodTruckDoc.id;
+            // 메뉴 삭제
             const menus = await db.collection('FoodTruck').doc(truckId).collection('Menu').get();
             for (const menuDoc of menus.docs) {
                 const menuData = menuDoc.data();

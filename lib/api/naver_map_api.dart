@@ -3,8 +3,9 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
-import 'package:food_truck/model/testmap_model.dart';
 import 'package:http/http.dart' as http;
+// 아래는 테스트하기 위한 import 파일.
+import 'package:food_truck/api/testmap_model.dart';
 
 class NaverMapApp extends StatefulWidget {
   const NaverMapApp({super.key});
@@ -63,12 +64,26 @@ class _NaverMapAppState extends State<NaverMapApp> {
     }
   }
 
-  //add : 클릭된 마커의 위도, 경도를 파이어베이스에 저장.
-  void _saveLocation() async {
-    if (_selectedPosition != null) {
-      await _testMap.saveLocationToFirestore(
-          _selectedPosition!.latitude, _selectedPosition!.longitude);
-    } else {}
+  // 정확X : firestore에서 받은 데이터에 해당하는 위치에 마커 표시.
+  void addMarkersFirestoreData() async {
+    List<Map<String, dynamic>> locations = await _testMap.getLocationData();
+    for (var location in locations) {
+      final latitude = location['latitude'];
+      final longitude = location['longitude'];
+      final marker = NMarker(
+        id: 'marker_${latitude}_$longitude',
+        position: NLatLng(latitude, longitude),
+      );
+
+      await _controller.addOverlay(marker);
+
+      final infoWindow = NInfoWindow.onMarker(
+        id: marker.info.id,
+        text: "$latitude, $longitude",
+      );
+
+      marker.openInfoWindow(infoWindow);
+    }
   }
 
   @override
@@ -92,52 +107,14 @@ class _NaverMapAppState extends State<NaverMapApp> {
             NaverMap(
               onMapReady: (controller) {
                 _controller = controller;
+                addMarkersFirestoreData(); // 지도 준비가 완료된 후 Firestore 데이터로부터 마커를 추가합니다.
               },
-
               options: const NaverMapViewOptions(
                 initialCameraPosition: NCameraPosition(
                     target: NLatLng(35.139988984673806, 126.93423855903913),
                     zoom: 15,
                     bearing: 0,
                     tilt: 0),
-              ),
-
-              //클릭시 마커생성
-              onMapTapped: (point, latLng) async {
-                await _controller.clearOverlays();
-                final marker = NMarker(
-                  id: 'marker_${latLng.latitude}_${latLng.longitude}',
-                  position: latLng,
-                );
-
-                await _controller.addOverlay(marker);
-
-                final infoWindow = NInfoWindow.onMarker(
-                  id: marker.info.id,
-                  text: "${latLng.latitude}, ${latLng.longitude}",
-                );
-
-                marker.openInfoWindow(infoWindow);
-                //add
-                setState(() {
-                  _selectedPosition = latLng;
-                });
-              },
-            ),
-            // 버튼 누르면 _saveLocation 함수 호출. (추가해야 할 점 : 마커 안 찍고 위치 지정 누르면 경고메시지 나오도록.)
-            Positioned(
-              bottom: 20,
-              left: 0,
-              right: 0,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  width: 200, // 원하는 너비로 설정
-                  child: ElevatedButton(
-                    onPressed: _saveLocation,
-                    child: const Text('위치 지정'),
-                  ),
-                ),
               ),
             ),
           ],

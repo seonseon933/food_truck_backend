@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:intl/intl.dart';
 
@@ -149,20 +150,34 @@ class FoodTruckModel {
     }
   }
 
-  // 등록된 푸드트럭 전체 데이터 불러오기
+  // 등록된 푸드트럭 전체 데이터 불러오기 - 현재 등록된 푸드트럭 전체 데이터 <- 푸드트럭 목록. => 상세
   Future<List<Map<String, dynamic>>> getFoodTruckData() async {
     try {
       QuerySnapshot querySnapshot = await _store.collection('FoodTruck').get();
       List<Map<String, dynamic>> foodtrucks = [];
       for (var doc in querySnapshot.docs) {
         var data = doc.data() as Map<String, dynamic>;
-        data['foodtruck_id'] = doc.id;
+        data['foodtruck_id'] = doc.id; // 문서 ID
         foodtrucks.add(data);
       }
       return foodtrucks;
     } catch (e) {
       print('푸드트럭 전체 데이터 불러오기 오류 : $e');
       return [];
+    }
+  }
+
+  // 해당 푸드트럭 데이터 불러오기 - 상세 페이지
+  Future<Map<String, dynamic>> getDetailFoodTruck(String foodtruckid) async {
+    try {
+      DocumentSnapshot documentSnapshot =
+          await _store.collection('FoodTruck').doc(foodtruckid).get();
+      Map<String, dynamic> foodtruckdata =
+          documentSnapshot.data() as Map<String, dynamic>;
+      return foodtruckdata;
+    } catch (e) {
+      print('해당 문서ID 푸드트럭 데이터 불러오기 오류 : $e');
+      return {};
     }
   }
 

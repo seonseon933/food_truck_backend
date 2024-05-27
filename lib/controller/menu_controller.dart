@@ -7,7 +7,7 @@ class FoodTruckController {
   final _picker = ImagePicker();
   final MenuModel _menuModel = MenuModel();
 
-  // 이미지 갤러리에서 선택
+  // 이미지 갤러리에서 선택 <- 되는지 확인 후에 이미지 파일유효성 검사 코드 넣기.
   Future<File?> getFoodTruckImgGaller() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
