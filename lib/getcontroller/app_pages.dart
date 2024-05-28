@@ -1,10 +1,14 @@
-import 'package:food_truck/getcontroller/login_controller.dart';
 import 'package:get/get.dart';
+
+import 'package:food_truck/view/foodtruckdetail_view.dart';
+import 'package:food_truck/getcontroller/foodtruckdetail_controller.dart';
 
 import '../view/home_view.dart';
 import '../getcontroller/home_controller.dart';
 
 import '../view/login_view.dart';
+import 'package:food_truck/getcontroller/login_controller.dart';
+
 import '../view/first_login.dart';
 
 part 'app_routes.dart';
@@ -36,6 +40,15 @@ class HomeBinding extends Bindings {
   }
 }
 
+class FoodtruckdetailBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<FoodtruckdetailController>(
+      () => FoodtruckdetailController(),
+    );
+  }
+}
+
 class AppPages {
   AppPages._();
 
@@ -54,6 +67,11 @@ class AppPages {
       name: _Paths.HOME,
       page: () => const HomeView(),
       binding: HomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.FOODTRUCKDETAIL,
+      page: () => const FoodtruckdetailView(),
+      binding: FoodtruckdetailBinding(),
     ),
   ];
 }

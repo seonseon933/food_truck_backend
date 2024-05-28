@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_truck/api/naver_map_api.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'getcontroller/app_pages.dart';
@@ -16,7 +17,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
+  await NaverMapApp.init();
   var currentUser = FirebaseAuth.instance.currentUser;
 
   String initialRoute;

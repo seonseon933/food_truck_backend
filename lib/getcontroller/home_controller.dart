@@ -1,3 +1,5 @@
+import 'package:food_truck/model/foodtruck_model.dart';
+
 import 'app_id.dart';
 import '../view/home_view.dart';
 //import 'package:food_truck/view/search_view.dart';
@@ -5,7 +7,17 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'app_pages.dart';
 
-class HomeController extends GetxController {}
+class HomeController extends GetxController {
+  final FoodTruckModel _foodTruckModel = FoodTruckModel();
+  void goDetail(foodtruck) {
+    //print(foodtruck);
+    Get.toNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck);
+  }
+
+  getFoodTruckData() async {
+    return _foodTruckModel.getFoodTruckData();
+  }
+}
 
 class HomeWrapper extends StatelessWidget {
   const HomeWrapper({super.key});

@@ -29,7 +29,7 @@ class _NaverMapAppState extends State<NaverMapApp> {
 
   //add
   final TestMap _testMap = TestMap();
-  NLatLng? _selectedPosition;
+  //NLatLng? _selectedPosition;
 
   // add (마커 클릭시 다른 페이지로 이동할 때 쓰임)
   String? _selectedTruckId;
