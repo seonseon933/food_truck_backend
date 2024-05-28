@@ -1,13 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_truck/model/usersmodel.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'app_pages.dart';
 
-class LoginController {
+class LoginController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final UsersModel _usersModel = UsersModel();
 
-  Future<User?> signInWithGoogle() async {
+  void goBase() {
+    // USER 아이디를 넘겨주어야함
+    Get.offAllNamed(Routes.BASE);
+  }
+
+  Future<void> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       // Obtain the auth details from the request
@@ -30,11 +37,18 @@ class LoginController {
 
       await _usersModel.saveUserData(user);
 
-      return user;
+      // 회원 타입 체크
+      int userType = await checkUserType();
+      if (userType == 0) {
+        // 회원 타입이 존재하는 경우
+        Get.offAllNamed(Routes.HOME); // 홈 화면으로 이동
+      } else if (userType == 1) {
+        // 회원 타입이 존재하지 않는 경우
+        Get.offAllNamed(Routes.FIRSTLOGIN); // 첫 로그인 화면으로 이동
+      }
     } catch (e) {
       print('구글 로그인 실패 : $e');
     }
-    return null;
   }
 
   // 사용자 회원 타입(구매자, 판매자) 존재 체크-> 1이면 로그인 처음 했다는 거임.
@@ -49,41 +63,7 @@ class LoginController {
     return _usersModel.saveUserType(type, user.uid);
   }
 
-  // 로그아웃
-  Future<void> signOutWithGoogle() async {
-    try {
-      await _auth.signOut();
-      await googleSignIn.signOut();
-    } catch (e) {
-      print("사용자 로그아웃 실패 : $e");
-    }
-  }
-
-  // 계정 삭제(탈퇴)
-  Future<void> userDelete() async {
-    User? user = _auth.currentUser;
-
-    if (user != null) {
-      try {
-        // 재인증 수행
-        GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-        if (googleUser != null) {
-          GoogleSignInAuthentication googleAuth =
-              await googleUser.authentication;
-          AuthCredential credential = GoogleAuthProvider.credential(
-            idToken: googleAuth.idToken,
-            accessToken: googleAuth.accessToken,
-          );
-          await user.reauthenticateWithCredential(credential);
-
-          // 재인증 후 사용자 데이터 삭제
-          // 이거 실행하고 fuctions에 있는 이벤트 발생할 예정.(사용자가 작성한 푸드트럭(메뉴 포함), 리뷰 일괄 삭제)
-          await _usersModel.deleteUserData();
-          await user.delete();
-        }
-      } catch (e) {
-        print('왜 사용자 삭제 중에 오류가 발생하냐고 : $e');
-      }
-    }
+  void goFirstLogin() {
+    Get.offAllNamed(Routes.FIRSTLOGIN);
   }
 }

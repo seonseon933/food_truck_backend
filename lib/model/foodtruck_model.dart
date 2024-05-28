@@ -203,7 +203,7 @@ class FoodTruckModel {
     }
   }
 
-// 푸드트럭 태그를 기반으로 검색하는 함수
+// 푸드트럭 태그를 기반으로 검색하는 함수 <- 푸드트럭 목록 페이지에 검색 기능 따로 넣어야 함. 지도 검색에 넣으면 겹쳐서 구현 어려움..
   Future<List<Map<String, String>>> searchFoodTrucksByTag(String tag) async {
     try {
       // Firestore에서 `truck_tag`가 입력된 `tag`와 정확히 일치하는 문서들을 가져오고ㅓ

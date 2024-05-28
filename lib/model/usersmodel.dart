@@ -160,7 +160,7 @@ class UsersModel {
       if (documentSnapshot.exists) {
         Map<String, dynamic>? data =
             documentSnapshot.data() as Map<String, dynamic>?;
-        if (data != null && data['user_img'] == '판매자') {
+        if (data != null && data['user_type'] == '판매자') {
           return 1; // 판매자
         } else {
           return 0; // 구매자

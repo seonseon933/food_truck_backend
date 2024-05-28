@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
+import 'package:food_truck/api/detailtest.dart';
 import 'package:http/http.dart' as http;
 // 아래는 테스트하기 위한 import 파일.
 import 'package:food_truck/api/testmap_model.dart';
@@ -29,6 +30,14 @@ class _NaverMapAppState extends State<NaverMapApp> {
   //add
   final TestMap _testMap = TestMap();
   NLatLng? _selectedPosition;
+
+  // add (마커 클릭시 다른 페이지로 이동할 때 쓰임)
+  String? _selectedTruckId;
+  double? _selectedLatitude;
+  double? _selectedLongitude;
+  String? _selectedTruckame;
+  String? _selectedTruckDescription;
+  double? _selectedRating;
 
   Future<NLatLng> getLatLngFromAddress(String address) async {
     final requestUrl = Uri.parse(
@@ -70,6 +79,13 @@ class _NaverMapAppState extends State<NaverMapApp> {
     for (var location in locations) {
       final latitude = location['latitude'];
       final longitude = location['longitude'];
+      final truckId = location['testmap_id'];
+      final testname = location['testname'];
+      final testdes = location['testdes'];
+      final rating = location['rating'] is int
+          ? (location['rating'] as int).toDouble()
+          : location['rating'];
+
       final marker = NMarker(
         id: 'marker_${latitude}_$longitude',
         position: NLatLng(latitude, longitude),
@@ -77,12 +93,25 @@ class _NaverMapAppState extends State<NaverMapApp> {
 
       await _controller.addOverlay(marker);
 
+      // 여기에 마커 클릭 리스너를 추가합니다.
+      marker.setOnTapListener((marker) {
+        setState(() {
+          _selectedTruckId = truckId;
+          _selectedLatitude = latitude;
+          _selectedLongitude = longitude;
+          _selectedTruckame = testname;
+          _selectedTruckDescription = testdes;
+          _selectedRating = rating;
+        });
+      });
+
+      /*
       final infoWindow = NInfoWindow.onMarker(
         id: marker.info.id,
-        text: "$latitude, $longitude",
+        text: "$latitude, $longitude", // 확인용
       );
 
-      marker.openInfoWindow(infoWindow);
+      marker.openInfoWindow(infoWindow);*/
     }
   }
 
@@ -107,7 +136,7 @@ class _NaverMapAppState extends State<NaverMapApp> {
             NaverMap(
               onMapReady: (controller) {
                 _controller = controller;
-                addMarkersFirestoreData(); // 지도 준비가 완료된 후 Firestore 데이터로부터 마커를 추가합니다.
+                addMarkersFirestoreData(); // 지도 준비가 완료된 후 Firestore 데이터로부터 마커를 추가.
               },
               options: const NaverMapViewOptions(
                 initialCameraPosition: NCameraPosition(
@@ -117,6 +146,56 @@ class _NaverMapAppState extends State<NaverMapApp> {
                     tilt: 0),
               ),
             ),
+            // 마커 클릭하면 상태가 바뀌니 작은 창 나옴.
+            if (_selectedTruckId != null)
+              Positioned(
+                bottom: 20,
+                left: 20,
+                right: 20,
+                child: Builder(
+                  builder: (BuildContext newContext) {
+                    return Card(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            title: Text('$_selectedTruckame '),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('별점 : $_selectedRating'),
+                                Text(
+                                  '$_selectedTruckDescription',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              ],
+                            ),
+                          ),
+                          ButtonBar(
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    newContext,
+                                    MaterialPageRoute(
+                                      builder: (context) => DetailPage(
+                                          truckId: _selectedTruckId!,
+                                          latitude: _selectedLatitude!,
+                                          longitude: _selectedLongitude!),
+                                    ),
+                                  );
+                                },
+                                child: const Text('이동'),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
           ],
         ),
       ),
