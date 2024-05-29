@@ -22,7 +22,7 @@ void main() async {
 
   String initialRoute;
   if (currentUser != null) {
-    initialRoute = Routes.HOME; // 로그인한 적 있을 때.
+    initialRoute = Routes.BASE; // 로그인한 적 있을 때.
   } else {
     initialRoute = Routes.LOGIN; // 로그인 정보 없을 때.
   }
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
 }
 
 
-/*
+/* 극초반때 테스트하던거
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

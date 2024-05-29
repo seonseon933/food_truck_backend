@@ -34,13 +34,14 @@ class FirstLogin extends StatelessWidget {
                 onPressed: () {
                   getxlogincontroller.saveUserType("판매자");
                   Get.offNamed(Routes.HOME);
+                  getxlogincontroller.goBase(); // 테스트 못해봄
                 },
               ),
               TextButton(
                 child: const Text('소비자인가요?'),
                 onPressed: () {
                   getxlogincontroller.saveUserType("소비자");
-                  Get.offNamed(Routes.HOME);
+                  getxlogincontroller.goBase();
                 },
               ),
             ],

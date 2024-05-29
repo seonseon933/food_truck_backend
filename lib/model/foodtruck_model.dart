@@ -174,6 +174,7 @@ class FoodTruckModel {
           await _store.collection('FoodTruck').doc(foodtruckid).get();
       Map<String, dynamic> foodtruckdata =
           documentSnapshot.data() as Map<String, dynamic>;
+      foodtruckdata['foodtruck_id'] = foodtruckid;
       return foodtruckdata;
     } catch (e) {
       print('해당 문서ID 푸드트럭 데이터 불러오기 오류 : $e');

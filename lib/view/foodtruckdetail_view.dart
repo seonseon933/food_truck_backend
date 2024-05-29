@@ -8,7 +8,8 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
 
   @override
   Widget build(BuildContext context) {
-    final foodtruck = Get.arguments as Map<String, dynamic>;
+    final Map<String, dynamic> foodtruck =
+        Get.arguments as Map<String, dynamic>;
     final String select = foodtruck['foodtruck_id'];
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -34,7 +35,23 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
             height: 1,
             color: Colors.grey[300],
           ),
-          const SizedBox(height: 20),
+
+          const SizedBox(height: 10),
+          Align(
+            alignment: Alignment.topRight,
+            child: SizedBox(
+              width: 36,
+              height: 36,
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+                icon: const Icon(Icons.edit),
+                onPressed: () {
+                  controller.goSetting(foodtruck['foodtruck_id']);
+                },
+              ),
+            ),
+          ),
           Text(
             "${foodtruck['truck_name']}",
             style: CustomTextStyles.title,

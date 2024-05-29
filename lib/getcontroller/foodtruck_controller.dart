@@ -1,5 +1,7 @@
 //import 'package:food_truck/view/foodtruck_view.dart';
 //import 'package:food_truck/view/foodtruckdetail_view.dart';
+import 'package:food_truck/view/foodtruck_view.dart';
+import 'package:food_truck/view/foodtruckdetail_view.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'app_id.dart';
@@ -17,7 +19,7 @@ class FoodtruckController extends GetxController {
     return _foodTruckModel.getFoodTruckData();
   }
 }
-/*
+
 class FoodtruckWrapper extends StatelessWidget {
   const FoodtruckWrapper({super.key});
 
@@ -43,4 +45,3 @@ class FoodtruckWrapper extends StatelessWidget {
     );
   }
 }
-*/
