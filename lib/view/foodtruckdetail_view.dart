@@ -95,6 +95,114 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
             height: 1,
             color: Colors.grey[300],
           ),
+          const DefaultTabController(
+            length: 3,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(height: 20),
+                TabBar(
+                  tabs: [
+                    Tab(text: '메뉴'),
+                    Tab(text: '정보'),
+                    Tab(text: '리뷰'),
+                  ],
+                ),
+                /*
+                SizedBox(
+                  height: 400,
+                  child: TabBarView(
+                    children: [
+                      FutureBuilder<List<dynamic>>(
+                          future: controller.getFoodTruckMenuData(select),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else if (snapshot.hasError) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Error: ${snapshot.error}',
+                                  style: const TextStyle(fontSize: 15),
+                                ),
+                              );
+                            } else if (!snapshot.hasData ||
+                                snapshot.data.isEmpty) {
+                              return const Center(
+                                  child: Text('No data available'));
+                            } else {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListView.builder(
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (context, index) {
+                                    final menu = snapshot.data[index];
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: size.height * 0.2,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.3),
+                                                spreadRadius: 1,
+                                                blurRadius: 5,
+                                                offset: const Offset(
+                                                    0, 3), // 그림자 위치 설정
+                                              ),
+                                            ],
+                                          ),
+                                          child: ListTile(
+                                            leading: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              child: Image.network(
+                                                menu['menu_img'], // 이미지 URL
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            title: Text(menu['menu_name'],
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            subtitle: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                    '설명: ${menu['menu_description']}'),
+                                                Text(
+                                                    '가격: ${menu['menu_price']}'),
+                                              ],
+                                            ),
+                                            onTap: () {},
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              );
+                            }
+                          }),
+                      Center(child: Text('정보 탭 내용')),
+                      Center(child: Text('리뷰 탭 내용')),
+                    ],
+                  ),
+                ),*/
+              ],
+            ),
+          )
         ],
       ),
     );

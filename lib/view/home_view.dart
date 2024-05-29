@@ -3,14 +3,12 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
-import 'package:food_truck/api/detailtest.dart';
-import 'package:food_truck/model/foodtruck_model.dart';
 import 'package:http/http.dart' as http;
 //import 'search_view.dart';
 import 'package:get/get.dart';
 import 'package:food_truck/getcontroller/home_controller.dart';
 //import '../controller/search_controller.dart';
-import '../style/font_style.dart';
+//import '../style/font_style.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -146,6 +144,17 @@ class _NaverMapAppState extends State<NaverMapApp> {
               onMapReady: (controller) {
                 _controller = controller;
                 addMarkersFirestoreData(); // 지도 준비가 완료된 후 Firestore 데이터로부터 마커를 추가.
+              },
+              onMapTapped: (point, latLng) {
+                setState(() {
+                  _selectedTruckId = null;
+                  _selectedLatitude = null;
+                  _selectedLongitude = null;
+                  _selectedTruckame = null;
+                  _selectedTruckDescription = null;
+                  _selectedRating = null;
+                  foodtruck = null;
+                });
               },
               options: const NaverMapViewOptions(
                 initialCameraPosition: NCameraPosition(
