@@ -1,9 +1,12 @@
 import 'package:food_truck/getcontroller/base_controller.dart';
 import 'package:food_truck/getcontroller/foodtruck_controller.dart';
-import 'package:food_truck/getcontroller/foodtrucksetting_controller.dart';
+
 import 'package:food_truck/view/base_view.dart';
 import 'package:food_truck/view/foodtruck_view.dart';
-import 'package:food_truck/view/foodtrucksetting_view.dart';
+
+import 'package:food_truck/view/foodtruckupdatemap_view.dart';
+import 'package:food_truck/getcontroller/foodtruckupdatemap_controller.dart';
+
 import 'package:get/get.dart';
 
 import 'package:food_truck/view/foodtruckdetail_view.dart';
@@ -16,6 +19,9 @@ import '../view/login_view.dart';
 import 'package:food_truck/getcontroller/login_controller.dart';
 
 import '../view/first_login.dart';
+
+import 'package:food_truck/view/foodtruckupdate_view.dart';
+import 'package:food_truck/getcontroller/foodtruckupdate_controller.dart';
 
 part 'app_routes.dart';
 
@@ -64,11 +70,20 @@ class HomeBinding extends Bindings {
   }
 }
 
-class FoodtrucksettingBinding extends Bindings {
+class FoodtruckupdateBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<FoodtrucksettingController>(
-      () => FoodtrucksettingController(),
+    Get.lazyPut<FoodtruckupdateController>(
+      () => FoodtruckupdateController(),
+    );
+  }
+}
+
+class FoodtruckupdatemapBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<FoodtruckupdatemapController>(
+      () => FoodtruckupdatemapController(),
     );
   }
 }
@@ -117,9 +132,14 @@ class AppPages {
       binding: FoodtruckBinding(),
     ),
     GetPage(
-      name: _Paths.FOODTRUCKSETTING,
-      page: () => const FoodtrucksettingView(),
-      binding: FoodtrucksettingBinding(),
+      name: _Paths.FOODTRUCKUPDATE,
+      page: () => const FoodtruckupdateView(),
+      binding: FoodtruckupdateBinding(),
+    ),
+    GetPage(
+      name: _Paths.FOODTRUCKUPDATEMAP,
+      page: () => const FoodtruckupdatemapView(),
+      binding: FoodtruckupdatemapBinding(),
     ),
   ];
 }

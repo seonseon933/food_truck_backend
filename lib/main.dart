@@ -21,12 +21,13 @@ void main() async {
   var currentUser = FirebaseAuth.instance.currentUser;
 
   String initialRoute;
+
   if (currentUser != null) {
     initialRoute = Routes.BASE; // 로그인한 적 있을 때.
   } else {
     initialRoute = Routes.LOGIN; // 로그인 정보 없을 때.
   }
-
+  //initialRoute = Routes.LOGIN;
   runApp(MyApp(initialRoute: initialRoute));
 }
 

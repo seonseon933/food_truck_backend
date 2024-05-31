@@ -12,7 +12,7 @@ class FoodtruckController extends GetxController {
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
   void goDetail(foodtruck) {
     //print(foodtruck);
-    Get.toNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck);
+    Get.toNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck); // map 형태로 보냄
   }
 
   getFoodTruckData() async {

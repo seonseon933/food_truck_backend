@@ -6,9 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 
-// 검색 기능 만들어야 함. -> 해시태그, 푸드트럭명으로 하면 되겠다.
-// 실시간 리스너 알아보기..
-
 class FoodTruckModel {
   late String uid;
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -48,7 +45,7 @@ class FoodTruckModel {
       await docref.set(newFoodTruck);
 
       if (file != null) {
-        updateFoodTruckImg(docref.id, file);
+        await updateFoodTruckImg(docref.id, file); // await 추가함
       }
       return docref.id;
     } catch (e) {
@@ -67,19 +64,24 @@ class FoodTruckModel {
       Map<String, dynamic> paymentOptions,
       File? file,
       String truckTag,
+      double latitude,
+      double longitude,
       String uid) async {
     try {
       if (file != null) {
-        updateFoodTruckImg(foodtruckid, file);
+        await updateFoodTruckImg(foodtruckid, file); // await 추가함
       }
-      _store.collection('FoodTruck').doc(foodtruckid).update({
+      await _store.collection('FoodTruck').doc(foodtruckid).update({
         'truck_name': truckName,
         'truck_phone': truckPhone,
         'truck_schedule': truckSchedule,
         'truck_description': truckDescription,
         'truck_tag': truckTag,
         'truck_payment': paymentOptions,
+        'truck_latitude': latitude,
+        'truck_longitude': longitude
       });
+
       return foodtruckid;
     } catch (e) {
       print('푸드트럭 수정 부분 에러 : $e');
@@ -95,7 +97,7 @@ class FoodTruckModel {
       Map<String, dynamic> data =
           documentSnapshot.data() as Map<String, dynamic>;
 
-      deleteFoodTruckImgStorage(data);
+      await deleteFoodTruckImgStorage(data); // await 추가함
       _store.collection('FoodTruck').doc(foodtruckid).delete();
     } catch (e) {
       print('푸드트럭 삭제 오류 : $e');
@@ -117,14 +119,14 @@ class FoodTruckModel {
       if (documentSnapshot.exists &&
           documentSnapshot.data() != null &&
           data.containsKey('truck_img')) {
-        deleteFoodTruckImgStorage(data);
+        await deleteFoodTruckImgStorage(data); // await 추가함
       }
 
       final ref = _storage.ref(destination);
       await ref.putFile(file);
 
       String downloadUrl = await ref.getDownloadURL();
-      _store
+      await _store
           .collection('FoodTruck')
           .doc(foodtruckid)
           .update({'truck_img': downloadUrl});
@@ -141,7 +143,6 @@ class FoodTruckModel {
       String filePath = Uri.parse(oldImgUrl).path;
       filePath = filePath.substring(filePath.indexOf('/o/') + 3);
       filePath = Uri.decodeFull(filePath.split('?').first);
-
       if (filePath != "defaultimg.jpg") {
         await _storage.ref(filePath).delete();
       }

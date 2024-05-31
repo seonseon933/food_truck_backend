@@ -65,8 +65,11 @@ class FoodtruckView extends GetView<FoodtruckController> {
                               '내용: ${foodtruck['truck_tag']}\n 평점: ${foodtruck['truck_avgrating']}',
                               style: CustomTextStyles.body),
                           onTap: () {
-                            //print(foodtruck);
-                            controller.goDetail(foodtruck);
+                            // controller.goDetail(foodtruck);
+                            Map<String, dynamic> mapfoodtruck = {
+                              'foodtruck_id': foodtruck['foodtruck_id']
+                            };
+                            controller.goDetail(mapfoodtruck);
                           },
                         ),
                       ),

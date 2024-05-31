@@ -1,18 +1,22 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:food_truck/getcontroller/foodtrucksetting_controller.dart';
+import 'package:food_truck/getcontroller/foodtruckupdate_controller.dart';
 //import '../controller/foodtrucksetting_controller.dart';
 import 'package:get/get.dart';
 
 import '../style/font_style.dart';
 
-class FoodtrucksettingView extends GetView<FoodtrucksettingController> {
-  const FoodtrucksettingView({super.key});
+class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
+  const FoodtruckupdateView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final foodtruckid = Get.arguments;
+    final Map arguments = Get.arguments as Map;
+
+    final String foodtruckid = arguments['foodtruck_id'];
+    final double latitude = arguments['latitude'];
+    final double longitude = arguments['longitude'];
     // TextEditingControllers for each text field
     final nameController = TextEditingController();
     final scheduleController = TextEditingController();
@@ -111,16 +115,7 @@ class FoodtrucksettingView extends GetView<FoodtrucksettingController> {
                   ),
                 ],
               ),
-              const SizedBox(height: 8.0),
-              Row(children: [
-                OutlinedButton(
-                  onPressed: () {
-                    print('지도이동 추가');
-                  },
-                  //child: const Text('버튼을 눌러서 주소를 추가하세요<지도 팝업 뛰우는 기능 필요>'),
-                  child: const Text('추가'),
-                ),
-              ]),
+
               const SizedBox(height: 16.0),
               const Text('결제 방법', // 결제 방법 텍스트
                   style: CustomTextStyles.title),
@@ -267,15 +262,17 @@ class FoodtrucksettingView extends GetView<FoodtrucksettingController> {
                       'accountName': accountHolderController.text,
                       'accountNumber': accountNumberController.text,
                     };
-                    controller.updateFoodTruck(
+                    await controller.updateFoodTruck(
                         foodtruckid,
                         nameController.text,
                         descriptionController.text,
                         scheduleController.text,
                         phoneController.text,
                         paymentOptions,
+                        file,
                         tagController.text,
-                        file);
+                        latitude,
+                        longitude);
                     print('등록버튼 클릭');
                     Map<String, dynamic> foodtruck =
                         await controller.getDetailFoodTruck(foodtruckid);

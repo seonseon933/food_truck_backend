@@ -41,7 +41,7 @@ class LoginController extends GetxController {
       int userType = await checkUserType();
       if (userType == 0) {
         // 회원 타입이 존재하는 경우
-        Get.offAllNamed(Routes.HOME); // 홈 화면으로 이동
+        Get.offAllNamed(Routes.BASE); // 홈 화면으로 이동
       } else if (userType == 1) {
         // 회원 타입이 존재하지 않는 경우
         Get.offAllNamed(Routes.FIRSTLOGIN); // 첫 로그인 화면으로 이동

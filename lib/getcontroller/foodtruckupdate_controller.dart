@@ -3,17 +3,17 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_truck/model/foodtruck_model.dart';
 import 'package:image_picker/image_picker.dart';
-import 'app_id.dart';
 import 'app_pages.dart';
 
-class FoodtrucksettingController extends GetxController {
+class FoodtruckupdateController extends GetxController {
   final _picker = ImagePicker();
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  // void goBack() {
-  //   Get.back(id: foodtruckD); // 눌러도 작동 안 함
-  // }
+
   void goDetail(foodtruck) {
+    while (Get.previousRoute == Routes.FOODTRUCKUPDATEMAP) {
+      Get.back();
+    }
     Get.offNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck);
   }
 
@@ -24,8 +24,10 @@ class FoodtrucksettingController extends GetxController {
       String truckSchedule,
       String truckPhone,
       Map<String, dynamic> paymentOptions,
+      File? file,
       String truckTag,
-      File? file) async {
+      double latitude,
+      double longitude) async {
     User user = _auth.currentUser!;
     return _foodTruckModel.updateFoodTruck(
         foodtruckid,
@@ -36,6 +38,8 @@ class FoodtrucksettingController extends GetxController {
         paymentOptions,
         file,
         truckTag,
+        latitude,
+        longitude,
         user.uid);
   }
 

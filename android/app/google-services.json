@@ -12,7 +12,28 @@
           "package_name": "com.example.food_truck"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "872679716506-ceafc399g21kd0370tu4rhu89b3bug6q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.food_truck",
+            "certificate_hash": "f3849933648edd2b03f1dc62c69e718aaf69e98e"
+          }
+        },
+        {
+          "client_id": "872679716506-ee2nul9ldhclnae48ca12lq9indb43gf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.food_truck",
+            "certificate_hash": "15e0b007f0d3fdb23a8c5bf14100ae102ced2356"
+          }
+        },
+        {
+          "client_id": "872679716506-h986goof15fpavtl219181l3au4l7pn7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCCiQtYk36PXyRmOh281VGfL4p7GkRYztk"
@@ -20,7 +41,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "872679716506-h986goof15fpavtl219181l3au4l7pn7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "872679716506-cpubks0mghncrqm3fb3r3iujqcp6f4mq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.foodTruck"
+              }
+            }
+          ]
         }
       }
     }

@@ -63,8 +63,10 @@ class FoodTruckController {
       String truckSchedule,
       String truckPhone,
       Map<String, dynamic> paymentOptions,
+      File? file,
       String truckTag,
-      File? file) async {
+      double latitude,
+      double longitude) async {
     User user = _auth.currentUser!;
     return _foodTruckModel.updateFoodTruck(
         foodtruckid,
@@ -75,6 +77,8 @@ class FoodTruckController {
         paymentOptions,
         file,
         truckTag,
+        latitude,
+        longitude,
         user.uid);
   }
 
