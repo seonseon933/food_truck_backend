@@ -36,7 +36,6 @@ class FoodTruckModel {
         'truck_tag': truckTag,
         'truck_description': truckDescription,
         'truck_payment': paymentOptions,
-        'truck_img': file == null ? defaultImg : null,
         'truck_avgrating': 0
         //'truck_latitude' : 경도
         //'truck_longitude' : 위도
@@ -46,6 +45,11 @@ class FoodTruckModel {
 
       if (file != null) {
         await updateFoodTruckImg(docref.id, file); // await 추가함
+      } else {
+        await _store
+            .collection('FoodTruck')
+            .doc(docref.id)
+            .update({'truck_img': defaultImg});
       }
       return docref.id;
     } catch (e) {
@@ -54,7 +58,6 @@ class FoodTruckModel {
     return '';
   }
 
-  // 수정할 때 기존에 입력된 데이터 꺼내와서 넣어줘야 함. 입력값이 많으니 그렇게 하는게 좋음.
   Future<String> updateFoodTruck(
       String foodtruckid,
       String truckName,

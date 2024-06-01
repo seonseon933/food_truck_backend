@@ -4,11 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart';
 
-// 실시간 리스너를 컨트롤러에서 사용해 특정 컬렉션의 데이터가 추가, 수정, 삭제될 때마다
-// 실행하는 건 그렇게 효율적이진 않을 것 같음. 어차피 수정, 삭제될 때마다 단일 문서 읽어오는데. 리스너가 그걸 읽으면 다시 읽어오니까
-// 추가, 수정, 삭제가 일어나지 않으면 기존에 읽어두었던 모든 문서 데이터를 넘길 수 있는 방법이 없나?
-// 변경하지도 않았는데 페이지를 다시 로드할 때마다 문서들을 다시 모두 읽어야 하니까
-
 class MenuModel {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseFirestore _store = FirebaseFirestore.instance;
@@ -45,14 +40,22 @@ class MenuModel {
         'menu_name': menuName,
         'menu_price': menuPrice,
         'menu_description': menuDescription,
-        'menu_img': file == null ? defaultImg : null
       };
 
       await docref.set(newMenu);
 
       if (file != null) {
-        updateMenuImg(foodtruckid, docref.id, file);
+        await updateMenuImg(foodtruckid, docref.id, file);
       }
+      if (file == null) {
+        await _store
+            .collection('FoodTruck')
+            .doc(foodtruckid)
+            .collection('Menu')
+            .doc(docref.id)
+            .update({'menu_img': defaultImg});
+      }
+
       return foodtruckid;
     } catch (e) {
       print('메뉴 등록 에러 : $e');
@@ -66,7 +69,7 @@ class MenuModel {
       if (file != null) {
         updateMenuImg(foodtruckid, menuid, file);
       }
-      _store
+      await _store
           .collection('FoodTruck')
           .doc(foodtruckid)
           .collection('Menu')
@@ -86,11 +89,15 @@ class MenuModel {
   // 메뉴 삭제
   Future<String> deleteMenu(String foodtruckid, String menuid) async {
     try {
-      final DocumentSnapshot documentSnapshot =
-          await _store.collection('FoodTruck').doc(foodtruckid).get();
+      final DocumentSnapshot documentSnapshot = await _store
+          .collection('FoodTruck')
+          .doc(foodtruckid)
+          .collection('Menu')
+          .doc(menuid)
+          .get();
       Map<String, dynamic> data =
           documentSnapshot.data() as Map<String, dynamic>;
-      deleteMenuImgStorage(data);
+      await deleteMenuImgStorage(data);
       await _store
           .collection('FoodTruck')
           .doc(foodtruckid)
@@ -124,14 +131,14 @@ class MenuModel {
       if (documentSnapshot.exists &&
           documentSnapshot.data() != null &&
           data.containsKey('menu_img')) {
-        deleteMenuImgStorage(data);
+        await deleteMenuImgStorage(data);
       }
 
       final ref = _storage.ref(destination);
       await ref.putFile(file);
 
       String downloadUrl = await ref.getDownloadURL();
-      _store
+      await _store
           .collection('FoodTruck')
           .doc(foodtruckid)
           .collection('Menu')
@@ -145,12 +152,10 @@ class MenuModel {
   // 기존에 저장된 메뉴 이미지 삭제
   Future<void> deleteMenuImgStorage(Map<String, dynamic> data) async {
     String oldImgUrl = data['menu_img'];
-
     try {
       String filePath = Uri.parse(oldImgUrl).path;
       filePath = filePath.substring(filePath.indexOf('/o/') + 3);
       filePath = Uri.decodeFull(filePath.split('?').first);
-
       if (filePath != "defaultimg.jpg") {
         await _storage.ref(filePath).delete();
       }

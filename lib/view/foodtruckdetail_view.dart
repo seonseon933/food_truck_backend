@@ -17,7 +17,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Food Truck Details'),
+        title: const Text(''),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: controller.getDetailFoodTruck(select),
@@ -27,7 +27,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No data found'));
+            return const Center(child: Text('잘못된 접근입니다'));
           } else {
             Map<String, dynamic> foodtruck = snapshot.data!;
             return ListView(
@@ -225,91 +225,126 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
 
   Widget buildMenuTab(BuildContext context, String select, Size size,
       FoodtruckdetailController controller) {
-    return FutureBuilder<List<Map<String, dynamic>>>(
-      future: controller.getFoodTruckMenuData(select),
-      builder: (context, menuSnapshot) {
-        if (menuSnapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (menuSnapshot.hasError) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Error: ${menuSnapshot.error}',
-              style: const TextStyle(fontSize: 15),
-            ),
-          );
-        } else if (!menuSnapshot.hasData || menuSnapshot.data!.isEmpty) {
-          return const Center(child: Text('등록된 메뉴가 없습니다.'));
-        } else {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView.builder(
-              itemCount: menuSnapshot.data!.length,
-              itemBuilder: (context, index) {
-                final menu = menuSnapshot.data![index];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: size.height * 0.2,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 1,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: ListTile(
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: SizedBox(
-                            width: 50.0,
-                            height: 50.0,
-                            child: Image.network(
-                              menu['menu_img'],
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(Icons.error);
-                              },
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) {
-                                  return child;
-                                } else {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                }
-                              },
+    final Map<String, dynamic> foodtruckidmap = {'foodtruck_id': select};
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              controller.goMenuSetting(foodtruckidmap);
+            },
+            child: const Text('메뉴 추가'),
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: Obx(
+              () {
+                if (controller.menuList.isEmpty) {
+                  return const Center(child: Text('등록된 메뉴가 없습니다.'));
+                } else {
+                  return ListView.builder(
+                    itemCount: controller.menuList.length,
+                    itemBuilder: (context, index) {
+                      final menu = controller.menuList[index];
+                      final Map<String, dynamic> foodtruckmenuidmap = {
+                        'foodtruck_id': select,
+                        'menu_id': menu['menu_id']
+                      };
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: size.height * 0.2,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  spreadRadius: 1,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: SizedBox(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: Image.network(
+                                    menu['menu_img'],
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Icon(Icons.error);
+                                    },
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      } else {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      menu['menu_name'],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.edit),
+                                    color: const Color.fromARGB(
+                                        255, 175, 175, 175),
+                                    onPressed: () {
+                                      controller
+                                          .goMenuUpdate(foodtruckmenuidmap);
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete),
+                                    color: const Color.fromARGB(
+                                        255, 175, 175, 175),
+                                    onPressed: () {
+                                      controller.goMenuDelete(
+                                          select, menu['menu_id']);
+                                    },
+                                  ),
+                                ],
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('가격: ${menu['menu_price']}'),
+                                  Text('설명: ${menu['menu_description']}'),
+                                ],
+                              ),
+                              onTap: () {},
                             ),
                           ),
-                        ),
-                        title: Text(
-                          menu['menu_name'],
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('설명: ${menu['menu_description']}'),
-                            Text('가격: ${menu['menu_price']}'),
-                          ],
-                        ),
-                        onTap: () {},
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                );
+                          const SizedBox(height: 20),
+                        ],
+                      );
+                    },
+                  );
+                }
               },
             ),
-          );
-        }
-      },
+          ),
+        ],
+      ),
     );
   }
 

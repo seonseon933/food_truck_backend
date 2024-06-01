@@ -1,13 +1,15 @@
-import 'package:food_truck/getcontroller/base_controller.dart';
-import 'package:food_truck/getcontroller/foodtruck_controller.dart';
+import 'package:get/get.dart';
 
+import 'package:food_truck/getcontroller/base_controller.dart';
 import 'package:food_truck/view/base_view.dart';
+
+import '../view/first_login.dart';
+
+import 'package:food_truck/getcontroller/foodtruck_controller.dart';
 import 'package:food_truck/view/foodtruck_view.dart';
 
 import 'package:food_truck/view/foodtruckupdatemap_view.dart';
 import 'package:food_truck/getcontroller/foodtruckupdatemap_controller.dart';
-
-import 'package:get/get.dart';
 
 import 'package:food_truck/view/foodtruckdetail_view.dart';
 import 'package:food_truck/getcontroller/foodtruckdetail_controller.dart';
@@ -18,10 +20,14 @@ import '../getcontroller/home_controller.dart';
 import '../view/login_view.dart';
 import 'package:food_truck/getcontroller/login_controller.dart';
 
-import '../view/first_login.dart';
-
 import 'package:food_truck/view/foodtruckupdate_view.dart';
 import 'package:food_truck/getcontroller/foodtruckupdate_controller.dart';
+
+import 'package:food_truck/getcontroller/menusetting_controller.dart';
+import 'package:food_truck/view/menusetting_view.dart';
+
+import 'package:food_truck/getcontroller/menuupdate_controller.dart';
+import 'package:food_truck/view/menuupdate_view.dart';
 
 part 'app_routes.dart';
 
@@ -97,6 +103,24 @@ class FoodtruckdetailBinding extends Bindings {
   }
 }
 
+class MenusettingBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<MenusettingController>(
+      () => MenusettingController(),
+    );
+  }
+}
+
+class MenuupdateBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<MenuupdateController>(
+      () => MenuupdateController(),
+    );
+  }
+}
+
 class AppPages {
   AppPages._();
 
@@ -140,6 +164,16 @@ class AppPages {
       name: _Paths.FOODTRUCKUPDATEMAP,
       page: () => const FoodtruckupdatemapView(),
       binding: FoodtruckupdatemapBinding(),
+    ),
+    GetPage(
+      name: _Paths.MENUSETTING,
+      page: () => const MenusettingView(),
+      binding: MenusettingBinding(),
+    ),
+    GetPage(
+      name: _Paths.MENUUPDATE,
+      page: () => const MenudateView(),
+      binding: MenuupdateBinding(),
     ),
   ];
 }

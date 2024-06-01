@@ -32,7 +32,7 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
     RxBool bankTransfer = false.obs;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('FoodTruckUpdateView'),
+        title: const Text('푸드트럭 수정'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(

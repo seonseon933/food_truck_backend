@@ -15,9 +15,11 @@ abstract class Routes {
   static const SEARCH = _Paths.SEARCH;
   static const FOODTRUCKSETTING = _Paths.FOODTRUCKSETTING;
   static const FOODTRUCKDETAIL = _Paths.FOODTRUCKDETAIL;
-  //수정
   static const FOODTRUCKUPDATEMAP = _Paths.FOODTRUCKUPDATEMAP;
   static const FOODTRUCKUPDATE = _Paths.FOODTRUCKUPDATE;
+  // 메뉴
+  static const MENUSETTING = _Paths.MENUSETTING;
+  static const MENUUPDATE = _Paths.MENUUPDATE;
 }
 
 abstract class _Paths {
@@ -35,7 +37,8 @@ abstract class _Paths {
   static const SEARCH = '/search';
   static const FOODTRUCKSETTING = '/foodtrucksetting';
   static const FOODTRUCKDETAIL = '/foodtruckdetail';
-  // 수정 부분.
   static const FOODTRUCKUPDATEMAP = '/foodtruckupdatemap';
   static const FOODTRUCKUPDATE = '/foodtruckupdate';
+  static const MENUSETTING = '/menusetting';
+  static const MENUUPDATE = '/menuupdate';
 }
