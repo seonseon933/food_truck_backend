@@ -112,10 +112,10 @@ class ReviewModel {
           .doc();
       await docref.set(newReview);
 
-      _store.collection('Users').doc(uid).update({
+      await _store.collection('Users').doc(uid).update({
         'review_create_truckid': FieldValue.arrayUnion([foodtruckid]) // 중복X
       });
-
+      print('문제없이 진행됨 ');
       await updateAvgRating(foodtruckid);
 
       return foodtruckid;

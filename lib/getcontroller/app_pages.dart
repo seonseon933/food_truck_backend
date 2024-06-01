@@ -29,6 +29,12 @@ import 'package:food_truck/view/menusetting_view.dart';
 import 'package:food_truck/getcontroller/menuupdate_controller.dart';
 import 'package:food_truck/view/menuupdate_view.dart';
 
+import 'package:food_truck/getcontroller/reviewsetting_controller.dart';
+import 'package:food_truck/view/reviewsetting_view.dart';
+
+import 'package:food_truck/getcontroller/reviewupdate_controller.dart';
+import 'package:food_truck/view/reviewupdate_view.dart';
+
 part 'app_routes.dart';
 
 class BaseBinding extends Bindings {
@@ -121,6 +127,24 @@ class MenuupdateBinding extends Bindings {
   }
 }
 
+class ReviewsettingBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<ReviewsettingController>(
+      () => ReviewsettingController(),
+    );
+  }
+}
+
+class ReviewupdateBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<ReviewupdateController>(
+      () => ReviewupdateController(),
+    );
+  }
+}
+
 class AppPages {
   AppPages._();
 
@@ -174,6 +198,16 @@ class AppPages {
       name: _Paths.MENUUPDATE,
       page: () => const MenudateView(),
       binding: MenuupdateBinding(),
+    ),
+    GetPage(
+      name: _Paths.REVIEWSETTING,
+      page: () => const ReviewsettingView(),
+      binding: ReviewsettingBinding(),
+    ),
+    GetPage(
+      name: _Paths.REVIEWUPDATE,
+      page: () => const ReviewupdateView(),
+      binding: ReviewupdateBinding(),
     ),
   ];
 }

@@ -17,9 +17,10 @@ abstract class Routes {
   static const FOODTRUCKDETAIL = _Paths.FOODTRUCKDETAIL;
   static const FOODTRUCKUPDATEMAP = _Paths.FOODTRUCKUPDATEMAP;
   static const FOODTRUCKUPDATE = _Paths.FOODTRUCKUPDATE;
-  // 메뉴
   static const MENUSETTING = _Paths.MENUSETTING;
   static const MENUUPDATE = _Paths.MENUUPDATE;
+  static const REVIEWSETTING = _Paths.REVIEWSETTING;
+  static const REVIEWUPDATE = _Paths.REVIEWUPDATE;
 }
 
 abstract class _Paths {
@@ -41,4 +42,6 @@ abstract class _Paths {
   static const FOODTRUCKUPDATE = '/foodtruckupdate';
   static const MENUSETTING = '/menusetting';
   static const MENUUPDATE = '/menuupdate';
+  static const REVIEWSETTING = '/reviewsetting';
+  static const REVIEWUPDATE = '/reviewupdate';
 }

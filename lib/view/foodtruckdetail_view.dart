@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_truck/getcontroller/foodtruckdetail_controller.dart';
 import 'package:get/get.dart';
 import '../style/font_style.dart';
@@ -208,7 +209,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                               ],
                             ),
                             // 리뷰 탭 ====================================
-                            const Text('data'),
+                            buildReviewTab(context, select, size, controller),
                           ],
                         ),
                       ),
@@ -329,6 +330,153 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                                 children: [
                                   Text('가격: ${menu['menu_price']}'),
                                   Text('설명: ${menu['menu_description']}'),
+                                ],
+                              ),
+                              onTap: () {},
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildReviewTab(BuildContext context, String select, Size size,
+      FoodtruckdetailController controller) {
+    final Map<String, dynamic> foodtruckidmap = {'foodtruck_id': select};
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              controller.goReviewSetting(foodtruckidmap);
+            },
+            child: const Text('리뷰 추가'),
+          ),
+          const SizedBox(height: 20),
+          Expanded(
+            child: Obx(
+              () {
+                if (controller.reviewList.isEmpty) {
+                  return const Center(child: Text('등록된 리뷰가 없습니다.'));
+                } else {
+                  return ListView.builder(
+                    itemCount: controller.reviewList.length,
+                    itemBuilder: (context, index) {
+                      final review = controller.reviewList[index];
+                      final Map<String, dynamic> foodtruckreviewidmap = {
+                        'foodtruck_id': select,
+                        'review_id': review['review_id']
+                      };
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: size.height * 0.2,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  spreadRadius: 1,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: SizedBox(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: Image.network(
+                                    review['user_img'],
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Icon(Icons.error);
+                                    },
+                                    loadingBuilder:
+                                        (context, child, loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      } else {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                              title: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  RatingBarIndicator(
+                                    rating: review['Rating'],
+                                    itemBuilder: (context, index) => const Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    itemCount: 5,
+                                    itemSize: 20.0,
+                                    direction: Axis.horizontal,
+                                  ),
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.edit),
+                                        color: const Color.fromARGB(
+                                            255, 175, 175, 175),
+                                        onPressed: () {
+                                          controller.goReviewUpdate(
+                                              foodtruckreviewidmap);
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete),
+                                        color: const Color.fromARGB(
+                                            255, 175, 175, 175),
+                                        onPressed: () {
+                                          controller.goReviewDelete(
+                                              select, review['review_id']);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('${review['user_name']}',
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      Text('${review['review_create_date']}'),
+                                    ],
+                                  ),
+                                  if (review['update'] == 1)
+                                    const Text(
+                                      '(수정됨)',
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors.grey),
+                                    ),
+                                  const SizedBox(height: 4),
+                                  Text(review['review_context']),
                                 ],
                               ),
                               onTap: () {},
