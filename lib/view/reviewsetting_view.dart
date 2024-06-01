@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:food_truck/getcontroller/reviewsetting_controller.dart';
+import 'package:food_truck/controller/reviewsetting_controller.dart';
 import 'package:get/get.dart';
 
 class ReviewsettingView extends GetView<ReviewsettingController> {

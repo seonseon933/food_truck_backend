@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:food_truck/getcontroller/foodtruckupdate_controller.dart';
-//import '../controller/foodtrucksetting_controller.dart';
+import 'package:food_truck/controller/foodtruckupdate_controller.dart';
 import 'package:get/get.dart';
 
 import '../style/font_style.dart';

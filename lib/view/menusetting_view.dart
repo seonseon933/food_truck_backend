@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:food_truck/getcontroller/menusetting_controller.dart';
+import 'package:food_truck/controller/menusetting_controller.dart';
 import 'package:food_truck/style/font_style.dart';
 import 'package:get/get.dart';
 

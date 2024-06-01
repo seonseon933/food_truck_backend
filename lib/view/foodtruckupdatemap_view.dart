@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:food_truck/api/detailtest.dart';
-import 'package:food_truck/getcontroller/foodtruckupdatemap_controller.dart';
+import 'package:food_truck/controller/foodtruckupdatemap_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 // 아래는 테스트하기 위한 import 파일.

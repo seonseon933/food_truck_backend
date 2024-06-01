@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_truck/api/naver_map_api.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
-import 'getcontroller/app_pages.dart';
+import 'controller/app_pages.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 

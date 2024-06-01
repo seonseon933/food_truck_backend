@@ -6,7 +6,7 @@ import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:http/http.dart' as http;
 //import 'search_view.dart';
 import 'package:get/get.dart';
-import 'package:food_truck/getcontroller/home_controller.dart';
+import 'package:food_truck/controller/home_controller.dart';
 //import '../controller/search_controller.dart';
 //import '../style/font_style.dart';
 

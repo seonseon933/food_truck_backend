@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:food_truck/getcontroller/foodtruckdetail_controller.dart';
+import 'package:food_truck/controller/foodtruckdetail_controller.dart';
 import 'package:get/get.dart';
 import '../style/font_style.dart';
 

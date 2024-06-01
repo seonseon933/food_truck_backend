@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck/getcontroller/foodtruck_controller.dart'; // getcontroller
+import 'package:food_truck/controller/foodtruck_controller.dart'; // getcontroller
 //import 'package:food_truck/controller/foodtruck_controller.dart';
 import 'package:food_truck/style/font_style.dart';
 import 'package:get/get.dart';

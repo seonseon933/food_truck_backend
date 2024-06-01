@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_truck/getcontroller/login_controller.dart';
-import '../getcontroller/app_pages.dart';
+import 'package:food_truck/controller/login_controller.dart';
+import '../controller/app_pages.dart';
 import '../style/font_style.dart';
 import 'package:get/get.dart';
 

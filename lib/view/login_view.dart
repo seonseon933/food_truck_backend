@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:food_truck/getcontroller/login_controller.dart';
+import 'package:food_truck/controller/login_controller.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
