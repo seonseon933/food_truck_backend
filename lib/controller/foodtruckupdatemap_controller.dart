@@ -4,7 +4,6 @@ import 'app_id.dart';
 import '../view/home_view.dart';
 //import 'package:food_truck/view/search_view.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'app_pages.dart';
 
 class FoodtruckupdatemapController extends GetxController {

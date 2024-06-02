@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,12 @@ class ProfileView extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    if (user == null) {
+      controller.goToLogin();
+    }
+    String uid = user!.uid;
     return Scaffold(
       appBar: AppBar(
         title: const Text('ProfileView'),
@@ -22,7 +29,7 @@ class ProfileView extends GetView<ProfileController> {
             Column(
               children: [
                 FutureBuilder(
-                    future: (controller.getUserData('av7G7DosY9sGnaL1PIG9')),
+                    future: (controller.getUserData(uid)),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData == false) {
                         return const CircularProgressIndicator();

@@ -87,9 +87,38 @@ class UsersModel {
   // 사용자 닉네임 변경 코드
   Future<void> updateUserName(String name, String uid) async {
     try {
-      _store.collection('Users').doc(uid).update({'user_name': name});
+      await _store.collection('Users').doc(uid).update({'user_name': name});
+      await updateUserWriteReviewData(uid);
     } catch (e) {
       print('사용자 닉네임 변경 오류 : $e');
+    }
+  }
+
+  // 사용자 정보 수정하면 리뷰에 저장된 사용자 정보도 바뀌어야 함
+  Future<void> updateUserWriteReviewData(String uid) async {
+    try {
+      DocumentSnapshot documentSnapshot =
+          await _store.collection('Users').doc(uid).get();
+      Map<String, dynamic> userdata =
+          documentSnapshot.data() as Map<String, dynamic>;
+      List<dynamic> reviewtruckids = userdata['review_create_truckid'];
+
+      for (String truckid in reviewtruckids) {
+        QuerySnapshot querySnapshot = await _store
+            .collection('FoodTruck')
+            .doc(truckid)
+            .collection('Review')
+            .where('user_uid', isEqualTo: uid)
+            .get();
+        for (QueryDocumentSnapshot reviewdoc in querySnapshot.docs) {
+          await reviewdoc.reference.update({
+            'user_name': userdata['user_name'],
+            'user_img': userdata['user_img'],
+          });
+        }
+      }
+    } catch (e) {
+      print('사용자가 작성한 리뷰의 사용자 정보 업데이트 중 오류 : $e');
     }
   }
 
@@ -109,7 +138,11 @@ class UsersModel {
       // URL 가져오기
       String downloadURL = await ref.getDownloadURL();
       // store에 저장
-      _store.collection('Users').doc(uid).update({'user_img': downloadURL});
+      await _store
+          .collection('Users')
+          .doc(uid)
+          .update({'user_img': downloadURL});
+      await updateUserWriteReviewData(uid);
     } catch (e) {
       print('이미지 저장 오류 $e');
     }
@@ -135,7 +168,7 @@ class UsersModel {
         print('storage에 있는 이미지 삭제 실패 : $e');
       }
     } else {
-      _store
+      await _store
           .collection("Users")
           .doc(uid)
           .update({'user_img_source': "storage"});

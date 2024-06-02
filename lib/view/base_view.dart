@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-//import '../controller/base_controller.dart';
 import '../controller/base_controller.dart';
 
 class BaseView extends GetView<BaseController> {
@@ -29,10 +28,10 @@ class BaseView extends GetView<BaseController> {
                     icon: Icon(Icons.food_bank),
                     label: 'Food',
                   ),
-                  // BottomNavigationBarItem(
-                  //   icon: Icon(Icons.person),
-                  //   label: 'Profile',
-                  // ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.person),
+                    label: 'Profile',
+                  ),
                 ],
                 currentIndex: controller.selectedIndex.value,
                 onTap: controller.onItemTapped,

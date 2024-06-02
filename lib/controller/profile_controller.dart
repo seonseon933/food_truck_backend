@@ -14,7 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ProfileController extends GetxController {
   final _store = FirebaseFirestore.instance;
   late String uid;
-  late final user;
+  var user = Rxn<Map<String, dynamic>>();
 
   void goToSettingPage() {
     Get.toNamed(Routes.SETTING, id: profileD);
@@ -28,13 +28,17 @@ class ProfileController extends GetxController {
     Get.toNamed(Routes.FOODTRUCKSETTING, id: profileD);
   }
 
-  void goToProfilesettingPage(userdata) {
-    user = userdata;
+  void goToProfilesettingPage(Map<String, dynamic> userdata) {
+    user.value = userdata;
     print(user);
     Get.toNamed(
       Routes.PROFILESETTING,
       id: profileD,
     );
+  }
+
+  void goToLogin() {
+    Get.offAllNamed(Routes.LOGIN);
   }
 
   getUserData(String uid) async {
