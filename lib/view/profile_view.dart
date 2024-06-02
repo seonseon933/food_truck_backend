@@ -18,7 +18,7 @@ class ProfileView extends GetView<ProfileController> {
     String uid = user!.uid;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProfileView'),
+        title: const Text('마이페이지'),
         centerTitle: true,
       ),
       body: Padding(
@@ -82,15 +82,6 @@ class ProfileView extends GetView<ProfileController> {
                                     },
                                     icon: const Icon(Icons.rate_review),
                                     label: const Text('내 리뷰',
-                                        style: CustomTextStyles.body),
-                                  ),
-                                  const SizedBox(width: 8.0),
-                                  ElevatedButton.icon(
-                                    onPressed: () {
-                                      // 알림함으로 이동하는 기능 추가
-                                    },
-                                    icon: const Icon(Icons.notifications),
-                                    label: const Text('알림함',
                                         style: CustomTextStyles.body),
                                   ),
                                 ],
@@ -199,6 +190,94 @@ class ProfileView extends GetView<ProfileController> {
                               const SizedBox(height: 8.0),
                               const Divider(height: 1.0, color: Colors.grey),
                               const SizedBox(height: 16.0),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16.0),
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('경고'),
+                                              content:
+                                                  const Text('정말 로그아웃 하시겠습니까?'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: const Text('아니오'),
+                                                  onPressed: () {
+                                                    Get.back();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: const Text('예'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                    controller
+                                                        .signOutWithGoogle();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: const Text(
+                                        '로그아웃',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors
+                                              .blue, // 클릭 가능하게 보이도록 텍스트 색상 변경
+                                          decoration:
+                                              TextDecoration.underline, // 밑줄 추가
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                        height: 16.0), // 로그아웃과 탈퇴하기 간의 간격
+                                    GestureDetector(
+                                      onTap: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('경고'),
+                                              content:
+                                                  const Text('정말 탈퇴 하시겠습니까?'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: const Text('아니오'),
+                                                  onPressed: () {
+                                                    Get.back();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: const Text('예'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: const Text(
+                                        '탈퇴하기',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors
+                                              .red, // 클릭 가능하게 보이도록 텍스트 색상 변경
+                                          decoration:
+                                              TextDecoration.underline, // 밑줄 추가
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         );
