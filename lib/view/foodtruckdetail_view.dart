@@ -13,8 +13,9 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
     final Map arguments = Get.arguments as Map;
     final String select = arguments['foodtruck_id'];
     controller.setFoodTruckId(select);
-
+    // 수정, 삭제
     final Size size = MediaQuery.of(context).size;
+    String uid = controller.getCurrentUseruid();
 
     return Scaffold(
       appBar: AppBar(
@@ -51,21 +52,23 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                   color: Colors.grey[300],
                 ),
                 const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: SizedBox(
-                    width: 36,
-                    height: 36,
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                      icon: const Icon(Icons.edit),
-                      onPressed: () {
-                        controller.goUpdateMap(foodtruck);
-                      },
+                if (uid == foodtruck['user_uid']) ...[
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: SizedBox(
+                      width: 36,
+                      height: 36,
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                          controller.goUpdateMap(foodtruck);
+                        },
+                      ),
                     ),
                   ),
-                ),
+                ],
                 Text(
                   "${foodtruck['truck_name']}",
                   style: CustomTextStyles.title,
@@ -147,7 +150,8 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                         child: TabBarView(
                           children: [
                             // 메뉴 탭 ====================================
-                            buildMenuTab(context, select, size, controller),
+                            buildMenuTab(context, select, uid,
+                                foodtruck['user_uid'], size, controller),
                             // 정보 탭 ====================================
                             ListView(
                               padding: const EdgeInsets.all(16.0),
@@ -209,7 +213,8 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                               ],
                             ),
                             // 리뷰 탭 ====================================
-                            buildReviewTab(context, select, size, controller),
+                            buildReviewTab(
+                                context, select, uid, size, controller),
                           ],
                         ),
                       ),
@@ -224,8 +229,8 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
     );
   }
 
-  Widget buildMenuTab(BuildContext context, String select, Size size,
-      FoodtruckdetailController controller) {
+  Widget buildMenuTab(BuildContext context, String select, String uid,
+      String writeuid, Size size, FoodtruckdetailController controller) {
     final Map<String, dynamic> foodtruckidmap = {'foodtruck_id': select};
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -305,24 +310,26 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
-                                  IconButton(
-                                    icon: const Icon(Icons.edit),
-                                    color: const Color.fromARGB(
-                                        255, 175, 175, 175),
-                                    onPressed: () {
-                                      controller
-                                          .goMenuUpdate(foodtruckmenuidmap);
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    color: const Color.fromARGB(
-                                        255, 175, 175, 175),
-                                    onPressed: () {
-                                      controller.goMenuDelete(
-                                          select, menu['menu_id']);
-                                    },
-                                  ),
+                                  if (uid == writeuid) ...[
+                                    IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      color: const Color.fromARGB(
+                                          255, 175, 175, 175),
+                                      onPressed: () {
+                                        controller
+                                            .goMenuUpdate(foodtruckmenuidmap);
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete),
+                                      color: const Color.fromARGB(
+                                          255, 175, 175, 175),
+                                      onPressed: () {
+                                        controller.goMenuDelete(
+                                            select, menu['menu_id']);
+                                      },
+                                    ),
+                                  ],
                                 ],
                               ),
                               subtitle: Column(
@@ -349,8 +356,8 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
     );
   }
 
-  Widget buildReviewTab(BuildContext context, String select, Size size,
-      FoodtruckdetailController controller) {
+  Widget buildReviewTab(BuildContext context, String select, String uid,
+      Size size, FoodtruckdetailController controller) {
     final Map<String, dynamic> foodtruckidmap = {'foodtruck_id': select};
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -432,28 +439,30 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                                     itemSize: 20.0,
                                     direction: Axis.horizontal,
                                   ),
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(Icons.edit),
-                                        color: const Color.fromARGB(
-                                            255, 175, 175, 175),
-                                        onPressed: () {
-                                          controller.goReviewUpdate(
-                                              foodtruckreviewidmap);
-                                        },
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(Icons.delete),
-                                        color: const Color.fromARGB(
-                                            255, 175, 175, 175),
-                                        onPressed: () {
-                                          controller.goReviewDelete(
-                                              select, review['review_id']);
-                                        },
-                                      ),
-                                    ],
-                                  ),
+                                  if (uid == review['user_uid']) ...[
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          icon: const Icon(Icons.edit),
+                                          color: const Color.fromARGB(
+                                              255, 175, 175, 175),
+                                          onPressed: () {
+                                            controller.goReviewUpdate(
+                                                foodtruckreviewidmap);
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete),
+                                          color: const Color.fromARGB(
+                                              255, 175, 175, 175),
+                                          onPressed: () {
+                                            controller.goReviewDelete(
+                                                select, review['review_id']);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ],
                               ),
                               subtitle: Column(

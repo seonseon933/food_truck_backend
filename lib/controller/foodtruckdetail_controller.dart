@@ -51,6 +51,11 @@ class FoodtruckdetailController extends GetxController {
     fetchReviewData(foodtruckid); // 데이터 다시 가져오기
   }
 
+  String getCurrentUseruid() {
+    User user = _auth.currentUser!;
+    return user.uid;
+  }
+
   // 상세 푸드트럭
   Future<Map<String, dynamic>> getDetailFoodTruck(String foodtruckid) async {
     return _foodTruckModel.getDetailFoodTruck(foodtruckid);
