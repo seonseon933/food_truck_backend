@@ -72,7 +72,7 @@ class _NaverMapAppState extends State<CNaverMapApp> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(child: Text('위치 정보를 불러오는데 실패했습니다.'));
+          return Center(child: Text('지도를 자유롭게 이동하고 마커를 클릭하여 푸드트럭 위치를 지정하세요'));
         } else {
           _initialPosition = snapshot.data!;
           return Scaffold(
@@ -103,6 +103,7 @@ class _NaverMapAppState extends State<CNaverMapApp> {
                                   cameraPosition.target.latitude;
                               fcontroller.jlongitude =
                                   cameraPosition.target.longitude;
+                              fcontroller.gocreateview();
                             },
                             child: Text("네"),
                           ),

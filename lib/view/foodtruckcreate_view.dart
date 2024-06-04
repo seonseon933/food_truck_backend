@@ -117,36 +117,6 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                 ),
               ),
               SizedBox(height: 16.0),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    Get.lazyPut<Search_Controller>(() => Search_Controller());
-                    final juso = await Get.dialog(
-                      Theme(
-                        data: Theme.of(context),
-                        child: AlertDialog(
-                          content: SearchView(),
-                        ),
-                      ),
-                    );
-                    controller.juso.value = juso;
-                  },
-                  child: Obx(() => Text(controller.juso.value)),
-                ),
-              ),
-              Center(
-                child: Container(
-                  width: size.width * 0.85,
-                  height: size.height * 0.5,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.black),
-                  child: Obx(() => CNaverMapApp(
-                        juso: controller.juso.value,
-                      )),
-                ),
-              ),
-              SizedBox(height: 16.0),
               Text('결제 방법', style: CustomTextStyles.title),
               SizedBox(height: 8.0),
               Row(
@@ -291,15 +261,14 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                       'accountNumber': accountNumberController.text,
                     };
                     controller.createFoodTruck(
-                        nameController.text,
-                        descriptionController.text,
-                        scheduleController.text,
-                        phoneController.text,
-                        paymentOptions,
-                        File('null'),
-                        tagController.text,
-                        controller.jlatitude,
-                        controller.jlongitude);
+                      nameController.text,
+                      descriptionController.text,
+                      scheduleController.text,
+                      phoneController.text,
+                      paymentOptions,
+                      File('null'),
+                      tagController.text,
+                    );
                     print('등록버튼 클릭');
                     controller.goBack();
                   },

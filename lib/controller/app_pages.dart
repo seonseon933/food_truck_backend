@@ -42,6 +42,8 @@ import 'package:food_truck/view/reviewupdate_view.dart';
 
 import 'foodtruckcreate_controller.dart';
 import '../view/foodtruckcreate_view.dart';
+
+import '../view/foodtruckcreatemap_view.dart';
 part 'app_routes.dart';
 
 class BaseBinding extends Bindings {
@@ -234,8 +236,13 @@ class AppPages {
       binding: FoodtruckupdatemapBinding(),
     ),
     GetPage(
-      name: _Paths.FOODTRUCKUPDATEMAP,
+      name: _Paths.FOODTRUCKCREATE,
       page: () => const FoodtruckcreateView(),
+      binding: FoodtruckcreateBinding(),
+    ),
+    GetPage(
+      name: _Paths.FOODTRUCKCREATEMAP,
+      page: () => const FoodtruckcreatemapView(),
       binding: FoodtruckcreateBinding(),
     ),
     GetPage(
