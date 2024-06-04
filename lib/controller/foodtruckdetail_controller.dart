@@ -4,13 +4,17 @@ import 'package:food_truck/model/review_model.dart';
 import 'package:get/get.dart';
 import '../model/menu_model.dart';
 import 'app_pages.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:food_truck/model/favorite_model.dart';
 
 class FoodtruckdetailController extends GetxController {
+  late RxList<String> favoriteTruckIds;
+  final _store = FirebaseFirestore.instance;
   final MenuModel _menuModel = MenuModel();
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
   final ReviewModel _reviewModel = ReviewModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final FavoriteModel _favoriteModel = FavoriteModel();
   var foodtruckid = ''.obs;
   var menuList = <Map<String, dynamic>>[].obs;
   var reviewList = <Map<String, dynamic>>[].obs;
@@ -51,8 +55,23 @@ class FoodtruckdetailController extends GetxController {
     fetchReviewData(foodtruckid); // 데이터 다시 가져오기
   }
 
+  String getCurrentUseruid() {
+    User user = _auth.currentUser!;
+    return user.uid;
+  }
+
   // 상세 푸드트럭
-  Future<Map<String, dynamic>> getDetailFoodTruck(String foodtruckid) async {
+  Future<Map<String, dynamic>> getDetailFoodTruck(
+      String foodtruckid, String uid) async {
+    try {
+      DocumentSnapshot documentSnapshot =
+          await _store.collection('Users').doc(uid).get();
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+      favoriteTruckIds = RxList<String>.from(data['favorite_truckid']);
+    } catch (e) {
+      print('사용자 정보 가져오기 오류 : $e ');
+    }
     return _foodTruckModel.getDetailFoodTruck(foodtruckid);
   }
 
@@ -78,5 +97,14 @@ class FoodtruckdetailController extends GetxController {
   Future<String> deleteReview(String foodtruckid, String reviewid) async {
     User user = _auth.currentUser!;
     return _reviewModel.deleteReview(foodtruckid, reviewid, user.uid);
+  }
+
+  Future<void> favoriteTruckInsert(String foodtruckid) async {
+    User user = _auth.currentUser!;
+    _favoriteModel.favoriteFoodTruckCreate(foodtruckid, user.uid);
+  }
+
+  Future<void> favoriteFoodTruckDelete(String foodtruckid, String uid) async {
+    return _favoriteModel.favoriteFoodTruckDelete(foodtruckid, uid);
   }
 }
