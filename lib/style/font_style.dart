@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CustomTextStyles {
+  static const TextStyle truckname = TextStyle(
+    fontSize: 45,
+    fontWeight: FontWeight.bold,
+    color: Colors.black87,
+  );
   static const TextStyle bigtitle = TextStyle(
     fontSize: 30,
     fontWeight: FontWeight.bold,
