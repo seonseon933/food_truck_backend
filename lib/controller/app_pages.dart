@@ -42,7 +42,8 @@ import 'package:food_truck/view/reviewupdate_view.dart';
 
 import 'foodtruckcreate_controller.dart';
 import '../view/foodtruckcreate_view.dart';
-
+import 'wishlist_controller.dart';
+import '../view/wishlist_view.dart';
 import '../view/foodtruckcreatemap_view.dart';
 part 'app_routes.dart';
 
@@ -181,6 +182,15 @@ class FoodtruckcreateBinding extends Bindings {
   }
 }
 
+class WishlistBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<WishlistController>(
+      () => WishlistController(),
+    );
+  }
+}
+
 class AppPages {
   AppPages._();
 
@@ -204,6 +214,11 @@ class AppPages {
       name: _Paths.FOODTRUCKDETAIL,
       page: () => const FoodtruckdetailView(),
       binding: FoodtruckdetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.WISHLIST,
+      page: () => const WishlistView(),
+      binding: WishlistBinding(),
     ),
     GetPage(
       name: _Paths.BASE,

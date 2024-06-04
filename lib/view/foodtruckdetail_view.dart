@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_truck/controller/foodtruckdetail_controller.dart';
+import 'package:food_truck/controller/base_controller.dart';
 import 'package:get/get.dart';
 import '../style/font_style.dart';
 
@@ -9,6 +10,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
 
   @override
   Widget build(BuildContext context) {
+    final BaseController baseController = Get.find<BaseController>();
     final Map arguments = Get.arguments as Map;
     final String select = arguments['foodtruck_id'];
     controller.setFoodTruckId(select);
@@ -52,7 +54,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (controller.favoriteTruckIds
+                        if (baseController.favoriteTruckIds
                             .contains(controller.foodtruckid.toString()))
                           SizedBox(
                             child: IconButton(
@@ -64,7 +66,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                               ),
                               iconSize: 35,
                               onPressed: () {
-                                controller.favoriteTruckIds
+                                baseController.favoriteTruckIds
                                     .remove(controller.foodtruckid.toString());
                                 controller.favoriteFoodTruckDelete(
                                     controller.foodtruckid.toString(), uid);
@@ -82,7 +84,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                               ),
                               iconSize: 35,
                               onPressed: () {
-                                controller.favoriteTruckIds
+                                baseController.favoriteTruckIds
                                     .add(controller.foodtruckid.toString());
                                 controller.favoriteTruckInsert(
                                     controller.foodtruckid.toString());

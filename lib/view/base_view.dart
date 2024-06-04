@@ -20,10 +20,10 @@ class BaseView extends GetView<BaseController> {
                     icon: Icon(Icons.home),
                     label: 'Home',
                   ),
-                  // BottomNavigationBarItem(
-                  //   icon: Icon(Icons.favorite),
-                  //   label: 'Whislist',
-                  // ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.favorite),
+                    label: 'Whislist',
+                  ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.food_bank),
                     label: 'Food',

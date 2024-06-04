@@ -8,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:food_truck/model/favorite_model.dart';
 
 class FoodtruckdetailController extends GetxController {
-  late RxList<String> favoriteTruckIds;
   final _store = FirebaseFirestore.instance;
   final MenuModel _menuModel = MenuModel();
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
@@ -63,15 +62,6 @@ class FoodtruckdetailController extends GetxController {
   // 상세 푸드트럭
   Future<Map<String, dynamic>> getDetailFoodTruck(
       String foodtruckid, String uid) async {
-    try {
-      DocumentSnapshot documentSnapshot =
-          await _store.collection('Users').doc(uid).get();
-      Map<String, dynamic> data =
-          documentSnapshot.data() as Map<String, dynamic>;
-      favoriteTruckIds = RxList<String>.from(data['favorite_truckid']);
-    } catch (e) {
-      print('사용자 정보 가져오기 오류 : $e ');
-    }
     return _foodTruckModel.getDetailFoodTruck(foodtruckid);
   }
 
