@@ -13,7 +13,6 @@ class FoodTruckModel {
   final String defaultImg =
       "https://firebasestorage.googleapis.com/v0/b/food-truck-19f2d.appspot.com/o/defaultimg.jpg?alt=media&token=ea4a0bef-c962-49c9-a8ef-c20f9e2ecada";
 
-  // 트럭 주소, 위치 정보는 제외함. 지도 기능 다 구현이 되면 추가할 것임.
   Future<String> createFoodTruck(
       String truckName,
       String truckDescription,
@@ -22,7 +21,9 @@ class FoodTruckModel {
       Map<String, dynamic> paymentOptions,
       File? file,
       String truckTag,
-      String uid) async {
+      String uid,
+      double trucklatitude,
+      double trucklongitude) async {
     String timenow = DateFormat("yyyy년 MM월 dd일").format(DateTime.now());
     DocumentReference docref = _store.collection('FoodTruck').doc();
 
@@ -36,15 +37,17 @@ class FoodTruckModel {
         'truck_tag': truckTag,
         'truck_description': truckDescription,
         'truck_payment': paymentOptions,
-        'truck_avgrating': 0
-        //'truck_latitude' : 경도
-        //'truck_longitude' : 위도
+        'truck_avgrating': 0,
+        'truck_latitude': trucklatitude,
+        'truck_longitude': trucklongitude,
+        'truck_review_ctn': 0 // 리뷰 개수
       };
-
+      print(
+          '위치 trucklatitude : $trucklatitude, trucklongitude : $trucklongitude');
       await docref.set(newFoodTruck);
 
       if (file != null) {
-        await updateFoodTruckImg(docref.id, file); // await 추가함
+        await updateFoodTruckImg(docref.id, file);
       } else {
         await _store
             .collection('FoodTruck')
@@ -68,8 +71,7 @@ class FoodTruckModel {
       File? file,
       String truckTag,
       double latitude,
-      double longitude,
-      String uid) async {
+      double longitude) async {
     try {
       if (file != null) {
         await updateFoodTruckImg(foodtruckid, file); // await 추가함
@@ -92,7 +94,6 @@ class FoodTruckModel {
     }
   }
 
-  // 푸드트럭 삭제. 리뷰랑, 메뉴도 처리해줘야 함. <- fuctions 사용해야 함.
   Future<void> deleteFoodTruck(String foodtruckid) async {
     try {
       final DocumentSnapshot documentSnapshot =
@@ -101,7 +102,7 @@ class FoodTruckModel {
           documentSnapshot.data() as Map<String, dynamic>;
 
       await deleteFoodTruckImgStorage(data); // await 추가함
-      _store.collection('FoodTruck').doc(foodtruckid).delete();
+      await _store.collection('FoodTruck').doc(foodtruckid).delete();
     } catch (e) {
       print('푸드트럭 삭제 오류 : $e');
     }

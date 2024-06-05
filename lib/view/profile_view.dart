@@ -105,7 +105,7 @@ class ProfileView extends GetView<ProfileController> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text('경고'),
+                                        title: const Text(''),
                                         content: const Text(
                                             '회원 정보 수정 페이지로 이동하시겠습니까?'),
                                         actions: <Widget>[
@@ -156,7 +156,7 @@ class ProfileView extends GetView<ProfileController> {
                                       return AlertDialog(
                                         title: const Text('경고'),
                                         content: const Text(
-                                            '푸드트럭 정보 수정 페이지로 이동하시겠습니까?'),
+                                            '푸드트럭 생성 페이지로 이동하시겠습니까?'),
                                         actions: <Widget>[
                                           TextButton(
                                             child: const Text('아니오'),
@@ -169,8 +169,9 @@ class ProfileView extends GetView<ProfileController> {
                                             onPressed: () {
                                               Navigator.of(context)
                                                   .pop(); // 팝업 창 닫기
-                                              //controller
-                                              //    .goToFoodtrucksettingPage();
+                                              controller
+                                                  .goToFoodtruckcreatePage(
+                                                      snapshot.data);
                                             },
                                           ),
                                         ],
@@ -180,7 +181,7 @@ class ProfileView extends GetView<ProfileController> {
                                 },
                                 child: const Row(
                                   children: [
-                                    Text('푸드트럭 정보 수정',
+                                    Text('푸드트럭 생성하기',
                                         style: CustomTextStyles.body),
                                     Spacer(),
                                     Icon(Icons.arrow_forward),

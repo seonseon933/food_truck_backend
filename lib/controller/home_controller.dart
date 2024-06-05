@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'app_pages.dart';
 
 class HomeController extends GetxController {
+  RxString juso = "".obs;
+
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
   void goDetail(foodtruck) {
     //print(foodtruck);

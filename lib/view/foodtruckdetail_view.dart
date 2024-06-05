@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:food_truck/controller/base_controller.dart';
 import 'package:food_truck/controller/foodtruckdetail_controller.dart';
 import 'package:get/get.dart';
 import '../style/font_style.dart';
@@ -10,6 +11,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
 
   @override
   Widget build(BuildContext context) {
+    final BaseController baseController = Get.find<BaseController>();
     final Map arguments = Get.arguments as Map;
     final String select = arguments['foodtruck_id'];
     controller.setFoodTruckId(select);
@@ -37,92 +39,158 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
               children: [
                 // 이미지 추가
                 Container(
-                  height: 200,
+                  height: size.height * 0.3,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage(foodtruck['truck_img']),
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                     ),
                     borderRadius: BorderRadius.circular(11.0),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
+                Obx(
+                  () => Align(
+                    alignment: Alignment.topRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (baseController.favoriteTruckIds
+                            .contains(controller.foodtruckid.toString()))
+                          SizedBox(
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: const Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                              ),
+                              iconSize: 35,
+                              onPressed: () {
+                                baseController.favoriteTruckIds
+                                    .remove(controller.foodtruckid.toString());
+                                controller.favoriteFoodTruckDelete(
+                                    controller.foodtruckid.toString(), uid);
+                              },
+                            ),
+                          )
+                        else
+                          SizedBox(
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: const Icon(
+                                Icons.favorite_border,
+                                color: Colors.black,
+                              ),
+                              iconSize: 35,
+                              onPressed: () {
+                                baseController.favoriteTruckIds
+                                    .add(controller.foodtruckid.toString());
+                                controller.favoriteTruckInsert(
+                                    controller.foodtruckid.toString());
+                              },
+                            ),
+                          ),
+                        if (uid == foodtruck['user_uid']) ...[
+                          SizedBox(
+                            width: 36,
+                            height: 36,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: const Icon(Icons.edit),
+                              iconSize: 30,
+                              onPressed: () {
+                                controller.goUpdateMap(foodtruck);
+                              },
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
                 Container(
                   height: 1,
                   color: Colors.grey[300],
                 ),
-                const SizedBox(height: 10),
-                if (uid == foodtruck['user_uid']) ...[
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: SizedBox(
-                      width: 36,
-                      height: 36,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints(),
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          controller.goUpdateMap(foodtruck);
-                        },
-                      ),
-                    ),
+                const SizedBox(height: 30),
+                Center(
+                  child: Text(
+                    "${foodtruck['truck_name']}",
+                    style: CustomTextStyles.truckname,
                   ),
-                ],
-                Text(
-                  "${foodtruck['truck_name']}",
-                  style: CustomTextStyles.title,
                 ),
-                const SizedBox(height: 10),
-                // 위치 및 거리 정보 추가
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "위치:",
-                      style: CustomTextStyles.body,
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Text(
-                        foodtruck['truck_address'],
-                        style: CustomTextStyles.body,
-                        softWrap: true, // 텍스트 줄 바꿈 허용
-                        overflow:
-                            TextOverflow.visible, // 텍스트가 경계를 넘을 경우 클립하지 않음
+                    RatingBarIndicator(
+                      rating: foodtruck["truck_avgrating"] is int
+                          ? (foodtruck["truck_avgrating"] as int).toDouble()
+                          : foodtruck["truck_avgrating"] as double,
+                      itemBuilder: (context, index) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
                       ),
+                      itemCount: 5,
+                      itemSize: 30.0,
+                      direction: Axis.horizontal,
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      "(${foodtruck["truck_avgrating"].toString()})",
+                      style: CustomTextStyles.caption,
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                // 결제 방법 추가
-                const Text(
-                  "결제 방법:",
-                  style: CustomTextStyles.subtitle,
+
+                const SizedBox(height: 30),
+                Container(
+                  height: 1,
+                  color: Colors.grey[300],
                 ),
+
+                const SizedBox(height: 10),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(
+                      width: size.width * 0.2,
+                      height: size.height * 0.05,
+                      child: const Text(
+                        "결제 방법",
+                        style: CustomTextStyles.body,
+                      ),
+                    ),
                     const SizedBox(width: 10),
-                    Expanded(
+                    SizedBox(
+                      width: size.width * 0.65,
+                      height: size.height * 0.05,
                       child: _buildPaymentMethodsWidget(
                           foodtruck['truck_payment']),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "운영 시간:",
-                      style: CustomTextStyles.subtitle,
+                    SizedBox(
+                      width: size.width * 0.2,
+                      height: size.height * 0.05,
+                      child: const Text(
+                        "운영 시간",
+                        style: CustomTextStyles.body,
+                      ),
                     ),
                     const SizedBox(width: 10),
-                    Expanded(
+                    SizedBox(
+                      width: size.width * 0.65,
+                      height: size.height * 0.05,
                       child: Text(
                         foodtruck['truck_schedule'],
                         style: CustomTextStyles.body,
-                        softWrap: true, // 텍스트 줄 바꿈 허용
-                        overflow:
-                            TextOverflow.visible, // 텍스트가 경계를 넘을 경우 클립하지 않음
                       ),
                     ),
                   ],
@@ -137,12 +205,38 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const SizedBox(height: 20),
-                      const TabBar(
+                      TabBar(
                         tabs: [
-                          Tab(text: '메뉴'),
-                          Tab(text: '정보'),
-                          Tab(text: '리뷰'),
+                          Tab(
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: double.infinity,
+                              child: const Text(
+                                '메뉴',
+                                style: CustomTextStyles.bodyBold,
+                              ),
+                            ),
+                          ),
+                          Tab(
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: double.infinity,
+                              child: const Text(
+                                '정보',
+                                style: CustomTextStyles.bodyBold,
+                              ),
+                            ),
+                          ),
+                          Tab(
+                            child: Container(
+                              alignment: Alignment.center,
+                              height: double.infinity,
+                              child: const Text(
+                                '리뷰',
+                                style: CustomTextStyles.bodyBold,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(
@@ -182,17 +276,6 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                                   foodtruck['truck_phone'],
                                   style: CustomTextStyles.body,
                                 ),
-                                // 위치
-                                const SizedBox(height: 20),
-                                const Text(
-                                  '위치:',
-                                  style: CustomTextStyles.subtitle,
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  '${foodtruck['truck_address']}',
-                                  style: CustomTextStyles.body,
-                                ),
                                 const SizedBox(height: 20),
                                 // 수평선 추가
                                 Container(
@@ -213,8 +296,8 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                               ],
                             ),
                             // 리뷰 탭 ====================================
-                            buildReviewTab(
-                                context, select, uid, size, controller),
+                            buildReviewTab(context, select, uid,
+                                foodtruck['user_uid'], size, controller),
                           ],
                         ),
                       ),
@@ -236,13 +319,15 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          ElevatedButton(
-            onPressed: () {
-              controller.goMenuSetting(foodtruckidmap);
-            },
-            child: const Text('메뉴 추가'),
-          ),
-          const SizedBox(height: 20),
+          if (uid == writeuid) ...[
+            ElevatedButton(
+              onPressed: () {
+                controller.goMenuSetting(foodtruckidmap);
+              },
+              child: const Text('메뉴 추가'),
+            ),
+            const SizedBox(height: 20),
+          ],
           Expanded(
             child: Obx(
               () {
@@ -357,19 +442,21 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
   }
 
   Widget buildReviewTab(BuildContext context, String select, String uid,
-      Size size, FoodtruckdetailController controller) {
+      String writeuid, Size size, FoodtruckdetailController controller) {
     final Map<String, dynamic> foodtruckidmap = {'foodtruck_id': select};
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          ElevatedButton(
-            onPressed: () {
-              controller.goReviewSetting(foodtruckidmap);
-            },
-            child: const Text('리뷰 추가'),
-          ),
-          const SizedBox(height: 20),
+          if (uid == writeuid) ...[
+            ElevatedButton(
+              onPressed: () {
+                controller.goReviewSetting(foodtruckidmap);
+              },
+              child: const Text('리뷰 추가'),
+            ),
+            const SizedBox(height: 20),
+          ],
           Expanded(
             child: Obx(
               () {

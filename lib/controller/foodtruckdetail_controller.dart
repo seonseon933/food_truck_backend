@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_truck/model/favorite_model.dart';
 import 'package:food_truck/model/foodtruck_model.dart';
 import 'package:food_truck/model/review_model.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ class FoodtruckdetailController extends GetxController {
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
   final ReviewModel _reviewModel = ReviewModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FavoriteModel _favoriteModel = FavoriteModel();
 
   var foodtruckid = ''.obs;
   var menuList = <Map<String, dynamic>>[].obs;
@@ -83,5 +85,14 @@ class FoodtruckdetailController extends GetxController {
   Future<String> deleteReview(String foodtruckid, String reviewid) async {
     User user = _auth.currentUser!;
     return _reviewModel.deleteReview(foodtruckid, reviewid, user.uid);
+  }
+
+  Future<void> favoriteTruckInsert(String foodtruckid) async {
+    User user = _auth.currentUser!;
+    _favoriteModel.favoriteFoodTruckCreate(foodtruckid, user.uid);
+  }
+
+  Future<void> favoriteFoodTruckDelete(String foodtruckid, String uid) async {
+    return _favoriteModel.favoriteFoodTruckDelete(foodtruckid, uid);
   }
 }

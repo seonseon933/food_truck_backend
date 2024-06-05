@@ -1,4 +1,3 @@
-// 헐 firestore읽기는 문서를 가져온 수로 계산된다 함.. 와..
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
@@ -9,6 +8,7 @@ exports.cleanUpUserData = functions.firestore.document('Users/{uid}').onDelete(a
     const uid = context.params.uid;
     // 해당 사용자가 푸드트럭을 등록한 경우 일괄 삭제
     try {
+        // 사용자가 등록한 푸드트럭 삭제
         const userFoodTrucks = await db.collection('FoodTruck').where('user_uid', '==', uid).get();
         for (const FoodTruckDoc of userFoodTrucks.docs) {
             const truckId = FoodTruckDoc.id;

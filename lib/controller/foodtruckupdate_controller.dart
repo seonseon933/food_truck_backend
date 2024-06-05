@@ -28,7 +28,6 @@ class FoodtruckupdateController extends GetxController {
       String truckTag,
       double latitude,
       double longitude) async {
-    User user = _auth.currentUser!;
     return _foodTruckModel.updateFoodTruck(
         foodtruckid,
         truckName,
@@ -39,8 +38,7 @@ class FoodtruckupdateController extends GetxController {
         file,
         truckTag,
         latitude,
-        longitude,
-        user.uid);
+        longitude);
   }
 
   // 이미지를 갤러리에서 가져올 수 있도록.

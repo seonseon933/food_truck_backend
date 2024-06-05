@@ -1,5 +1,7 @@
 import 'package:food_truck/controller/profilesetting_controller.dart';
+import 'package:food_truck/controller/wishlist_controller.dart';
 import 'package:food_truck/view/profilesetting_view.dart';
+import 'package:food_truck/view/wishlist_view.dart';
 import 'package:get/get.dart';
 
 import 'package:food_truck/controller/base_controller.dart';
@@ -12,6 +14,10 @@ import 'package:food_truck/view/profile_view.dart';
 
 import 'package:food_truck/controller/foodtruck_controller.dart';
 import 'package:food_truck/view/foodtruck_view.dart';
+
+import 'package:food_truck/controller/foodtruckcreate_controller.dart';
+import 'package:food_truck/view/foodtruckcreate_view.dart';
+import 'package:food_truck/view/foodtruckcreatemap_view.dart';
 
 import 'package:food_truck/view/foodtruckupdatemap_view.dart';
 import 'package:food_truck/controller/foodtruckupdatemap_controller.dart';
@@ -168,6 +174,24 @@ class ReviewupdateBinding extends Bindings {
   }
 }
 
+class FoodtruckcreateBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<FoodtruckcreateController>(
+      () => FoodtruckcreateController(),
+    );
+  }
+}
+
+class WishlistBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<WishlistController>(
+      () => WishlistController(),
+    );
+  }
+}
+
 class AppPages {
   AppPages._();
 
@@ -191,6 +215,11 @@ class AppPages {
       name: _Paths.FOODTRUCKDETAIL,
       page: () => const FoodtruckdetailView(),
       binding: FoodtruckdetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.WISHLIST,
+      page: () => const WishlistView(),
+      binding: WishlistBinding(),
     ),
     GetPage(
       name: _Paths.BASE,
@@ -221,6 +250,16 @@ class AppPages {
       name: _Paths.FOODTRUCKUPDATEMAP,
       page: () => const FoodtruckupdatemapView(),
       binding: FoodtruckupdatemapBinding(),
+    ),
+    GetPage(
+      name: _Paths.FOODTRUCKCREATE,
+      page: () => const FoodtruckcreateView(),
+      binding: FoodtruckcreateBinding(),
+    ),
+    GetPage(
+      name: _Paths.FOODTRUCKCREATEMAP,
+      page: () => const FoodtruckcreatemapView(),
+      binding: FoodtruckcreateBinding(),
     ),
     GetPage(
       name: _Paths.MENUSETTING,

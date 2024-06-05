@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_truck/controller/app_id.dart';
 import 'package:food_truck/controller/base_controller.dart';
+import 'package:food_truck/view/foodtruckcreatemap_view.dart';
 import 'package:food_truck/view/profilesetting_view.dart';
 //import 'package:food_truck/view/foodtrucksetting_view.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,16 @@ class ProfileController extends GetxController {
   final _store = FirebaseFirestore.instance;
   late String uid;
   var user = Rxn<Map<String, dynamic>>();
+
+  void goToFoodtruckcreatePage(Map<String, dynamic> userdata) {
+    user.value = userdata;
+
+    print(user);
+    Get.toNamed(
+      Routes.FOODTRUCKCREATEMAP,
+      id: profileD,
+    );
+  }
 
   void goToSettingPage() {
     Get.toNamed(Routes.SETTING, id: profileD);
@@ -93,17 +104,12 @@ class ProfileWrapper extends StatelessWidget {
               routeName: Routes.PROFILESETTING,
               page: () => const ProfilesettingView(),
               binding: ProfilesettingBinding());
-        } /*else if (routeSettings.name == Routes.REVIEW) {
+        } else if (routeSettings.name == Routes.FOODTRUCKCREATEMAP) {
           return GetPageRoute(
-              routeName: Routes.REVIEW,
-              page: () => const Review(),
-              binding: ReviewBinding());
-        } else if (routeSettings.name == Routes.FOODTRUCKSETTING) {
-          return GetPageRoute(
-              routeName: Routes.FOODTRUCKSETTING,
-              page: () => const FoodtrucksettingView(),
-              binding: FoodtrucksettingBinding());
-        }*/
+              routeName: Routes.FOODTRUCKCREATEMAP,
+              page: () => const FoodtruckcreatemapView(),
+              binding: FoodtruckcreateBinding());
+        }
         return null;
       },
     );

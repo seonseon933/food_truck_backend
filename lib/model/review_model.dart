@@ -91,8 +91,13 @@ class ReviewModel {
     try {
       final DocumentSnapshot documentSnapshot =
           await _store.collection('Users').doc(uid).get();
+      final DocumentSnapshot foodtruckSnapshot =
+          await _store.collection('FoodTruck').doc(foodtruckid).get();
+
       Map<String, dynamic> data =
           documentSnapshot.data() as Map<String, dynamic>;
+      //Map<String, dynamic> truckdata =
+      //    foodtruckSnapshot.data() as Map<String, dynamic>;
       String timenow = DateFormat("yyyy년 MM월 dd일").format(DateTime.now());
 
       Map<String, dynamic> newReview = {
@@ -115,7 +120,13 @@ class ReviewModel {
       await _store.collection('Users').doc(uid).update({
         'review_create_truckid': FieldValue.arrayUnion([foodtruckid]) // 중복X
       });
-      print('문제없이 진행됨 ');
+
+      // final reviewctn = truckdata['truck_review_ctn'];
+      // await _store
+      //     .collection('FoodTruck')
+      //     .doc(foodtruckid)
+      //     .update({'truck_review_ctn': reviewctn + 1});
+
       await updateAvgRating(foodtruckid);
 
       return foodtruckid;

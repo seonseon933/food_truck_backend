@@ -49,10 +49,21 @@ class FoodTruckController {
       String truckPhone,
       Map<String, dynamic> paymentOptions,
       File file,
-      String truckTag) async {
+      String truckTag,
+      double lat,
+      double long) async {
     User user = _auth.currentUser!;
-    return _foodTruckModel.createFoodTruck(truckName, truckDescription,
-        truckSchedule, truckPhone, paymentOptions, file, truckTag, user.uid);
+    return _foodTruckModel.createFoodTruck(
+        truckName,
+        truckDescription,
+        truckSchedule,
+        truckPhone,
+        paymentOptions,
+        file,
+        truckTag,
+        user.uid,
+        lat,
+        long);
   }
 
   // 푸드트럭 수정 메소드 호출
@@ -78,8 +89,7 @@ class FoodTruckController {
         file,
         truckTag,
         latitude,
-        longitude,
-        user.uid);
+        longitude);
   }
 
   Future<void> deleteFoodTruck(String foodtruckid) async {

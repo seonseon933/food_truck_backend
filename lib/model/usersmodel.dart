@@ -47,7 +47,7 @@ class UsersModel {
 
     await deleteUserImgStorage(uid);
 
-    _store.collection("Users").doc(uid).delete().then(
+    await _store.collection("Users").doc(uid).delete().then(
           (doc) => print("탈퇴하고 사용자 정보 지워짐"),
           onError: (e) => print("사용자 정보 삭제에 문제가 생김"),
         );
