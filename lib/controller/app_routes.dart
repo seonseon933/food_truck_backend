@@ -23,6 +23,7 @@ abstract class Routes {
   static const REVIEWUPDATE = _Paths.REVIEWUPDATE;
   static const FOODTRUCKCREATE = _Paths.FOODTRUCKCREATE;
   static const FOODTRUCKCREATEMAP = _Paths.FOODTRUCKCREATEMAP;
+  static const MYFOODTRUCK = _Paths.MYFOODTRUCK;
 }
 
 abstract class _Paths {
@@ -48,4 +49,5 @@ abstract class _Paths {
   static const MENUUPDATE = '/menuupdate';
   static const REVIEWSETTING = '/reviewsetting';
   static const REVIEWUPDATE = '/reviewupdate';
+  static const MYFOODTRUCK = '/myfoodtruck';
 }

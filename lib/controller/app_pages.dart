@@ -1,5 +1,7 @@
+import 'package:food_truck/controller/myfoodtruck_controller.dart';
 import 'package:food_truck/controller/profilesetting_controller.dart';
 import 'package:food_truck/controller/wishlist_controller.dart';
+import 'package:food_truck/view/myfoodtruck_view.dart';
 import 'package:food_truck/view/profilesetting_view.dart';
 import 'package:food_truck/view/wishlist_view.dart';
 import 'package:get/get.dart';
@@ -17,10 +19,8 @@ import 'package:food_truck/view/foodtruck_view.dart';
 
 import 'package:food_truck/controller/foodtruckcreate_controller.dart';
 import 'package:food_truck/view/foodtruckcreate_view.dart';
-import 'package:food_truck/view/foodtruckcreatemap_view.dart';
 
 import 'package:food_truck/view/foodtruckupdatemap_view.dart';
-import 'package:food_truck/controller/foodtruckupdatemap_controller.dart';
 
 import 'package:food_truck/view/foodtruckdetail_view.dart';
 import 'package:food_truck/controller/foodtruckdetail_controller.dart';
@@ -62,6 +62,15 @@ class FoodtruckBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<FoodtruckController>(
       () => FoodtruckController(),
+    );
+  }
+}
+
+class MyFoodtruckBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<MyFoodtruckController>(
+      () => MyFoodtruckController(),
     );
   }
 }
@@ -116,15 +125,6 @@ class FoodtruckupdateBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<FoodtruckupdateController>(
       () => FoodtruckupdateController(),
-    );
-  }
-}
-
-class FoodtruckupdatemapBinding extends Bindings {
-  @override
-  void dependencies() {
-    Get.lazyPut<FoodtruckupdatemapController>(
-      () => FoodtruckupdatemapController(),
     );
   }
 }
@@ -232,6 +232,11 @@ class AppPages {
       binding: FoodtruckBinding(),
     ),
     GetPage(
+      name: _Paths.MYFOODTRUCK,
+      page: () => const MyFoodtruckView(),
+      binding: MyFoodtruckBinding(),
+    ),
+    GetPage(
       name: _Paths.PROFILE,
       page: () => const ProfileView(),
       binding: ProfileBinding(),
@@ -249,16 +254,11 @@ class AppPages {
     GetPage(
       name: _Paths.FOODTRUCKUPDATEMAP,
       page: () => const FoodtruckupdatemapView(),
-      binding: FoodtruckupdatemapBinding(),
+      binding: FoodtruckupdateBinding(),
     ),
     GetPage(
       name: _Paths.FOODTRUCKCREATE,
       page: () => const FoodtruckcreateView(),
-      binding: FoodtruckcreateBinding(),
-    ),
-    GetPage(
-      name: _Paths.FOODTRUCKCREATEMAP,
-      page: () => const FoodtruckcreatemapView(),
       binding: FoodtruckcreateBinding(),
     ),
     GetPage(

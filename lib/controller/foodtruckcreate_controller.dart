@@ -1,5 +1,6 @@
-import 'package:food_truck/controller/app_id.dart';
 import 'package:food_truck/controller/app_pages.dart';
+import 'package:get/get_rx/get_rx.dart';
+import '../controller/app_id.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +8,7 @@ import 'package:food_truck/model/foodtruck_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FoodtruckcreateController extends GetxController {
+  File? file;
   double jlatitude = 35.139988984673806;
   double jlongitude = 126.93423855903913;
   RxString juso = "버튼을 눌러 도로명 주소를 검색해주세요".obs;
@@ -14,8 +16,11 @@ class FoodtruckcreateController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
 
-  void goBack() {
+  void goProfile() {
     Get.back();
+    Future.delayed(const Duration(milliseconds: 50), () {
+      Get.back(id: profileD);
+    });
   }
 
   void gocreateview() {

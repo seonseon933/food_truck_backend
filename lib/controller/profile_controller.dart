@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_truck/controller/app_id.dart';
 import 'package:food_truck/controller/base_controller.dart';
 import 'package:food_truck/view/foodtruckcreatemap_view.dart';
+import 'package:food_truck/view/myfoodtruck_view.dart';
 import 'package:food_truck/view/profilesetting_view.dart';
 //import 'package:food_truck/view/foodtrucksetting_view.dart';
 import 'package:get/get.dart';
@@ -17,21 +18,14 @@ class ProfileController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final _store = FirebaseFirestore.instance;
-  late String uid;
   var user = Rxn<Map<String, dynamic>>();
+  String uid = "";
 
-  void goToFoodtruckcreatePage(Map<String, dynamic> userdata) {
-    user.value = userdata;
-
-    print(user);
+  void goToFoodtruckcreatePage() {
     Get.toNamed(
       Routes.FOODTRUCKCREATEMAP,
       id: profileD,
     );
-  }
-
-  void goToSettingPage() {
-    Get.toNamed(Routes.SETTING, id: profileD);
   }
 
   void goToReviewPage() {
@@ -42,9 +36,11 @@ class ProfileController extends GetxController {
     Get.toNamed(Routes.FOODTRUCKSETTING, id: profileD);
   }
 
-  void goToProfilesettingPage(Map<String, dynamic> userdata) {
-    user.value = userdata;
-    print(user);
+  void goToMyFoodtruck() {
+    Get.toNamed(Routes.MYFOODTRUCK, id: profileD);
+  }
+
+  void goToProfilesettingPage() {
     Get.toNamed(
       Routes.PROFILESETTING,
       id: profileD,
@@ -55,7 +51,8 @@ class ProfileController extends GetxController {
     Get.offAllNamed(Routes.LOGIN);
   }
 
-  getUserData(String uid) async {
+  getUserData(String userid) async {
+    uid = userid;
     try {
       DocumentSnapshot documentSnapshot =
           await _store.collection('Users').doc(uid).get();
@@ -93,13 +90,12 @@ class ProfileWrapper extends StatelessWidget {
               routeName: Routes.PROFILE,
               page: () => const ProfileView(),
               binding: ProfileBinding());
-        } /*else if (routeSettings.name == Routes.SETTING) {
+        } else if (routeSettings.name == Routes.MYFOODTRUCK) {
           return GetPageRoute(
-              routeName: Routes.SETTING,
-              page: () => const SettingView(),
-              binding: SettingBinding());
-        }*/
-        else if (routeSettings.name == Routes.PROFILESETTING) {
+              routeName: Routes.MYFOODTRUCK,
+              page: () => const MyFoodtruckView(),
+              binding: MyFoodtruckBinding());
+        } else if (routeSettings.name == Routes.PROFILESETTING) {
           return GetPageRoute(
               routeName: Routes.PROFILESETTING,
               page: () => const ProfilesettingView(),

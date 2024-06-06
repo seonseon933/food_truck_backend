@@ -1,20 +1,31 @@
+import 'package:flutter/material.dart';
+import 'package:food_truck/controller/app_id.dart';
 import 'package:get/get.dart';
 import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_truck/model/foodtruck_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'app_pages.dart';
 
 class FoodtruckupdateController extends GetxController {
+  double jlatitude = 35.139988984673806;
+  double jlongitude = 126.93423855903913;
+  RxString juso = "버튼을 눌러 도로명 주소를 검색해주세요".obs;
+  late final foodtruck;
+  String foodtruckid = "";
   final _picker = ImagePicker();
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  File? file;
+  NetworkImage? fileimg;
 
-  void goDetail(foodtruck) {
-    while (Get.previousRoute == Routes.FOODTRUCKUPDATEMAP) {
+  void goDetail() {
+    Get.back();
+    Future.delayed(const Duration(milliseconds: 50), () {
       Get.back();
-    }
-    Get.offNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck);
+    });
+  }
+
+  goupdateview() {
+    Get.toNamed(Routes.FOODTRUCKUPDATE);
   }
 
   Future<String> updateFoodTruck(
@@ -54,6 +65,8 @@ class FoodtruckupdateController extends GetxController {
 
   // 해당 푸드트럭 데이터 가져오기 (모델getDetailFoodTruck 코드 변경됨)
   Future<Map<String, dynamic>> getDetailFoodTruck(String foodtruckid) async {
-    return _foodTruckModel.getDetailFoodTruck(foodtruckid);
+    foodtruck = await _foodTruckModel.getDetailFoodTruck(foodtruckid);
+    fileimg = NetworkImage(foodtruck["truck_img"]);
+    return foodtruck;
   }
 }

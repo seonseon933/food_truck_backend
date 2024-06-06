@@ -1,14 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:food_truck/controller/foodtruckcreate_controller.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import '../view/navermap_view.dart';
-import '../view/search_view.dart';
-import '../controller/search_controller.dart';
 import '../style/font_style.dart';
 
 class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
@@ -25,7 +18,7 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
     final accountHolderController = TextEditingController();
     final accountNumberController = TextEditingController();
     final descriptionController = TextEditingController();
-    File? file;
+
     RxBool cash = false.obs;
     RxBool card = false.obs;
     RxBool bankTransfer = false.obs;
@@ -41,36 +34,51 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
               Row(
                 children: [
                   Container(
-                    width: size.width * 0.85,
+                    width: size.width * 0.9,
                     height: size.height * 0.3,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     child: Stack(
                       children: [
-                        Positioned(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.asset(
-                              'assets/images/foodtruck_icon.png',
-                              fit: BoxFit.cover,
+                        GetBuilder<FoodtruckcreateController>(
+                          builder: (controller) => Container(
+                            decoration: BoxDecoration(
+                              image: controller.file != null
+                                  ? DecorationImage(
+                                      image: FileImage(controller.file!),
+                                      fit: BoxFit.fill,
+                                    )
+                                  : null,
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(11.0),
                             ),
+                            child: controller.file == null
+                                ? Center(
+                                    child: Text('선택된 이미지가 없습니다.'),
+                                  )
+                                : null,
                           ),
                         ),
                         Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () async {
-                              file = await controller.getFoodTruckImgGaller();
-                            },
+                          bottom: 8,
+                          right: 8,
+                          child: SizedBox(
+                            width: 36,
+                            height: 36,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: const Icon(Icons.edit),
+                              iconSize: 30,
+                              onPressed: () async {
+                                controller.file = await controller
+                                    .getFoodTruckImgGaller() as File?;
+                                controller.update();
+                              },
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 16.0),
                 ],
               ),
               const SizedBox(height: 16.0),
@@ -267,11 +275,11 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                       scheduleController.text,
                       phoneController.text,
                       paymentOptions,
-                      file,
+                      controller.file,
                       tagController.text,
                     );
                     print('등록버튼 클릭');
-                    controller.goBack();
+                    controller.goProfile();
                   },
                   child: const Text('등록'),
                 ),

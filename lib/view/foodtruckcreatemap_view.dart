@@ -1,11 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:food_truck/controller/foodtruckcreate_controller.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import '../view/navermap_view.dart';
 import '../view/search_view.dart';
 import '../controller/search_controller.dart';

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:food_truck/controller/foodtruck_controller.dart';
+import 'package:food_truck/controller/myfoodtruck_controller.dart';
 import 'package:get/get.dart';
 import 'package:food_truck/controller/profile_controller.dart';
 import '../style/font_style.dart';
@@ -10,6 +11,7 @@ class ProfileView extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
     if (user == null) {
@@ -101,42 +103,18 @@ class ProfileView extends GetView<ProfileController> {
                               const SizedBox(height: 8.0),
                               GestureDetector(
                                 onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text(''),
-                                        content: const Text(
-                                            '회원 정보 수정 페이지로 이동하시겠습니까?'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: const Text('아니오'),
-                                            onPressed: () {
-                                              Get.back();
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: const Text('예'),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); // 팝업 창 닫기
-                                              controller.goToProfilesettingPage(
-                                                  snapshot.data);
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
+                                  controller.goToProfilesettingPage();
                                 },
-                                child: const Row(
-                                  children: [
-                                    Text('나의 정보 수정',
-                                        style: CustomTextStyles.body),
-                                    Spacer(),
-                                    Icon(Icons.arrow_forward),
-                                  ],
-                                ),
+                                child: Container(
+                                    color: Colors.white70,
+                                    child: Row(
+                                      children: [
+                                        Text('나의 정보 수정',
+                                            style: CustomTextStyles.body),
+                                        Spacer(),
+                                        Icon(Icons.arrow_forward),
+                                      ],
+                                    )),
                               ),
                               const SizedBox(height: 16.0),
                               const Divider(height: 1.0, color: Colors.grey),
@@ -150,43 +128,36 @@ class ProfileView extends GetView<ProfileController> {
                               const SizedBox(height: 8.0),
                               GestureDetector(
                                 onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('경고'),
-                                        content: const Text(
-                                            '푸드트럭 생성 페이지로 이동하시겠습니까?'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: const Text('아니오'),
-                                            onPressed: () {
-                                              Get.back();
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: const Text('예'),
-                                            onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); // 팝업 창 닫기
-                                              controller
-                                                  .goToFoodtruckcreatePage(
-                                                      snapshot.data);
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
+                                  controller.goToFoodtruckcreatePage();
                                 },
-                                child: const Row(
-                                  children: [
-                                    Text('푸드트럭 생성하기',
-                                        style: CustomTextStyles.body),
-                                    Spacer(),
-                                    Icon(Icons.arrow_forward),
-                                  ],
-                                ),
+                                child: Container(
+                                    color: Colors.white70,
+                                    child: Row(
+                                      children: [
+                                        Text('푸드트럭 생성하기',
+                                            style: CustomTextStyles.body),
+                                        Spacer(),
+                                        Icon(Icons.arrow_forward),
+                                      ],
+                                    )),
+                              ),
+                              const SizedBox(height: 8.0),
+                              const Divider(height: 1.0, color: Colors.grey),
+                              const SizedBox(height: 16.0),
+                              GestureDetector(
+                                onTap: () {
+                                  controller.goToMyFoodtruck();
+                                },
+                                child: Container(
+                                    color: Colors.white70,
+                                    child: Row(
+                                      children: [
+                                        Text('나의 푸드트럭',
+                                            style: CustomTextStyles.body),
+                                        Spacer(),
+                                        Icon(Icons.arrow_forward),
+                                      ],
+                                    )),
                               ),
                               const SizedBox(height: 8.0),
                               const Divider(height: 1.0, color: Colors.grey),

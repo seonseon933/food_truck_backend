@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_truck/controller/base_controller.dart';
 import 'package:food_truck/controller/foodtruckdetail_controller.dart';
@@ -320,13 +319,15 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
       child: Column(
         children: [
           if (uid == writeuid) ...[
-            ElevatedButton(
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                minimumSize: Size(size.width * 0.8, size.height * 0.05),
+              ),
               onPressed: () {
                 controller.goMenuSetting(foodtruckidmap);
               },
               child: const Text('메뉴 추가'),
             ),
-            const SizedBox(height: 20),
           ],
           Expanded(
             child: Obx(
