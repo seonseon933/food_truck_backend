@@ -14,14 +14,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "872679716506-8gu855vbgqqme14juc5r8bg9qs5uav8i.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.food_truck",
-            "certificate_hash": "792d1b5c8ec2a4edaf641108bac2c5b500bedc33"
-          }
-        },
-        {
           "client_id": "872679716506-ceafc399g21kd0370tu4rhu89b3bug6q.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

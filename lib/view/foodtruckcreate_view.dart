@@ -12,7 +12,7 @@ import '../controller/search_controller.dart';
 import '../style/font_style.dart';
 
 class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
-  const FoodtruckcreateView({Key? key}) : super(key: key);
+  const FoodtruckcreateView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +25,12 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
     final accountHolderController = TextEditingController();
     final accountNumberController = TextEditingController();
     final descriptionController = TextEditingController();
+    File? file;
     RxBool cash = false.obs;
     RxBool card = false.obs;
     RxBool bankTransfer = false.obs;
     return Scaffold(
-      appBar: AppBar(title: Text('푸드트럭 등록')),
+      appBar: AppBar(title: const Text('푸드트럭 등록')),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -60,47 +61,47 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                           bottom: 0,
                           right: 0,
                           child: IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {
-                              controller.getFoodTruckImgGaller();
+                            icon: const Icon(Icons.edit),
+                            onPressed: () async {
+                              file = await controller.getFoodTruckImgGaller();
                             },
                           ),
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: 16.0),
+                  const SizedBox(width: 16.0),
                 ],
               ),
-              SizedBox(height: 16.0),
-              Text('푸드트럭 이름', style: CustomTextStyles.title),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 16.0),
+              const Text('푸드트럭 이름', style: CustomTextStyles.title),
+              const SizedBox(height: 8.0),
               TextField(
                 controller: nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: '푸드트럭 이름 입력',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 16.0),
-              Text('푸드트럭 정보', style: CustomTextStyles.title),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 16.0),
+              const Text('푸드트럭 정보', style: CustomTextStyles.title),
+              const SizedBox(height: 8.0),
               Row(
                 children: [
                   Expanded(
                     child: TextField(
                       controller: phoneController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: '전화번호 입력',
                         border: OutlineInputBorder(),
                       ),
                     ),
                   ),
-                  SizedBox(width: 16.0),
+                  const SizedBox(width: 16.0),
                   Expanded(
                     child: TextField(
                       controller: tagController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: '음식 태그',
                         border: OutlineInputBorder(),
                       ),
@@ -108,17 +109,17 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                   ),
                 ],
               ),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 8.0),
               TextField(
                 controller: scheduleController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: '판매요일/시간 입력',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 16.0),
-              Text('결제 방법', style: CustomTextStyles.title),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 16.0),
+              const Text('결제 방법', style: CustomTextStyles.title),
+              const SizedBox(height: 8.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -129,7 +130,7 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                           onChanged: (bool? value) {
                             cash.value = value!;
                           })),
-                      Text('현금', style: CustomTextStyles.body),
+                      const Text('현금', style: CustomTextStyles.body),
                     ],
                   ),
                   Row(
@@ -139,7 +140,7 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                           onChanged: (bool? value) {
                             card.value = value!;
                           })),
-                      Text('카드', style: CustomTextStyles.body),
+                      const Text('카드', style: CustomTextStyles.body),
                     ],
                   ),
                   Row(
@@ -149,20 +150,20 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                           onChanged: (bool? value) {
                             bankTransfer.value = value!;
                           })),
-                      Text('계좌이체', style: CustomTextStyles.body),
+                      const Text('계좌이체', style: CustomTextStyles.body),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('은행', style: CustomTextStyles.body),
-                      SizedBox(height: 4.0),
+                      const Text('은행', style: CustomTextStyles.body),
+                      const SizedBox(height: 4.0),
                       Container(
                         width: 120.0,
                         height: 36.0,
@@ -172,7 +173,7 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                         ),
                         child: TextField(
                           controller: bankController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             contentPadding:
                                 EdgeInsets.symmetric(horizontal: 8.0),
@@ -182,12 +183,12 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                       ),
                     ],
                   ),
-                  SizedBox(width: 16.0),
+                  const SizedBox(width: 16.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('성명', style: CustomTextStyles.body),
-                      SizedBox(height: 4.0),
+                      const Text('성명', style: CustomTextStyles.body),
+                      const SizedBox(height: 4.0),
                       Container(
                         width: 120.0,
                         height: 36.0,
@@ -197,7 +198,7 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                         ),
                         child: TextField(
                           controller: accountHolderController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             contentPadding:
                                 EdgeInsets.symmetric(horizontal: 8.0),
@@ -209,9 +210,9 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                   ),
                 ],
               ),
-              SizedBox(height: 16.0),
-              Text('계좌번호', style: CustomTextStyles.body),
-              SizedBox(height: 4.0),
+              const SizedBox(height: 16.0),
+              const Text('계좌번호', style: CustomTextStyles.body),
+              const SizedBox(height: 4.0),
               Container(
                 width: 250.0,
                 height: 36.0,
@@ -221,16 +222,16 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                 ),
                 child: TextField(
                   controller: accountNumberController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
                     hintText: '계좌번호 입력',
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
-              Text('설명', style: CustomTextStyles.title),
-              SizedBox(height: 8.0),
+              const SizedBox(height: 16.0),
+              const Text('설명', style: CustomTextStyles.title),
+              const SizedBox(height: 8.0),
               Container(
                 width: double.infinity,
                 height: 100.0,
@@ -241,14 +242,14 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                 child: TextField(
                   controller: descriptionController,
                   maxLines: null,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(8.0),
                     hintText: '설명 입력',
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
@@ -266,16 +267,16 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                       scheduleController.text,
                       phoneController.text,
                       paymentOptions,
-                      File('null'),
+                      file,
                       tagController.text,
                     );
                     print('등록버튼 클릭');
                     controller.goBack();
                   },
-                  child: Text('등록'),
+                  child: const Text('등록'),
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
             ],
           ),
         ),

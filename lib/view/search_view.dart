@@ -73,7 +73,8 @@ class SearchView extends GetView<Search_Controller> {
                                 style: CustomTextStyles.body),
                             Text(e.engAddr.trim(),
                                 style: CustomTextStyles.body),
-                            Text('[선택]', style: CustomTextStyles.accentcaption),
+                            const Text('[선택]',
+                                style: CustomTextStyles.accentcaption),
                           ],
                         ),
                         onTap: () {

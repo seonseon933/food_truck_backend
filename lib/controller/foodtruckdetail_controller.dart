@@ -1,19 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_truck/model/favorite_model.dart';
 import 'package:food_truck/model/foodtruck_model.dart';
 import 'package:food_truck/model/review_model.dart';
 import 'package:get/get.dart';
 import '../model/menu_model.dart';
 import 'app_pages.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:food_truck/model/favorite_model.dart';
 
 class FoodtruckdetailController extends GetxController {
-  final _store = FirebaseFirestore.instance;
   final MenuModel _menuModel = MenuModel();
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
   final ReviewModel _reviewModel = ReviewModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FavoriteModel _favoriteModel = FavoriteModel();
+
   var foodtruckid = ''.obs;
   var menuList = <Map<String, dynamic>>[].obs;
   var reviewList = <Map<String, dynamic>>[].obs;
@@ -60,8 +59,7 @@ class FoodtruckdetailController extends GetxController {
   }
 
   // 상세 푸드트럭
-  Future<Map<String, dynamic>> getDetailFoodTruck(
-      String foodtruckid, String uid) async {
+  Future<Map<String, dynamic>> getDetailFoodTruck(String foodtruckid) async {
     return _foodTruckModel.getDetailFoodTruck(foodtruckid);
   }
 

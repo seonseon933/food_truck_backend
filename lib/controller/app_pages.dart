@@ -1,5 +1,7 @@
 import 'package:food_truck/controller/profilesetting_controller.dart';
+import 'package:food_truck/controller/wishlist_controller.dart';
 import 'package:food_truck/view/profilesetting_view.dart';
+import 'package:food_truck/view/wishlist_view.dart';
 import 'package:get/get.dart';
 
 import 'package:food_truck/controller/base_controller.dart';
@@ -12,6 +14,10 @@ import 'package:food_truck/view/profile_view.dart';
 
 import 'package:food_truck/controller/foodtruck_controller.dart';
 import 'package:food_truck/view/foodtruck_view.dart';
+
+import 'package:food_truck/controller/foodtruckcreate_controller.dart';
+import 'package:food_truck/view/foodtruckcreate_view.dart';
+import 'package:food_truck/view/foodtruckcreatemap_view.dart';
 
 import 'package:food_truck/view/foodtruckupdatemap_view.dart';
 import 'package:food_truck/controller/foodtruckupdatemap_controller.dart';
@@ -40,11 +46,6 @@ import 'package:food_truck/view/reviewsetting_view.dart';
 import 'package:food_truck/controller/reviewupdate_controller.dart';
 import 'package:food_truck/view/reviewupdate_view.dart';
 
-import 'foodtruckcreate_controller.dart';
-import '../view/foodtruckcreate_view.dart';
-import 'wishlist_controller.dart';
-import '../view/wishlist_view.dart';
-import '../view/foodtruckcreatemap_view.dart';
 part 'app_routes.dart';
 
 class BaseBinding extends Bindings {

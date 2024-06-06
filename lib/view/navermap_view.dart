@@ -10,7 +10,7 @@ import '../controller/foodtruckcreate_controller.dart';
 class CNaverMapApp extends StatefulWidget {
   final String juso;
 
-  CNaverMapApp({required this.juso});
+  const CNaverMapApp({super.key, required this.juso});
 
   @override
   _NaverMapAppState createState() => _NaverMapAppState();
@@ -56,7 +56,7 @@ class _NaverMapAppState extends State<CNaverMapApp> {
 
   Future<NLatLng> getPosition(String address) async {
     if (widget.juso == "") {
-      return NLatLng(35.139988984673806, 126.93423855903913);
+      return const NLatLng(35.139988984673806, 126.93423855903913);
     } else {
       final latLng = await getLatLngFromAddress(address);
       print(address);
@@ -70,9 +70,10 @@ class _NaverMapAppState extends State<CNaverMapApp> {
       future: getPosition(widget.juso),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(child: Text('지도를 자유롭게 이동하고 마커를 클릭하여 푸드트럭 위치를 지정하세요'));
+          return const Center(
+              child: Text('지도를 자유롭게 이동하고 마커를 클릭하여 푸드트럭 위치를 지정하세요'));
         } else {
           _initialPosition = snapshot.data!;
           return Scaffold(
@@ -83,16 +84,16 @@ class _NaverMapAppState extends State<CNaverMapApp> {
               onCameraChange:
                   (NCameraUpdateReason reason, bool animated) async {
                 final cameraPosition = await _controller.getCameraPosition();
-                final _centerMarker = NMarker(
+                final centerMarker = NMarker(
                   id: 'center_marker',
                   position: cameraPosition.target,
                 );
-                _centerMarker.setOnTapListener((NMarker marker) {
+                centerMarker.setOnTapListener((NMarker marker) {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        content: Text("해당 위치로 지정하겠습니까?"),
+                        content: const Text("해당 위치로 지정하겠습니까?"),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
@@ -105,13 +106,13 @@ class _NaverMapAppState extends State<CNaverMapApp> {
                                   cameraPosition.target.longitude;
                               fcontroller.gocreateview();
                             },
-                            child: Text("네"),
+                            child: const Text("네"),
                           ),
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text("아니요"),
+                            child: const Text("아니요"),
                           ),
                         ],
                       );
@@ -119,7 +120,7 @@ class _NaverMapAppState extends State<CNaverMapApp> {
                   );
                 });
 
-                _controller.addOverlay(_centerMarker);
+                _controller.addOverlay(centerMarker);
               },
               options: NaverMapViewOptions(
                 initialCameraPosition: NCameraPosition(

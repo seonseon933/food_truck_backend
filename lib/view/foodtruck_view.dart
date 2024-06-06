@@ -67,7 +67,7 @@ class FoodtruckView extends GetView<FoodtruckController> {
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            SizedBox(width: 16),
+                            const SizedBox(width: 16),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class FoodtruckView extends GetView<FoodtruckController> {
                                       ),
                                       const SizedBox(width: 2),
                                       Text(
-                                        "(리뷰개수)", //가능하면
+                                        "(${foodtruck['truck_review_ctn']?.toString() ?? '0'})",
                                         style: CustomTextStyles.body,
                                       ),
                                     ],

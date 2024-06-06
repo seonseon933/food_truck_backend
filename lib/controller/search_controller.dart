@@ -92,7 +92,7 @@ class Search_Controller extends GetxController {
   searchAddress([String? value]) async {
     //if (address != null) address = <Address>[];
     String queryUrl =
-        "https://business.juso.go.kr/addrlink/addrLinkApi.do?currentPage=1&countPerPage=200&keyword=${value}&confmKey=${dataApiKey}&hstryYn=Y&resultType=json&firstSort=location";
+        "https://business.juso.go.kr/addrlink/addrLinkApi.do?currentPage=1&countPerPage=200&keyword=$value&confmKey=$dataApiKey&hstryYn=Y&resultType=json&firstSort=location";
 
     final http.Response res = await http.get(
       Uri.parse(queryUrl),

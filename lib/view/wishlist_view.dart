@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../controller/base_controller.dart';
 
 class WishlistView extends GetView<WishlistController> {
-  const WishlistView({Key? key}) : super(key: key);
+  const WishlistView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class WishlistView extends GetView<WishlistController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('WishlistView'),
+        title: const Text('나의 찜 목록'),
         centerTitle: true,
       ),
       body: Obx(() {
@@ -119,7 +119,7 @@ class WishlistView extends GetView<WishlistController> {
                                           style: CustomTextStyles.body,
                                         ),
                                         const SizedBox(width: 2),
-                                        Text(
+                                        const Text(
                                           "(리뷰개수)",
                                           style: CustomTextStyles.body,
                                         ),

@@ -12,13 +12,13 @@ import '../controller/search_controller.dart';
 import '../style/font_style.dart';
 
 class FoodtruckcreatemapView extends GetView<FoodtruckcreateController> {
-  const FoodtruckcreatemapView({Key? key}) : super(key: key);
+  const FoodtruckcreatemapView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: Text('푸드트럭 등록')),
+      appBar: AppBar(title: const Text('푸드트럭 등록')),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Padding(
@@ -40,13 +40,13 @@ class FoodtruckcreatemapView extends GetView<FoodtruckcreateController> {
                     final juso = await Get.dialog(
                       Theme(
                         data: Theme.of(context),
-                        child: AlertDialog(
+                        child: const AlertDialog(
                           content: SearchView(),
                         ),
                       ),
                     );
                     controller.juso.value = juso;
-                    print("search = ${juso}");
+                    print("search = $juso");
                   },
 
                   child: Container(
@@ -57,7 +57,7 @@ class FoodtruckcreatemapView extends GetView<FoodtruckcreateController> {
                       color: Colors.black12,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Row(
+                    child: const Row(
                       children: [
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8.0),

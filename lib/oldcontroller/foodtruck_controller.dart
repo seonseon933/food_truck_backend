@@ -42,18 +42,29 @@ class FoodTruckController {
   }
 
   // 푸드트럭 생성 메소드 호출
-  // Future<String> createFoodTruck(
-  //     String truckName,
-  //     String truckDescription,
-  //     String truckSchedule,
-  //     String truckPhone,
-  //     Map<String, dynamic> paymentOptions,
-  //     File file,
-  //     String truckTag) async {
-  //   User user = _auth.currentUser!;
-  //   return _foodTruckModel.createFoodTruck(truckName, truckDescription,
-  //       truckSchedule, truckPhone, paymentOptions, file, truckTag, user.uid);
-  // }
+  Future<String> createFoodTruck(
+      String truckName,
+      String truckDescription,
+      String truckSchedule,
+      String truckPhone,
+      Map<String, dynamic> paymentOptions,
+      File file,
+      String truckTag,
+      double lat,
+      double long) async {
+    User user = _auth.currentUser!;
+    return _foodTruckModel.createFoodTruck(
+        truckName,
+        truckDescription,
+        truckSchedule,
+        truckPhone,
+        paymentOptions,
+        file,
+        truckTag,
+        user.uid,
+        lat,
+        long);
+  }
 
   // 푸드트럭 수정 메소드 호출
   Future<String> updateFoodTruck(
@@ -78,8 +89,7 @@ class FoodTruckController {
         file,
         truckTag,
         latitude,
-        longitude,
-        user.uid);
+        longitude);
   }
 
   Future<void> deleteFoodTruck(String foodtruckid) async {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:food_truck/controller/foodtruckdetail_controller.dart';
 import 'package:food_truck/controller/base_controller.dart';
+import 'package:food_truck/controller/foodtruckdetail_controller.dart';
 import 'package:get/get.dart';
 import '../style/font_style.dart';
 
@@ -23,7 +24,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
         title: const Text(''),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: controller.getDetailFoodTruck(select, uid),
+        future: controller.getDetailFoodTruck(select),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -91,7 +92,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                               },
                             ),
                           ),
-                        if (uid != foodtruck['user_uid']) ...[
+                        if (uid == foodtruck['user_uid']) ...[
                           SizedBox(
                             width: 36,
                             height: 36,
@@ -125,7 +126,9 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     RatingBarIndicator(
-                      rating: foodtruck["truck_avgrating"],
+                      rating: foodtruck["truck_avgrating"] is int
+                          ? (foodtruck["truck_avgrating"] as int).toDouble()
+                          : foodtruck["truck_avgrating"] as double,
                       itemBuilder: (context, index) => const Icon(
                         Icons.star,
                         color: Colors.amber,
@@ -134,7 +137,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                       itemSize: 30.0,
                       direction: Axis.horizontal,
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     Text(
                       "(${foodtruck["truck_avgrating"].toString()})",
                       style: CustomTextStyles.caption,
@@ -147,34 +150,12 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                   height: 1,
                   color: Colors.grey[300],
                 ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: size.width * 0.2,
-                      height: size.height * 0.05,
-                      child: Text(
-                        "위 치",
-                        style: CustomTextStyles.body,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      width: size.width * 0.65,
-                      height: size.height * 0.05,
-                      child: Text(
-                        foodtruck['truck_address'],
-                        style: CustomTextStyles.body,
-                      ),
-                    ),
-                  ],
-                ),
+
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: size.width * 0.2,
                       height: size.height * 0.05,
                       child: const Text(
@@ -183,7 +164,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Container(
+                    SizedBox(
                       width: size.width * 0.65,
                       height: size.height * 0.05,
                       child: _buildPaymentMethodsWidget(
@@ -195,7 +176,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
+                    SizedBox(
                       width: size.width * 0.2,
                       height: size.height * 0.05,
                       child: const Text(
@@ -204,7 +185,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                       ),
                     ),
                     const SizedBox(width: 10),
-                    Container(
+                    SizedBox(
                       width: size.width * 0.65,
                       height: size.height * 0.05,
                       child: Text(
@@ -230,7 +211,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                             child: Container(
                               alignment: Alignment.center,
                               height: double.infinity,
-                              child: Text(
+                              child: const Text(
                                 '메뉴',
                                 style: CustomTextStyles.bodyBold,
                               ),
@@ -240,7 +221,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                             child: Container(
                               alignment: Alignment.center,
                               height: double.infinity,
-                              child: Text(
+                              child: const Text(
                                 '정보',
                                 style: CustomTextStyles.bodyBold,
                               ),
@@ -250,7 +231,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                             child: Container(
                               alignment: Alignment.center,
                               height: double.infinity,
-                              child: Text(
+                              child: const Text(
                                 '리뷰',
                                 style: CustomTextStyles.bodyBold,
                               ),
@@ -295,17 +276,6 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                                   foodtruck['truck_phone'],
                                   style: CustomTextStyles.body,
                                 ),
-                                // 위치
-                                const SizedBox(height: 20),
-                                const Text(
-                                  '위치:',
-                                  style: CustomTextStyles.subtitle,
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  '${foodtruck['truck_address']}',
-                                  style: CustomTextStyles.body,
-                                ),
                                 const SizedBox(height: 20),
                                 // 수평선 추가
                                 Container(
@@ -326,8 +296,8 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                               ],
                             ),
                             // 리뷰 탭 ====================================
-                            buildReviewTab(
-                                context, select, uid, size, controller),
+                            buildReviewTab(context, select, uid,
+                                foodtruck['user_uid'], size, controller),
                           ],
                         ),
                       ),
@@ -349,13 +319,15 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          ElevatedButton(
-            onPressed: () {
-              controller.goMenuSetting(foodtruckidmap);
-            },
-            child: const Text('메뉴 추가'),
-          ),
-          const SizedBox(height: 20),
+          if (uid == writeuid) ...[
+            ElevatedButton(
+              onPressed: () {
+                controller.goMenuSetting(foodtruckidmap);
+              },
+              child: const Text('메뉴 추가'),
+            ),
+            const SizedBox(height: 20),
+          ],
           Expanded(
             child: Obx(
               () {
@@ -470,19 +442,21 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
   }
 
   Widget buildReviewTab(BuildContext context, String select, String uid,
-      Size size, FoodtruckdetailController controller) {
+      String writeuid, Size size, FoodtruckdetailController controller) {
     final Map<String, dynamic> foodtruckidmap = {'foodtruck_id': select};
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          ElevatedButton(
-            onPressed: () {
-              controller.goReviewSetting(foodtruckidmap);
-            },
-            child: const Text('리뷰 추가'),
-          ),
-          const SizedBox(height: 20),
+          if (uid == writeuid) ...[
+            ElevatedButton(
+              onPressed: () {
+                controller.goReviewSetting(foodtruckidmap);
+              },
+              child: const Text('리뷰 추가'),
+            ),
+            const SizedBox(height: 20),
+          ],
           Expanded(
             child: Obx(
               () {

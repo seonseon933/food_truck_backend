@@ -1,4 +1,3 @@
-import 'package:food_truck/controller/base_controller.dart';
 import 'package:food_truck/view/wishlist_view.dart';
 import '../view/foodtruckdetail_view.dart';
 import 'package:get/get.dart';
