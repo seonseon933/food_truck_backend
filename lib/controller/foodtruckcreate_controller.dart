@@ -1,5 +1,6 @@
 import 'package:food_truck/controller/app_id.dart';
 import 'package:food_truck/controller/app_pages.dart';
+import 'package:food_truck/controller/foodtruck_controller.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,8 @@ class FoodtruckcreateController extends GetxController {
   final _picker = ImagePicker();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
+  final FoodtruckController foodtruckController =
+      Get.find<FoodtruckController>();
 
   void goBack() {
     Get.back();
@@ -53,5 +56,9 @@ class FoodtruckcreateController extends GetxController {
         user.uid,
         jlatitude,
         jlongitude);
+  }
+
+  Future<void> FoodtruckDataupdate() async {
+    await foodtruckController.ObsgetFoodTruckData(); // 목록페이지 데이터 갱신
   }
 }

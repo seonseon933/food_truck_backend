@@ -252,7 +252,7 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
               const SizedBox(height: 16.0),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Map<String, dynamic> paymentOptions = {
                       'cash': cash.value,
                       'card': card.value,
@@ -261,7 +261,7 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                       'accountName': accountHolderController.text,
                       'accountNumber': accountNumberController.text,
                     };
-                    controller.createFoodTruck(
+                    await controller.createFoodTruck(
                       nameController.text,
                       descriptionController.text,
                       scheduleController.text,
@@ -271,6 +271,8 @@ class FoodtruckcreateView extends GetView<FoodtruckcreateController> {
                       tagController.text,
                     );
                     print('등록버튼 클릭');
+                    // 푸드트럭 목록 갱신
+                    await controller.FoodtruckDataupdate();
                     controller.goBack();
                   },
                   child: const Text('등록'),

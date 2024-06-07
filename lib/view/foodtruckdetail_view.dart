@@ -119,7 +119,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                                         constraints: const BoxConstraints(),
                                         icon: const Icon(Icons.delete),
                                         iconSize: 30,
-                                        onPressed: () {
+                                        onPressed: () async {
                                           controller.deleteFoodTruck(select);
                                         },
                                       ),
@@ -472,7 +472,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          if (uid != writeuid) ...[
+          if (uid == writeuid) ...[
             // 푸드트럭 등록한 자가 자신의 푸드트럭에 리뷰를 달지 못하도록.
             ElevatedButton(
               onPressed: () {

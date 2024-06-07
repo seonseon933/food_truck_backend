@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_truck/controller/base_controller.dart';
+import 'package:food_truck/controller/foodtruck_controller.dart';
 import 'package:food_truck/model/favorite_model.dart';
 import 'package:food_truck/model/foodtruck_model.dart';
 import 'package:food_truck/model/review_model.dart';
@@ -12,6 +14,10 @@ class FoodtruckdetailController extends GetxController {
   final ReviewModel _reviewModel = ReviewModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FavoriteModel _favoriteModel = FavoriteModel();
+  final FoodtruckController foodtruckController =
+      Get.find<FoodtruckController>();
+  final BaseController baseController = Get.find<BaseController>();
+
   RxList<String> favoriteTruckIds = <String>[].obs;
 
   var foodtruckid = ''.obs;
@@ -111,6 +117,7 @@ class FoodtruckdetailController extends GetxController {
   // 푸드트럭 삭제
   Future<void> deleteFoodTruck(String foodtruckid) async {
     await _foodTruckModel.deleteFoodTruck(foodtruckid);
+    await foodtruckController.ObsgetFoodTruckData(); // 목록페이지 데이터 갱신
     Get.back();
   }
 }

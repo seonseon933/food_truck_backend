@@ -112,13 +112,7 @@ class ProfileWrapper extends StatelessWidget {
               routeName: Routes.PROFILE,
               page: () => const ProfileView(),
               binding: ProfileBinding());
-        } /*else if (routeSettings.name == Routes.SETTING) {
-          return GetPageRoute(
-              routeName: Routes.SETTING,
-              page: () => const SettingView(),
-              binding: SettingBinding());
-        }*/
-        else if (routeSettings.name == Routes.PROFILESETTING) {
+        } else if (routeSettings.name == Routes.PROFILESETTING) {
           return GetPageRoute(
               routeName: Routes.PROFILESETTING,
               page: () => const ProfilesettingView(),
