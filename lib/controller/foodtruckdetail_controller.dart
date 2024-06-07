@@ -16,7 +16,6 @@ class FoodtruckdetailController extends GetxController {
   final FavoriteModel _favoriteModel = FavoriteModel();
   final FoodtruckController foodtruckController =
       Get.find<FoodtruckController>();
-  final BaseController baseController = Get.find<BaseController>();
 
   RxList<String> favoriteTruckIds = <String>[].obs;
 

@@ -1,3 +1,4 @@
+import 'package:food_truck/controller/foodtruck_controller.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +10,8 @@ class FoodtruckupdateController extends GetxController {
   final _picker = ImagePicker();
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FoodtruckController foodtruckController =
+      Get.find<FoodtruckController>();
 
   void goDetail(foodtruck) {
     while (Get.previousRoute == Routes.FOODTRUCKUPDATEMAP) {
@@ -17,7 +20,7 @@ class FoodtruckupdateController extends GetxController {
     Get.offNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck);
   }
 
-  Future<String> updateFoodTruck(
+  Future<void> updateFoodTruck(
       String foodtruckid,
       String truckName,
       String truckDescription,
@@ -28,7 +31,7 @@ class FoodtruckupdateController extends GetxController {
       String truckTag,
       double latitude,
       double longitude) async {
-    return _foodTruckModel.updateFoodTruck(
+    await _foodTruckModel.updateFoodTruck(
         foodtruckid,
         truckName,
         truckDescription,
@@ -39,6 +42,7 @@ class FoodtruckupdateController extends GetxController {
         truckTag,
         latitude,
         longitude);
+    await foodtruckController.ObsgetFoodTruckData(); // 목록페이지 데이터 갱신
   }
 
   // 이미지를 갤러리에서 가져올 수 있도록.
