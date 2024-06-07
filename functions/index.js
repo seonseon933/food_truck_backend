@@ -26,6 +26,22 @@ exports.cleanUpUserData = functions.firestore.document('Users/{uid}').onDelete(a
             for (const reviewDoc of reviews.docs) {
                 await reviewDoc.ref.delete();
             }
+
+            // Users 컬렉션의 필드 'review_create_truckid' 배열에서 해당 foodtruckid 삭제
+            const usersreview = await db.collection('Users').where('review_create_truckid', 'array-contains', truckId).get();
+            for (const reviewDoc of usersreview.docs) {
+                await reviewDoc.ref.update({
+                    review_create_truckid: admin.firestore.FieldValue.arrayRemove(truckId)
+                });
+            }
+            // Users 컬렉션의 필드 'favorite_truckid' 배열에서 해당 문서ID 삭제
+            const usersfavorite = await db.collection('Users').where('favorite_truckid', 'array-contains', truckId).get();
+            for (const favoriteDoc of usersfavorite.docs) {
+                await favoriteDoc.ref.update({
+                    favorite_truckid: admin.firestore.FieldValue.arrayRemove(truckId)
+                });
+            }
+
             // 트럭 이미지 삭제 및 트럭 삭제
             const truckData = FoodTruckDoc.data();
             if (truckData.truck_img) {
@@ -71,9 +87,23 @@ exports.cleanUpTruckData = functions.firestore.document('FoodTruck/{truckid}').o
         for (const reviewDoc of reviews.docs) {
             await reviewDoc.ref.delete();
         }
+        // Users 컬렉션의 필드 'review_create_truckid' 배열에서 해당 foodtruckid 삭제
+        const usersreview = await db.collection('Users').where('review_create_truckid', 'array-contains', truckId).get();
+        for (const reviewDoc of usersreview.docs) {
+            await reviewDoc.ref.update({
+                review_create_truckid: admin.firestore.FieldValue.arrayRemove(truckId)
+            });
+        }
+        // Users 컬렉션의 필드 'favorite_truckid' 배열에서 해당 문서ID 삭제
+        const usersfavorite = await db.collection('Users').where('favorite_truckid', 'array-contains', truckId).get();
+        for (const favoriteDoc of usersfavorite.docs) {
+            await favoriteDoc.ref.update({
+                favorite_truckid: admin.firestore.FieldValue.arrayRemove(truckId)
+            });
+        }
 
     } catch (e) {
-        console.log('js에서 truck의 메뉴,리뷰 재귀 삭제 오류: ${e}');
+        console.log(`js에서 truck의 메뉴,리뷰 재귀 삭제 오류: ${e}`);
     }
 
 })
@@ -90,7 +120,7 @@ async function deleteImg(oldImgUrl) {
             await admin.storage().bucket().file(decodedFilePath).delete();
         }
     } catch (e) {
-        console.log('js에서 이미지 삭제 오류: ${e}');
+        console.log(`js에서 이미지 삭제 오류: ${e}`);
     }
 }
 
