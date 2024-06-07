@@ -12,6 +12,7 @@ class FoodtruckdetailController extends GetxController {
   final ReviewModel _reviewModel = ReviewModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FavoriteModel _favoriteModel = FavoriteModel();
+  RxList<String> favoriteTruckIds = <String>[].obs;
 
   var foodtruckid = ''.obs;
   var menuList = <Map<String, dynamic>>[].obs;
@@ -87,12 +88,29 @@ class FoodtruckdetailController extends GetxController {
     return _reviewModel.deleteReview(foodtruckid, reviewid, user.uid);
   }
 
+  // 찜
   Future<void> favoriteTruckInsert(String foodtruckid) async {
     User user = _auth.currentUser!;
-    _favoriteModel.favoriteFoodTruckCreate(foodtruckid, user.uid);
+    await _favoriteModel.favoriteFoodTruckCreate(foodtruckid, user.uid);
+    favoriteTruckIds.add(foodtruckid.toString());
   }
 
   Future<void> favoriteFoodTruckDelete(String foodtruckid, String uid) async {
-    return _favoriteModel.favoriteFoodTruckDelete(foodtruckid, uid);
+    await _favoriteModel.favoriteFoodTruckDelete(foodtruckid, uid);
+    favoriteTruckIds.remove(foodtruckid.toString());
+  }
+
+  // 찜한 푸드트럭 불러오기
+  Future<void> getFavoriteFoodTruck() async {
+    User user = _auth.currentUser!;
+    List<String> favoriteTrucks =
+        await _foodTruckModel.getFavoriteFoodTruck(user.uid);
+    favoriteTruckIds.value = favoriteTrucks; // RxList를 업데이트
+  }
+
+  // 푸드트럭 삭제
+  Future<void> deleteFoodTruck(String foodtruckid) async {
+    await _foodTruckModel.deleteFoodTruck(foodtruckid);
+    Get.back();
   }
 }

@@ -9,7 +9,6 @@ class BaseController extends GetxController {
   RxInt selectedIndex = 0.obs;
   late List<Widget> widgetOptions;
   final userdata = Get.arguments;
-  RxList<String> favoriteTruckIds = <String>[].obs;
 
   BaseController() {
     widgetOptions = <Widget>[

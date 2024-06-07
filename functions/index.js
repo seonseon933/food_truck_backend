@@ -79,6 +79,7 @@ exports.cleanUpTruckData = functions.firestore.document('FoodTruck/{truckid}').o
 })
 
 
+
 async function deleteImg(oldImgUrl) {
     try {
         const filePath = new URL(oldImgUrl).pathname;

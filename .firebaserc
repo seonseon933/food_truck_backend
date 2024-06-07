@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "food-truck-a8296"
-  }
+    "default": "food-truck-19f2d"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }

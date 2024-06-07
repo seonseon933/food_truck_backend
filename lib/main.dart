@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_truck/api/naver_map_api.dart';
+import 'package:food_truck/controller/foodtruckdetail_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 import 'controller/app_pages.dart';
@@ -19,6 +20,8 @@ void main() async {
   ]);
   await NaverMapApp.init();
   var currentUser = FirebaseAuth.instance.currentUser;
+
+  Get.put(FoodtruckdetailController()); // add
 
   String initialRoute;
 

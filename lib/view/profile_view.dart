@@ -256,8 +256,10 @@ class ProfileView extends GetView<ProfileController> {
                                                 ),
                                                 TextButton(
                                                   child: const Text('예'),
-                                                  onPressed: () {
+                                                  onPressed: () async {
                                                     Navigator.of(context).pop();
+                                                    controller
+                                                        .userDelete(); // 완성X
                                                   },
                                                 ),
                                               ],

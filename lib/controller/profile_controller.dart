@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_truck/controller/app_id.dart';
 import 'package:food_truck/controller/base_controller.dart';
+import 'package:food_truck/model/usersmodel.dart';
 import 'package:food_truck/view/foodtruckcreatemap_view.dart';
 import 'package:food_truck/view/profilesetting_view.dart';
 //import 'package:food_truck/view/foodtrucksetting_view.dart';
@@ -16,6 +17,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class ProfileController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
+  final UsersModel _usersModel = UsersModel();
   final _store = FirebaseFirestore.instance;
   late String uid;
   var user = Rxn<Map<String, dynamic>>();
@@ -75,6 +77,23 @@ class ProfileController extends GetxController {
     } catch (e) {
       print("사용자 로그아웃 실패 : $e");
     }
+  }
+
+  // 계정 삭제(탈퇴)
+  Future<void> userDelete() async {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      try {
+        await _usersModel.deleteUserData();
+        await user.delete();
+      } catch (e) {
+        print('계정 삭제 오류 : $e');
+      }
+    } else {
+      print('user에 값 null 들어옴...');
+    }
+    Get.offAllNamed(Routes.LOGIN);
   }
 }
 
