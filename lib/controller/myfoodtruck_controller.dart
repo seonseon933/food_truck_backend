@@ -9,12 +9,26 @@ import '../model/foodtruck_model.dart';
 
 class MyFoodtruckController extends GetxController {
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
-  void goDetail(foodtruck) {
-    Get.toNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck); // map 형태로 보냄
+  var foodtrucks = <Map<String, dynamic>>[].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchFoodTruckData();
   }
 
-  getFoodTruckData() async {
-    return _foodTruckModel.getFoodTruckData();
+  @override
+  void refresh() {
+    fetchFoodTruckData();
+  }
+
+  Future<void> fetchFoodTruckData() async {
+    final data = await _foodTruckModel.getFoodTruckData();
+    foodtrucks.value = data;
+  }
+
+  void goDetail(foodtruck) {
+    Get.toNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck); // map 형태로 보냄
   }
 }
 

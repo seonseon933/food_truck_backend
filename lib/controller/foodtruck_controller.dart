@@ -19,6 +19,11 @@ class FoodtruckController extends GetxController {
     fetchFoodTruckData();
   }
 
+  @override
+  void refresh() {
+    fetchFoodTruckData();
+  }
+
   goDetail(Map<String, dynamic> foodtruck) {
     Get.toNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck);
   }

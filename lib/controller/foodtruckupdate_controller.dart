@@ -39,9 +39,18 @@ class FoodtruckupdateController extends GetxController {
   }
 
   goDetail() {
-    final dcontroller = Get.find<FoodtruckdetailController>();
+    if (Get.isRegistered<FoodtruckdetailController>()) {
+      final dcontroller = Get.find<FoodtruckdetailController>();
+      dcontroller.foodtruck["truck_name"] = nameController.value.text;
+    }
+    if (Get.isRegistered<FoodtruckController>()) {
+      final fcontroller = Get.find<FoodtruckController>();
+      fcontroller.update();
+    } else if (Get.isRegistered<MyFoodtruckController>()) {
+      final mcontroller = Get.find<MyFoodtruckController>();
+      mcontroller.update();
+    }
 
-    dcontroller.foodtruck["truck_name"] = nameController.value.text;
     Get.back();
   }
 

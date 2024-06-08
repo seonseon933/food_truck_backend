@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 class FoodtruckupdatemapController extends GetxController {
   double jlatitude = 35.139988984673806;
   double jlongitude = 126.93423855903913;
-  RxString juso = "버튼을 눌러 도로명 주소를 검색해주세요".obs;
+  RxString juso = "주소를 검색해주세요".obs;
   late Map<String, dynamic> foodtruck;
 
   String foodtruckid = "";
