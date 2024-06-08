@@ -9,6 +9,7 @@ class FoodtruckView extends GetView<FoodtruckController> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    controller.ObsgetFoodTruckData();
 
     return Scaffold(
       appBar: AppBar(
