@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck/controller/login_controller.dart';
 import '../controller/app_pages.dart';
-import '../style/font_style.dart';
 import 'package:get/get.dart';
 
 class FirstLogin extends StatelessWidget {
@@ -16,33 +15,78 @@ class FirstLogin extends StatelessWidget {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.grey, // 조금 더 진한 파스텔 핑크색
               Colors.white,
-              Colors.grey, // 조금 더 진한 파스텔 주황색
+              Colors.white,
             ],
-            begin: Alignment.topCenter, // 그라데이션 시작 위치 설정
-            end: Alignment.bottomCenter, // 그라데이션 종료 위치 설정
           ),
         ),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('최초 로그인 구분', style: CustomTextStyles.title),
-              TextButton(
-                child: const Text('판매자인가요?'),
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   getxlogincontroller.saveUserType("판매자");
                   Get.offNamed(Routes.HOME);
                   getxlogincontroller.goBase(); // 테스트 못해봄
                 },
+                child: Container(
+                  width: 300,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/login/seller_image.jpg', width: 50),
+                      const SizedBox(height: 8),
+                      const Text('판매자인가요?'),
+                    ],
+                  ),
+                ),
               ),
-              TextButton(
-                child: const Text('소비자인가요?'),
-                onPressed: () {
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
                   getxlogincontroller.saveUserType("소비자");
                   getxlogincontroller.goBase();
                 },
+                child: Container(
+                  width: 300,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/login/consumer_image.jpg', width: 50),
+                      const SizedBox(height: 8),
+                      const Text('소비자인가요?'),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),

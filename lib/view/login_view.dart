@@ -12,12 +12,9 @@ class Login extends StatelessWidget {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.grey,
-              Colors.white, // 조금 더 진한 파스텔 핑크색
-              Colors.grey, // 조금 더 진한 파스텔 주황색
+              Colors.white,
+              Colors.white,
             ],
-            begin: Alignment.topCenter, // 그라데이션 시작 위치 설정
-            end: Alignment.bottomCenter, // 그라데이션 종료 위치 설정
           ),
         ),
         child: Center(
@@ -34,7 +31,7 @@ class Login extends StatelessWidget {
                 ),
               ),
               Image.asset(
-                'assets/images/foodtruck_icon.png', // 이미지 출처 : <a href="https://www.flaticon.com/kr/free-icons/-" title="- 아이콘">- 아이콘 제작자: iconixar - Flaticon</a>
+                'assets/login/foodtruck_icon.png',
                 width: 200.0,
                 height: 200.0,
               ),

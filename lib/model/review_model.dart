@@ -170,9 +170,20 @@ class ReviewModel {
           .collection('Review')
           .doc(reviewid)
           .delete();
-      await _store.collection('Users').doc(uid).update({
-        'review_create_truckid': FieldValue.arrayRemove([foodtruckid])
-      });
+      // 해당 푸드트럭에 유저의 다른 리뷰가 남아있는지 확인
+      final QuerySnapshot userReviews = await _store
+          .collection('FoodTruck')
+          .doc(foodtruckid)
+          .collection('Review')
+          .where('user_uid', isEqualTo: uid)
+          .get();
+
+      if (userReviews.docs.isEmpty) {
+        // 다른 리뷰가 없으면 배열에서 해당 트럭 ID 삭제
+        await _store.collection('Users').doc(uid).update({
+          'review_create_truckid': FieldValue.arrayRemove([foodtruckid])
+        });
+      }
 
       await updateAvgRating(foodtruckid);
 

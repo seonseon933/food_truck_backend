@@ -79,7 +79,73 @@ class ProfileController extends GetxController {
     }
   }
 
-  // 계정 삭제(탈퇴)
+  Future<void> testDelete() async {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      try {
+        // Google Sign-In을 통해 재인증 수행
+        GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+        if (googleUser != null) {
+          GoogleSignInAuthentication googleAuth =
+              await googleUser.authentication;
+          AuthCredential credential = GoogleAuthProvider.credential(
+            idToken: googleAuth.idToken,
+            accessToken: googleAuth.accessToken,
+          );
+          await user.reauthenticateWithCredential(credential);
+
+          await user.delete();
+
+          Get.offAllNamed(Routes.LOGIN);
+        } else {
+          Get.snackbar('재인증 실패', 'Google 계정으로 다시 로그인해주세요.');
+        }
+      } catch (e) {
+        print('왜 사용자 삭제 중에 오류가 발생하냐고 : $e');
+        Get.snackbar('계정 삭제 오류', '계정 삭제 중 오류가 발생했습니다: $e');
+      }
+    } else {
+      Get.snackbar('오류', '사용자 정보가 유효하지 않습니다.');
+      Get.offAllNamed(Routes.LOGIN);
+    }
+  }
+
+  Future<void> userDelete() async {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      try {
+        // Google Sign-In을 통해 재인증 수행
+        GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+        if (googleUser != null) {
+          GoogleSignInAuthentication googleAuth =
+              await googleUser.authentication;
+          AuthCredential credential = GoogleAuthProvider.credential(
+            idToken: googleAuth.idToken,
+            accessToken: googleAuth.accessToken,
+          );
+          await user.reauthenticateWithCredential(credential);
+
+          // 재인증 후 사용자 데이터 삭제
+          await _usersModel.deleteUserData();
+          await user.delete();
+          Get.offAllNamed(Routes.LOGIN);
+        } else {
+          Get.snackbar('재인증 실패', 'Google 계정으로 다시 로그인해주세요.');
+          Get.offAllNamed(Routes.LOGIN);
+        }
+      } catch (e) {
+        print('왜 사용자 삭제 중에 오류가 발생하냐고 : $e');
+        Get.snackbar('계정 삭제 오류', '계정 삭제 중 오류가 발생했습니다: $e');
+      }
+    } else {
+      Get.snackbar('오류', '사용자 정보가 유효하지 않습니다.');
+      Get.offAllNamed(Routes.LOGIN);
+    }
+  }
+  /*
+  // 계정 삭제(탈퇴) - auth삭제 안됨
   Future<void> userDelete() async {
     User? user = _auth.currentUser;
 
@@ -95,6 +161,7 @@ class ProfileController extends GetxController {
     }
     Get.offAllNamed(Routes.LOGIN);
   }
+  */
 }
 
 class ProfileWrapper extends StatelessWidget {

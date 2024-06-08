@@ -20,11 +20,24 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   await NaverMapApp.init();
-  var currentUser = FirebaseAuth.instance.currentUser;
+  //var currentUser = FirebaseAuth.instance.currentUser;
 
   Get.put(FoodtruckController()); // add
   Get.put(FoodtruckdetailController()); // add
 
+  // Firebase Auth 상태 변경을 모니터링합니다.
+  FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    print('user : $user');
+    if (user == null) {
+      // 사용자가 로그인되지 않았습니다. 초기 경로를 로그인 페이지로 설정합니다.
+      runApp(const MyApp(initialRoute: Routes.LOGIN));
+    } else {
+      // 사용자가 로그인되었습니다. 초기 경로를 기본 페이지로 설정합니다.
+      runApp(const MyApp(initialRoute: Routes.BASE));
+    }
+  });
+
+  /*
   String initialRoute;
 
   if (currentUser != null) {
@@ -33,7 +46,7 @@ void main() async {
     initialRoute = Routes.LOGIN; // 로그인 정보 없을 때.
   }
   //initialRoute = Routes.LOGIN;
-  runApp(MyApp(initialRoute: initialRoute));
+  runApp(MyApp(initialRoute: initialRoute));*/
 }
 
 class MyApp extends StatelessWidget {

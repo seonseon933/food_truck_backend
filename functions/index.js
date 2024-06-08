@@ -6,10 +6,17 @@ const db = admin.firestore();// admin sdk를 통해 firestore인스턴스에 접
 // 해당 경로에 리스너를 설치.
 exports.cleanUpUserData = functions.firestore.document('Users/{uid}').onDelete(async (snap, context) => {
     const uid = context.params.uid;
+    let reviewedTruckIds = [];
+    console.log(`${uid} uid 잘 가져옴.`);
     // 해당 사용자가 푸드트럭을 등록한 경우 일괄 삭제
     try {
+        const userDoc = snap.data();
+        reviewedTruckIds = userDoc.review_create_truckid || []; // 삭제되기 전 사용자 문서에서 필요한 정보 가져오기
+        console.log(`${reviewedTruckIds} 잘 가져옴.`);
+
         // 사용자가 등록한 푸드트럭 삭제
         const userFoodTrucks = await db.collection('FoodTruck').where('user_uid', '==', uid).get();
+        console.log(`${userFoodTrucks} uid 잘 가져옴.`);
         for (const FoodTruckDoc of userFoodTrucks.docs) {
             const truckId = FoodTruckDoc.id;
             // 메뉴 삭제
@@ -49,20 +56,20 @@ exports.cleanUpUserData = functions.firestore.document('Users/{uid}').onDelete(a
             }
             await FoodTruckDoc.ref.delete();
         }
-        // 해당 유저가 작성한 리뷰 일괄 삭제 및 평균 평점 업데이트
-        const userDoc = await db.collection('Users').doc(uid).get();
-        const reviewedTruckIds = userDoc.data()?.review_create_truckid || [];  // 사용자 문서에서 리뷰가 작성된 푸드트럭ID 배열 가져옴
 
         for (const truckId of reviewedTruckIds) {
-            const truckExists = (await db.collection('FoodTruck').doc(truckId).get()).exists;
-            if (truckExists) {
+            const truckDoc = await db.collection('FoodTruck').doc(truckId).get();
+            if (truckDoc.exists) {
                 const reviews = await db.collection('FoodTruck').doc(truckId).collection('Review').where('user_uid', '==', uid).get();
-                const deletePromises = reviews.docs.map(review => review.ref.delete());
-                await Promise.all(deletePromises);
-
+                for (const reviewDoc of reviews.docs) {
+                    await reviewDoc.ref.delete();
+                }
+                console.log(`푸드트럭 ID ${truckId}에 대한 사용자의 리뷰 삭제 완료.`);
                 await updateAvgRating(db, truckId);
             }
         }
+
+        console.log('사용자가 작성한 모든 리뷰가 삭제되었고, 관련된 푸드트럭들의 평균 평점이 업데이트되었습니다.');
 
     } catch (e) {
         console.log(`js에서 truck의 메뉴, 리뷰 재귀 삭제 오류: ${e}`);
