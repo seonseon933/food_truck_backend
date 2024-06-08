@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:food_truck/controller/app_pages.dart';
 import 'package:food_truck/controller/base_controller.dart';
 import 'package:food_truck/controller/foodtruckdetail_controller.dart';
 import 'package:get/get.dart';
@@ -14,7 +15,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
     final Map arguments = Get.arguments as Map;
     final String select = arguments['foodtruck_id'];
     controller.setFoodTruckId(select);
-    // 수정, 삭제
+
     final Size size = MediaQuery.of(context).size;
     String uid = controller.getCurrentUseruid();
 
@@ -32,20 +33,30 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('잘못된 접근입니다'));
           } else {
-            Map<String, dynamic> foodtruck = snapshot.data!;
+            controller.foodtruck.value = snapshot.data!;
             return ListView(
               padding: const EdgeInsets.all(16.0),
               children: [
-                // 이미지 추가
-                Container(
-                  height: size.height * 0.3,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(foodtruck['truck_img']),
-                      fit: BoxFit.fill,
-                    ),
-                    borderRadius: BorderRadius.circular(11.0),
-                  ),
+                GetBuilder<FoodtruckdetailController>(
+                  builder: (controller) {
+                    return Container(
+                      width: size.width * 0.9,
+                      height: size.height * 0.4,
+                      decoration: BoxDecoration(
+                        image: controller.foodtruck != null
+                            ? DecorationImage(
+                                image: NetworkImage(
+                                    controller.foodtruck["truck_img"]),
+                                fit: BoxFit.fill,
+                              )
+                            : null,
+                        borderRadius: BorderRadius.circular(11.0),
+                      ),
+                      child: controller.foodtruck == null
+                          ? Center(child: CircularProgressIndicator())
+                          : null,
+                    );
+                  },
                 ),
                 const SizedBox(height: 10),
                 Obx(
@@ -91,7 +102,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                               },
                             ),
                           ),
-                        if (uid == foodtruck['user_uid']) ...[
+                        if (uid == controller.foodtruck['user_uid']) ...[
                           SizedBox(
                             width: 36,
                             height: 36,
@@ -100,8 +111,15 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                               constraints: const BoxConstraints(),
                               icon: const Icon(Icons.edit),
                               iconSize: 30,
-                              onPressed: () {
-                                controller.goUpdateMap(foodtruck);
+                              onPressed: () async {
+                                //controller.goUpdateMap(controller.foodtruck);
+                                ///print(
+                                //"초기 이미지 : ${controller.foodtruck['truck_img']}");
+                                await Get.toNamed(Routes.FOODTRUCKUPDATEMAP);
+
+                                // print(
+                                //"새로운 이미지 : ${controller.foodtruck['truck_img']}");
+                                controller.update();
                               },
                             ),
                           ),
@@ -116,18 +134,21 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                 ),
                 const SizedBox(height: 30),
                 Center(
-                  child: Text(
-                    "${foodtruck['truck_name']}",
-                    style: CustomTextStyles.truckname,
+                  child: Obx(
+                    () => Text(
+                      "${controller.foodtruck['truck_name']}",
+                      style: CustomTextStyles.truckname,
+                    ),
                   ),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     RatingBarIndicator(
-                      rating: foodtruck["truck_avgrating"] is int
-                          ? (foodtruck["truck_avgrating"] as int).toDouble()
-                          : foodtruck["truck_avgrating"] as double,
+                      rating: controller.foodtruck["truck_avgrating"] is int
+                          ? (controller.foodtruck["truck_avgrating"] as int)
+                              .toDouble()
+                          : controller.foodtruck["truck_avgrating"] as double,
                       itemBuilder: (context, index) => const Icon(
                         Icons.star,
                         color: Colors.amber,
@@ -138,18 +159,16 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                     ),
                     const SizedBox(width: 5),
                     Text(
-                      "(${foodtruck["truck_avgrating"].toString()})",
+                      "(${controller.foodtruck["truck_avgrating"].toString()})",
                       style: CustomTextStyles.caption,
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 30),
                 Container(
                   height: 1,
                   color: Colors.grey[300],
                 ),
-
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -167,7 +186,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                       width: size.width * 0.65,
                       height: size.height * 0.05,
                       child: _buildPaymentMethodsWidget(
-                          foodtruck['truck_payment']),
+                          controller.foodtruck['truck_payment']),
                     ),
                   ],
                 ),
@@ -188,7 +207,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                       width: size.width * 0.65,
                       height: size.height * 0.05,
                       child: Text(
-                        foodtruck['truck_schedule'],
+                        controller.foodtruck['truck_schedule'],
                         style: CustomTextStyles.body,
                       ),
                     ),
@@ -243,14 +262,19 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                         child: TabBarView(
                           children: [
                             // 메뉴 탭 ====================================
-                            buildMenuTab(context, select, uid,
-                                foodtruck['user_uid'], size, controller),
+                            buildMenuTab(
+                                context,
+                                select,
+                                uid,
+                                controller.foodtruck['user_uid'],
+                                size,
+                                controller),
                             // 정보 탭 ====================================
                             ListView(
                               padding: const EdgeInsets.all(16.0),
                               children: [
                                 Text(
-                                  '${foodtruck['truck_name']}',
+                                  '${controller.foodtruck['truck_name']}',
                                   style: CustomTextStyles.title,
                                 ),
                                 const SizedBox(height: 10),
@@ -260,7 +284,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  foodtruck['truck_schedule'],
+                                  controller.foodtruck['truck_schedule'],
                                   style: CustomTextStyles.body,
                                 ),
 
@@ -272,7 +296,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  foodtruck['truck_phone'],
+                                  controller.foodtruck['truck_phone'],
                                   style: CustomTextStyles.body,
                                 ),
                                 const SizedBox(height: 20),
@@ -289,14 +313,19 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                                 ),
                                 const SizedBox(height: 5),
                                 Text(
-                                  '${foodtruck['truck_description']}',
+                                  '${controller.foodtruck['truck_description']}',
                                   style: CustomTextStyles.body,
                                 ),
                               ],
                             ),
                             // 리뷰 탭 ====================================
-                            buildReviewTab(context, select, uid,
-                                foodtruck['user_uid'], size, controller),
+                            buildReviewTab(
+                                context,
+                                select,
+                                uid,
+                                controller.foodtruck['user_uid'],
+                                size,
+                                controller),
                           ],
                         ),
                       ),

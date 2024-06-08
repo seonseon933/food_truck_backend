@@ -19,7 +19,7 @@ class FoodtruckcreateController extends GetxController {
   void goProfile() {
     Get.back();
     Future.delayed(const Duration(milliseconds: 50), () {
-      Get.back(id: profileD);
+      Get.offNamed(Routes.MYFOODTRUCK, id: profileD);
     });
   }
 

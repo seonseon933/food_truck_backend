@@ -1,7 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:food_truck/controller/app_id.dart';
+import 'package:food_truck/controller/foodtruck_controller.dart';
 import 'package:food_truck/model/favorite_model.dart';
 import 'package:food_truck/model/foodtruck_model.dart';
 import 'package:food_truck/model/review_model.dart';
+import 'package:food_truck/view/foodtruckdetail_view.dart';
+import 'package:food_truck/view/foodtruckupdate_view.dart';
 import 'package:get/get.dart';
 import '../model/menu_model.dart';
 import 'app_pages.dart';
@@ -12,6 +17,7 @@ class FoodtruckdetailController extends GetxController {
   final ReviewModel _reviewModel = ReviewModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FavoriteModel _favoriteModel = FavoriteModel();
+  final RxMap<String, dynamic> foodtruck = <String, dynamic>{}.obs;
 
   var foodtruckid = ''.obs;
   var menuList = <Map<String, dynamic>>[].obs;

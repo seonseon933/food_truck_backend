@@ -1,3 +1,4 @@
+import 'package:food_truck/controller/foodtruckupdatemap_controller.dart';
 import 'package:food_truck/controller/myfoodtruck_controller.dart';
 import 'package:food_truck/controller/profilesetting_controller.dart';
 import 'package:food_truck/controller/wishlist_controller.dart';
@@ -129,6 +130,15 @@ class FoodtruckupdateBinding extends Bindings {
   }
 }
 
+class FoodtruckupdatemapBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<FoodtruckupdatemapController>(
+      () => FoodtruckupdatemapController(),
+    );
+  }
+}
+
 class FoodtruckdetailBinding extends Bindings {
   @override
   void dependencies() {
@@ -247,13 +257,13 @@ class AppPages {
       binding: ProfilesettingBinding(),
     ),
     GetPage(
-      name: _Paths.FOODTRUCKUPDATE,
-      page: () => const FoodtruckupdateView(),
-      binding: FoodtruckupdateBinding(),
-    ),
-    GetPage(
       name: _Paths.FOODTRUCKUPDATEMAP,
       page: () => const FoodtruckupdatemapView(),
+      binding: FoodtruckupdatemapBinding(),
+    ),
+    GetPage(
+      name: _Paths.FOODTRUCKUPDATE,
+      page: () => const FoodtruckupdateView(),
       binding: FoodtruckupdateBinding(),
     ),
     GetPage(

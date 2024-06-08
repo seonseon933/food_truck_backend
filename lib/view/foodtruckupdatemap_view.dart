@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:food_truck/controller/app_pages.dart';
 import 'package:food_truck/controller/foodtruckdetail_controller.dart';
-import 'package:food_truck/controller/foodtruckupdate_controller.dart';
+import 'package:food_truck/controller/foodtruckupdatemap_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
@@ -12,7 +12,7 @@ import '../view/search_view.dart';
 import '../controller/search_controller.dart';
 import '../style/font_style.dart';
 
-class FoodtruckupdatemapView extends GetView<FoodtruckupdateController> {
+class FoodtruckupdatemapView extends GetView<FoodtruckupdatemapController> {
   const FoodtruckupdatemapView({super.key});
 
   @override
@@ -32,9 +32,7 @@ class FoodtruckupdatemapView extends GetView<FoodtruckupdateController> {
               SizedBox(height: size.height * 0.02),
               Center(
                 child: InkWell(
-                  // 누르면 버튼 효과
                   highlightColor: Colors.black12,
-                  // Container와 동일한 Radius 설정
                   borderRadius: BorderRadius.circular(8.0),
                   onTap: () async {
                     Get.lazyPut<Search_Controller>(
@@ -51,7 +49,6 @@ class FoodtruckupdatemapView extends GetView<FoodtruckupdateController> {
                     controller.juso.value = juso;
                     print("search = $juso");
                   },
-
                   child: Container(
                     width: size.width * 0.7,
                     padding: const EdgeInsets.all(8.0),
@@ -60,7 +57,7 @@ class FoodtruckupdatemapView extends GetView<FoodtruckupdateController> {
                       color: Colors.black12,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -70,7 +67,12 @@ class FoodtruckupdatemapView extends GetView<FoodtruckupdateController> {
                             size: 20.0,
                           ),
                         ),
-                        Text("주소를 입력하세요", style: CustomTextStyles.caption)
+                        if (controller.juso.isEmpty) ...[
+                          Text("주소를 입력하세요", style: CustomTextStyles.caption)
+                        ] else ...[
+                          Text(controller.juso.value,
+                              style: CustomTextStyles.caption)
+                        ],
                       ],
                     ),
                   ),
@@ -91,7 +93,7 @@ class FoodtruckupdatemapView extends GetView<FoodtruckupdateController> {
               ),
               SizedBox(height: size.height * 0.02),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FutureBuilder(
                     future:
@@ -104,14 +106,31 @@ class FoodtruckupdatemapView extends GetView<FoodtruckupdateController> {
                       } else if (!snapshot.hasData) {
                         return Text('No Data');
                       } else {
-                        var data = snapshot.data;
-                        return ElevatedButton(
+                        return SizedBox(
+                          width: size.width * 0.8,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Color(0xff7d7d7d),
+                              shadowColor: Colors.grey[300],
+                              elevation: 3,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
+                            ),
                             onPressed: () {
-                              controller.jlatitude = data["truck_latitude"];
-                              controller.jlongitude = data["truck_longitude"];
-                              Get.toNamed(Routes.FOODTRUCKUPDATE);
+                              controller.jlatitude =
+                                  controller.foodtruck["truck_latitude"];
+                              controller.jlongitude =
+                                  controller.foodtruck["truck_longitude"];
+
+                              controller.gotoupdate();
                             },
-                            child: Text("위치 변경 건너뛰기"));
+                            child: const Text("위치 변경 건너뛰기",
+                                style: CustomTextStyles.bodyBold),
+                          ),
+                        );
                       }
                     },
                   ),
@@ -141,7 +160,7 @@ class UNaverMapApp extends StatefulWidget {
 }
 
 class _NaverMapAppState extends State<UNaverMapApp> {
-  final fcontroller = Get.find<FoodtruckupdateController>();
+  final fcontroller = Get.find<FoodtruckupdatemapController>();
   late NaverMapController _controller;
   final String clientId = 'ujb8t157zt';
   final String clientSecret = 'TMdtyDoM6PImQk8pr16gUuzpTeFjr9AkO8Cm5n3d';
@@ -222,7 +241,7 @@ class _NaverMapAppState extends State<UNaverMapApp> {
                                   cameraPosition.target.latitude;
                               fcontroller.jlongitude =
                                   cameraPosition.target.longitude;
-                              fcontroller.goupdateview();
+                              Get.toNamed(Routes.FOODTRUCKUPDATE);
                             },
                             child: const Text("네"),
                           ),

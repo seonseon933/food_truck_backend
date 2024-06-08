@@ -48,11 +48,6 @@ class FoodTruckModel {
 
       if (file != null) {
         await updateFoodTruckImg(docref.id, file);
-      } else {
-        await _store
-            .collection('FoodTruck')
-            .doc(docref.id)
-            .update({'truck_img': defaultImg});
       }
       return docref.id;
     } catch (e) {
@@ -84,7 +79,7 @@ class FoodTruckModel {
         'truck_tag': truckTag,
         'truck_payment': paymentOptions,
         'truck_latitude': latitude,
-        'truck_longitude': longitude
+        'truck_longitude': longitude,
       });
 
       return foodtruckid;

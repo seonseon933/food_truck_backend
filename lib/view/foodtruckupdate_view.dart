@@ -1,50 +1,15 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:food_truck/controller/foodtruckupdate_controller.dart';
 import 'package:get/get.dart';
 
 import '../style/font_style.dart';
 
-class FoodtruckupdateView extends StatefulWidget {
+class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
   const FoodtruckupdateView({Key? key}) : super(key: key);
-
-  @override
-  _FoodtruckupdateViewState createState() => _FoodtruckupdateViewState();
-}
-
-class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController scheduleController = TextEditingController();
-  final TextEditingController bankController = TextEditingController();
-  final TextEditingController tagController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController accountHolderController = TextEditingController();
-  final TextEditingController accountNumberController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-
-  final RxBool cash = false.obs;
-  final RxBool card = false.obs;
-  final RxBool bankTransfer = false.obs;
-
-  @override
-  void dispose() {
-    // dispose 메소드에서 TextEditingController를 해제합니다.
-    nameController.dispose();
-    scheduleController.dispose();
-    bankController.dispose();
-    tagController.dispose();
-    phoneController.dispose();
-    accountHolderController.dispose();
-    accountNumberController.dispose();
-    descriptionController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final controller = Get.find<FoodtruckupdateController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -74,7 +39,8 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
                                       fit: BoxFit.fill,
                                     )
                                   : DecorationImage(
-                                      image: controller.fileimg as NetworkImage,
+                                      image: NetworkImage(
+                                          controller.foodtruck["truck_img"]),
                                       fit: BoxFit.fill,
                                     ),
                               color: Colors.grey,
@@ -94,8 +60,8 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
                               icon: const Icon(Icons.edit),
                               iconSize: 30,
                               onPressed: () async {
-                                controller.file = await controller
-                                    .getFoodTruckImgGaller() as File;
+                                controller.file =
+                                    await controller.getFoodTruckImgGaller();
                                 controller.update();
                               },
                             ),
@@ -106,7 +72,6 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 16.0),
               const Text('푸드트럭 이름', // 푸드트럭 이름 텍스트
                   style: CustomTextStyles.title),
@@ -115,9 +80,9 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        hintText: controller.foodtruck["truck_name"],
+                      controller: controller.nameController.value,
+                      decoration: const InputDecoration(
+                        hintText: "푸드트럭 이름 입력",
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -128,14 +93,13 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
               const Text('푸드트럭 정보', // 시간 텍스트
                   style: CustomTextStyles.title),
               const SizedBox(height: 8.0),
-
               Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: phoneController,
-                      decoration: InputDecoration(
-                        hintText: controller.foodtruck["truck_phone"],
+                      controller: controller.phoneController.value,
+                      decoration: const InputDecoration(
+                        hintText: "전화번호 입력",
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -143,23 +107,9 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
                   const SizedBox(width: 16.0),
                   Expanded(
                     child: TextField(
-                      controller: tagController,
-                      decoration: InputDecoration(
-                        hintText: controller.foodtruck["truck_tag"],
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8.0),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: scheduleController,
-                      decoration: InputDecoration(
-                        hintText: controller.foodtruck["truck_schedule"],
+                      controller: controller.tagController.value,
+                      decoration: const InputDecoration(
+                        hintText: '음식 태그입력',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -167,6 +117,20 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
                 ],
               ),
 
+              const SizedBox(height: 8.0),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: controller.scheduleController.value,
+                      decoration: const InputDecoration(
+                        hintText: '판매요일/시간 입력',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 16.0),
               const Text('결제 방법', // 결제 방법 텍스트
                   style: CustomTextStyles.title),
@@ -177,30 +141,30 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
                   Row(
                     children: [
                       Obx(() => Checkbox(
-                          value: cash.value,
-                          onChanged: (bool? value) {
-                            cash.value = value!;
-                          })), // 현금 체크박스
+                          value: controller.cash.value,
+                          onChanged: (value) {
+                            controller.cash.value = value!;
+                          })),
                       const Text('현금', style: CustomTextStyles.body),
                     ],
                   ),
                   Row(
                     children: [
                       Obx(() => Checkbox(
-                          value: card.value,
+                          value: controller.card.value,
                           onChanged: (bool? value) {
-                            card.value = value!;
-                          })), // 카드 체크박스
+                            controller.card.value = value!;
+                          })),
                       const Text('카드', style: CustomTextStyles.body),
                     ],
                   ),
                   Row(
                     children: [
                       Obx(() => Checkbox(
-                          value: bankTransfer.value,
+                          value: controller.bankTransfer.value,
                           onChanged: (bool? value) {
-                            bankTransfer.value = value!;
-                          })), // 계좌이체 체크박스
+                            controller.bankTransfer.value = value!;
+                          })),
                       const Text('계좌이체', style: CustomTextStyles.body),
                     ],
                   ),
@@ -223,13 +187,12 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: TextField(
-                          controller: bankController,
-                          decoration: InputDecoration(
+                          controller: controller.bankController.value,
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             contentPadding:
                                 EdgeInsets.symmetric(horizontal: 8.0),
-                            hintText: controller.foodtruck["truck_payment"]
-                                ["bankName"],
+                            hintText: '은행 입력',
                           ),
                         ),
                       ),
@@ -249,13 +212,12 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: TextField(
-                          controller: accountHolderController,
-                          decoration: InputDecoration(
+                          controller: controller.accountHolderController.value,
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             contentPadding:
                                 EdgeInsets.symmetric(horizontal: 8.0),
-                            hintText: controller.foodtruck["truck_payment"]
-                                ["accountName"], // 성명 입력 박스
+                            hintText: '성명 입력',
                           ),
                         ),
                       ),
@@ -274,12 +236,11 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: TextField(
-                  controller: accountNumberController,
-                  decoration: InputDecoration(
+                  controller: controller.accountNumberController.value,
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                    hintText: controller.foodtruck["truck_payment"]
-                        ["accountNumber"], // 계좌번호 입력 박스
+                    hintText: '계좌번호 입력',
                   ),
                 ),
               ),
@@ -295,82 +256,40 @@ class _FoodtruckupdateViewState extends State<FoodtruckupdateView> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: TextField(
-                  controller: descriptionController,
+                  controller: controller.descriptionController.value,
                   maxLines: null, // 다중 라인 입력을 가능하게 함
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(8.0),
-                    hintText:
-                        controller.foodtruck["truck_description"], // 설명 입력 박스
+                    hintText: '설명 입력',
                   ),
                 ),
               ),
+
               const SizedBox(height: 16.0),
-              Center(
+              SizedBox(
+                width: double.infinity, // 버튼 너비를 화면에 맞게 확장
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey[100],
+                    foregroundColor: Colors.black87,
+                    shadowColor: Colors.grey[300],
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  ),
                   onPressed: () async {
-                    if (nameController.text.isEmpty) {
-                      nameController.text =
-                          controller.foodtruck["truck_name"] ?? "";
-                    }
-                    if (descriptionController.text.isEmpty) {
-                      descriptionController.text =
-                          controller.foodtruck["truck_description"] ?? "";
-                    }
-                    if (scheduleController.text.isEmpty) {
-                      scheduleController.text =
-                          controller.foodtruck["truck_schedule"] ?? "";
-                    }
-                    if (phoneController.text.isEmpty) {
-                      phoneController.text =
-                          controller.foodtruck["truck_phone"] ?? "";
-                    }
-                    if (bankController.text.isEmpty) {
-                      bankController.text =
-                          controller.foodtruck["bankName"] ?? "";
-                    }
-                    if (accountHolderController.text.isEmpty) {
-                      accountHolderController.text =
-                          controller.foodtruck["accountName"] ?? "";
-                    }
-                    if (accountNumberController.text.isEmpty) {
-                      accountNumberController.text =
-                          controller.foodtruck["accountNumber"] ?? "";
-                    }
-                    if (tagController.text.isEmpty) {
-                      tagController.text =
-                          controller.foodtruck["truck_tag"] ?? "";
-                    }
-
-                    Map<String, dynamic> paymentOptions = {
-                      'cash': cash.value,
-                      'card': card.value,
-                      'bankTransfer': bankTransfer.value,
-                      'bankName': bankController.text,
-                      'accountName': accountHolderController.text,
-                      'accountNumber': accountNumberController.text,
-                    };
-
-                    await controller.updateFoodTruck(
-                      controller.foodtruckid,
-                      nameController.text,
-                      descriptionController.text,
-                      scheduleController.text,
-                      phoneController.text,
-                      paymentOptions,
-                      controller.file,
-                      tagController.text,
-                      controller.jlatitude,
-                      controller.jlongitude,
-                    );
-
-                    print('등록버튼 클릭');
-
+                    controller.foodtruckid =
+                        controller.foodtruck["foodtruck_id"];
+                    await controller.updateFoodTruck();
                     controller.goDetail();
                   },
-                  child: const Text('등록'),
+                  child: const Text("등 록", style: CustomTextStyles.bodyBold),
                 ),
               ),
+
               const SizedBox(height: 16.0),
             ],
           ),

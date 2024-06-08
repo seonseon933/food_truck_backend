@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_truck/controller/app_id.dart';
 import 'package:food_truck/controller/base_controller.dart';
 import 'package:food_truck/view/foodtruckcreatemap_view.dart';
+import 'package:food_truck/view/foodtruckupdate_view.dart';
 import 'package:food_truck/view/myfoodtruck_view.dart';
 import 'package:food_truck/view/profilesetting_view.dart';
 //import 'package:food_truck/view/foodtrucksetting_view.dart';

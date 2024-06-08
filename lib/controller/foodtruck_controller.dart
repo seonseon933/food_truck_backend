@@ -9,13 +9,24 @@ import 'app_pages.dart';
 import '../model/foodtruck_model.dart';
 
 class FoodtruckController extends GetxController {
+  var foodtrucks = <Map<String, dynamic>>[].obs;
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
-  void goDetail(foodtruck) {
-    Get.toNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck); // map 형태로 보냄
+
+  @override
+  void onInit() {
+    super.onInit();
+    print("onInit");
+    fetchFoodTruckData();
   }
 
-  getFoodTruckData() async {
-    return _foodTruckModel.getFoodTruckData();
+  goDetail(Map<String, dynamic> foodtruck) {
+    Get.toNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck);
+  }
+
+  // Fetch data asynchronously and update the observable list
+  Future<void> fetchFoodTruckData() async {
+    final data = await _foodTruckModel.getFoodTruckData();
+    foodtrucks.value = data;
   }
 }
 

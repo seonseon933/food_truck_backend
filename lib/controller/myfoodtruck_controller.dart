@@ -4,7 +4,6 @@ import 'package:food_truck/view/foodtruckdetail_view.dart';
 import 'package:food_truck/view/myfoodtruck_view.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'app_id.dart';
 import 'app_pages.dart';
 import '../model/foodtruck_model.dart';
 
