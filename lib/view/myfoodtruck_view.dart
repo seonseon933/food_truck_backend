@@ -23,7 +23,7 @@ class MyFoodtruckView extends GetView<MyFoodtruckController> {
             itemCount: controller.foodtrucks.length,
             itemBuilder: (context, index) {
               final foodtruck = controller.foodtrucks[index];
-              if (foodtruck['user_uid'] != Pcontroller.uid) {
+              if (foodtruck['user_uid'] == Pcontroller.uid) {
                 return GestureDetector(
                   onTap: () async {
                     Map<String, dynamic> mapfoodtruck = {

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../style/font_style.dart';
 
 class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
-  const FoodtruckupdateView({Key? key}) : super(key: key);
+  const FoodtruckupdateView({super.key});
 
   @override
   Widget build(BuildContext context) {

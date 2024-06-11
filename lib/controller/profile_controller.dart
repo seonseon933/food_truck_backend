@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_truck/controller/app_id.dart';
-import 'package:food_truck/controller/base_controller.dart';
+import 'package:food_truck/view/foodtruckcreate_view.dart';
 import 'package:food_truck/view/foodtruckcreatemap_view.dart';
-import 'package:food_truck/view/foodtruckupdate_view.dart';
 import 'package:food_truck/view/myfoodtruck_view.dart';
 import 'package:food_truck/view/profilesetting_view.dart';
 //import 'package:food_truck/view/foodtrucksetting_view.dart';
@@ -23,10 +22,7 @@ class ProfileController extends GetxController {
   String uid = "";
 
   void goToFoodtruckcreatePage() {
-    Get.toNamed(
-      Routes.FOODTRUCKCREATEMAP,
-      id: profileD,
-    );
+    Get.toNamed(Routes.FOODTRUCKCREATEMAP);
   }
 
   void goToReviewPage() {
@@ -49,7 +45,7 @@ class ProfileController extends GetxController {
   }
 
   void goToLogin() {
-    Get.offAllNamed(Routes.LOGIN);
+    Get.offNamed(Routes.LOGIN);
   }
 
   getUserData(String userid) async {
@@ -69,7 +65,7 @@ class ProfileController extends GetxController {
     try {
       await _auth.signOut();
       await googleSignIn.signOut();
-      Get.offAllNamed(Routes.LOGIN);
+      Get.offNamed(Routes.LOGIN);
     } catch (e) {
       print("사용자 로그아웃 실패 : $e");
     }
@@ -101,11 +97,16 @@ class ProfileWrapper extends StatelessWidget {
               routeName: Routes.PROFILESETTING,
               page: () => const ProfilesettingView(),
               binding: ProfilesettingBinding());
-        } else if (routeSettings.name == Routes.FOODTRUCKCREATEMAP) {
-          return GetPageRoute(
-              routeName: Routes.FOODTRUCKCREATEMAP,
-              page: () => const FoodtruckcreatemapView(),
-              binding: FoodtruckcreateBinding());
+          // } else if (routeSettings.name == Routes.FOODTRUCKCREATEMAP) {
+          //   return GetPageRoute(
+          //       routeName: Routes.FOODTRUCKCREATEMAP,
+          //       page: () => const FoodtruckcreatemapView(),
+          //       binding: FoodtruckcreatemapBinding());
+          // } else if (routeSettings.name == Routes.FOODTRUCKCREATE) {
+          //   return GetPageRoute(
+          //       routeName: Routes.FOODTRUCKCREATE,
+          //       page: () => const FoodtruckcreateView(),
+          //       binding: FoodtruckcreateBinding());
         }
         return null;
       },

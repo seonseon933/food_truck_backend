@@ -47,7 +47,6 @@ class FoodtruckupdatemapView extends GetView<FoodtruckupdatemapController> {
                       ),
                     );
                     controller.juso.value = juso;
-                    print("search = $juso");
                   },
                   child: Container(
                     width: size.width * 0.7,
@@ -59,7 +58,7 @@ class FoodtruckupdatemapView extends GetView<FoodtruckupdatemapController> {
                     ),
                     child: Row(
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 8.0),
                           child: Icon(
                             Icons.search,

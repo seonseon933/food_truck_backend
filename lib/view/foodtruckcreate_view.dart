@@ -1,42 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:food_truck/controller/foodtruckcreate_controller.dart';
+import 'package:food_truck/oldcontroller/foodtruck_controller.dart';
 import 'package:get/get.dart';
 import '../style/font_style.dart';
 
-class FoodtruckcreateView extends StatefulWidget {
-  const FoodtruckcreateView({Key? key}) : super(key: key);
-
-  @override
-  _FoodtruckcreateViewState createState() => _FoodtruckcreateViewState();
-}
-
-class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController scheduleController = TextEditingController();
-  final TextEditingController bankController = TextEditingController();
-  final TextEditingController tagController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController accountHolderController = TextEditingController();
-  final TextEditingController accountNumberController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-
-  final RxBool cash = false.obs;
-  final RxBool card = false.obs;
-  final RxBool bankTransfer = false.obs;
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    scheduleController.dispose();
-    bankController.dispose();
-    tagController.dispose();
-    phoneController.dispose();
-    accountHolderController.dispose();
-    accountNumberController.dispose();
-    descriptionController.dispose();
-    super.dispose();
-  }
+class FoodtruckcreateView extends GetView<FoodTruckController> {
+  const FoodtruckcreateView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +76,7 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
               const Text('푸드트럭 이름', style: CustomTextStyles.title),
               const SizedBox(height: 8.0),
               TextField(
-                controller: nameController,
+                controller: controller.nameController.value,
                 decoration: const InputDecoration(
                   hintText: '푸드트럭 이름 입력',
                   border: OutlineInputBorder(),
@@ -119,7 +89,7 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: phoneController,
+                      controller: controller.phoneController.value,
                       decoration: const InputDecoration(
                         hintText: '전화번호 입력',
                         border: OutlineInputBorder(),
@@ -129,7 +99,7 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
                   const SizedBox(width: 16.0),
                   Expanded(
                     child: TextField(
-                      controller: tagController,
+                      controller: controller.tagController.value,
                       decoration: const InputDecoration(
                         hintText: '음식 태그입력',
                         border: OutlineInputBorder(),
@@ -140,7 +110,7 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
               ),
               const SizedBox(height: 8.0),
               TextField(
-                controller: scheduleController,
+                controller: controller.scheduleController.value,
                 decoration: const InputDecoration(
                   hintText: '판매요일/시간 입력',
                   border: OutlineInputBorder(),
@@ -155,9 +125,9 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
                   Row(
                     children: [
                       Obx(() => Checkbox(
-                          value: cash.value,
+                          value: controller.cash.value,
                           onChanged: (bool? value) {
-                            cash.value = value!;
+                            controller.cash.value = value!;
                           })),
                       const Text('현금', style: CustomTextStyles.body),
                     ],
@@ -165,9 +135,9 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
                   Row(
                     children: [
                       Obx(() => Checkbox(
-                          value: card.value,
+                          value: controller.card.value,
                           onChanged: (bool? value) {
-                            card.value = value!;
+                            controller.card.value = value!;
                           })),
                       const Text('카드', style: CustomTextStyles.body),
                     ],
@@ -175,9 +145,9 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
                   Row(
                     children: [
                       Obx(() => Checkbox(
-                          value: bankTransfer.value,
+                          value: controller.bankTransfer.value,
                           onChanged: (bool? value) {
-                            bankTransfer.value = value!;
+                            controller.bankTransfer.value = value!;
                           })),
                       const Text('계좌이체', style: CustomTextStyles.body),
                     ],
@@ -201,7 +171,7 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: TextField(
-                          controller: bankController,
+                          controller: controller.bankController.value,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             contentPadding:
@@ -226,7 +196,7 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: TextField(
-                          controller: accountHolderController,
+                          controller: controller.accountHolderController.value,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             contentPadding:
@@ -250,7 +220,7 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: TextField(
-                  controller: accountNumberController,
+                  controller: controller.accountNumberController.value,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -269,7 +239,7 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: TextField(
-                  controller: descriptionController,
+                  controller: controller.descriptionController.value,
                   maxLines: null,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -280,30 +250,44 @@ class _FoodtruckcreateViewState extends State<FoodtruckcreateView> {
               ),
               const SizedBox(height: 16.0),
               Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Map<String, dynamic> paymentOptions = {
-                      'cash': cash.value,
-                      'card': card.value,
-                      'bankTransfer': bankTransfer.value,
-                      'bankName': bankController.text,
-                      'accountName': accountHolderController.text,
-                      'accountNumber': accountNumberController.text,
-                    };
-                    controller.createFoodTruck(
-                      nameController.text,
-                      descriptionController.text,
-                      scheduleController.text,
-                      phoneController.text,
-                      paymentOptions,
-                      controller.file,
-                      tagController.text,
-                    );
-                    //print('등록버튼 클릭');
-                    dispose();
-                    controller.goProfile();
-                  },
-                  child: const Text('등록'),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[100],
+                      foregroundColor: Colors.black87,
+                      shadowColor: Colors.grey[300],
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 15),
+                    ),
+                    onPressed: () async {
+                      Map<String, dynamic> paymentOptions = {
+                        'cash': controller.cash.value,
+                        'card': controller.card.value,
+                        'bankTransfer': controller.bankTransfer.value,
+                        'bankName': controller.bankController.value.text,
+                        'accountName':
+                            controller.accountHolderController.value.text,
+                        'accountNumber':
+                            controller.accountNumberController.value.text,
+                      };
+                      await controller.createFoodTruck(
+                        controller.nameController.value.text,
+                        controller.descriptionController.value.text,
+                        controller.scheduleController.value.text,
+                        controller.phoneController.value.text,
+                        paymentOptions,
+                        controller.file,
+                        controller.tagController.value.text,
+                      );
+                      controller.goProfile();
+                    },
+                    child: const Text("등 록", style: CustomTextStyles.bodyBold),
+                  ),
                 ),
               ),
               const SizedBox(height: 16.0),

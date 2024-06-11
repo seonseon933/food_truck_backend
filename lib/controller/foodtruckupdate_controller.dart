@@ -31,7 +31,7 @@ class FoodtruckupdateController extends GetxController {
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
 
   File? file;
-
+  @override
   void onInit() {
     super.onInit();
     foodtruck = Get.arguments;
