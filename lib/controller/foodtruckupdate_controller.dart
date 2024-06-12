@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_truck/controller/app_pages.dart';
 import 'package:food_truck/controller/foodtruck_controller.dart';
 import 'package:food_truck/controller/foodtruckdetail_controller.dart';
+import 'package:food_truck/controller/myfoodtruck_controller.dart';
 //import 'package:food_truck/controller/myfoodtruck_controller.dart';
 import 'package:get/get.dart';
 import 'package:food_truck/model/foodtruck_model.dart';
@@ -50,10 +51,10 @@ class FoodtruckupdateController extends GetxController {
     if (Get.isRegistered<FoodtruckController>()) {
       final fcontroller = Get.find<FoodtruckController>();
       fcontroller.update();
-    } /* else if (Get.isRegistered<MyFoodtruckController>()) {
+    } else if (Get.isRegistered<MyFoodtruckController>()) {
       final mcontroller = Get.find<MyFoodtruckController>();
       mcontroller.update();
-    }*/
+    }
 
     Get.back();
   }

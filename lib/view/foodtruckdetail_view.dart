@@ -14,7 +14,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
     final Map arguments = Get.arguments as Map;
     final String select = arguments['foodtruck_id'];
     controller.setFoodTruckId(select);
-    // 수정, 삭제
+
     final Size size = MediaQuery.of(context).size;
     String uid = controller.getCurrentUseruid();
 

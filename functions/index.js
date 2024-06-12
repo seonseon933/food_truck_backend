@@ -61,10 +61,17 @@ exports.cleanUpUserData = functions.firestore.document('Users/{uid}').onDelete(a
             const truckDoc = await db.collection('FoodTruck').doc(truckId).get();
             if (truckDoc.exists) {
                 const reviews = await db.collection('FoodTruck').doc(truckId).collection('Review').where('user_uid', '==', uid).get();
+                const reviewCount = reviews.docs.length;
                 for (const reviewDoc of reviews.docs) {
                     await reviewDoc.ref.delete();
                 }
                 console.log(`푸드트럭 ID ${truckId}에 대한 사용자의 리뷰 삭제 완료.`);
+
+                // truck_review_ctn 필드 업데이트
+                await truckDoc.ref.update({
+                    truck_review_ctn: admin.firestore.FieldValue.increment(-reviewCount)
+                });
+
                 await updateAvgRating(db, truckId);
             }
         }

@@ -4,7 +4,9 @@ import 'package:food_truck/controller/app_id.dart';
 import 'package:food_truck/controller/base_controller.dart';
 import 'package:food_truck/model/usersmodel.dart';
 import 'package:food_truck/view/foodtruckcreatemap_view.dart';
+import 'package:food_truck/view/myfoodtruck_view.dart';
 import 'package:food_truck/view/profilesetting_view.dart';
+import 'package:food_truck/view/writereview_view.dart';
 //import 'package:food_truck/view/foodtrucksetting_view.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -21,6 +23,13 @@ class ProfileController extends GetxController {
   final _store = FirebaseFirestore.instance;
   late String uid;
   var user = Rxn<Map<String, dynamic>>();
+  var userType = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchUserType();
+  }
 
   void goToFoodtruckcreatePage(Map<String, dynamic> userdata) {
     user.value = userdata;
@@ -41,6 +50,16 @@ class ProfileController extends GetxController {
     Get.toNamed(Routes.FOODTRUCKSETTING, id: profileD);
   }
 
+  void goToMyFoodtruck() {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      uid = user.uid;
+      Get.toNamed(Routes.MYFOODTRUCK, id: profileD);
+    } else {
+      Get.offAllNamed(Routes.LOGIN);
+    }
+  }
+
   void goToProfilesettingPage(Map<String, dynamic> userdata) {
     user.value = userdata;
     print(user);
@@ -50,8 +69,25 @@ class ProfileController extends GetxController {
     );
   }
 
+  Future<int> getUserType() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      uid = user.uid;
+      int type = await _usersModel.getUserType(uid);
+      return type;
+    } else {
+      Get.offAllNamed(Routes.LOGIN);
+    }
+    return -1;
+  }
+
   void goToLogin() {
     Get.offAllNamed(Routes.LOGIN);
+  }
+
+  Future<void> fetchUserType() async {
+    int type = await getUserType();
+    userType.value = type;
   }
 
   getUserData(String uid) async {
@@ -176,6 +212,16 @@ class ProfileWrapper extends StatelessWidget {
               routeName: Routes.PROFILE,
               page: () => const ProfileView(),
               binding: ProfileBinding());
+        } else if (routeSettings.name == Routes.REVIEW) {
+          return GetPageRoute(
+              routeName: Routes.REVIEW,
+              page: () => const ReviewlistView(),
+              binding: ReviewlistBinding());
+        } else if (routeSettings.name == Routes.MYFOODTRUCK) {
+          return GetPageRoute(
+              routeName: Routes.MYFOODTRUCK,
+              page: () => const MyFoodtruckView(),
+              binding: MyFoodtruckBinding());
         } else if (routeSettings.name == Routes.PROFILESETTING) {
           return GetPageRoute(
               routeName: Routes.PROFILESETTING,

@@ -17,10 +17,11 @@ class FoodtruckupdatemapController extends GetxController {
   File? file;
 
   gotoupdate() {
-    foodtruck["foodtruck_id"] = foodtruckid;
+    foodtruck["foodtruck_id"] = foodtruckid; // 있어야 함
     foodtruck["truck_latitude"] = jlatitude;
     foodtruck["truck_longitude"] = jlongitude;
-    Get.offNamed(Routes.FOODTRUCKUPDATE, arguments: foodtruck);
+    Get.offNamed(Routes.FOODTRUCKUPDATE,
+        arguments: foodtruck); // arguments로 넘겨줘야 함
   }
 
   Future<Map<String, dynamic>> getDetailFoodTruck(String foodtruckid) async {

@@ -96,8 +96,8 @@ class ReviewModel {
 
       Map<String, dynamic> data =
           documentSnapshot.data() as Map<String, dynamic>;
-      //Map<String, dynamic> truckdata =
-      //    foodtruckSnapshot.data() as Map<String, dynamic>;
+      Map<String, dynamic> truckdata =
+          foodtruckSnapshot.data() as Map<String, dynamic>;
       String timenow = DateFormat("yyyy년 MM월 dd일").format(DateTime.now());
 
       Map<String, dynamic> newReview = {
@@ -121,11 +121,12 @@ class ReviewModel {
         'review_create_truckid': FieldValue.arrayUnion([foodtruckid]) // 중복X
       });
 
-      // final reviewctn = truckdata['truck_review_ctn'];
-      // await _store
-      //     .collection('FoodTruck')
-      //     .doc(foodtruckid)
-      //     .update({'truck_review_ctn': reviewctn + 1});
+      int reviewctn = truckdata['truck_review_ctn'];
+      reviewctn++;
+      await _store
+          .collection('FoodTruck')
+          .doc(foodtruckid)
+          .update({'truck_review_ctn': reviewctn});
 
       await updateAvgRating(foodtruckid);
 
@@ -161,9 +162,10 @@ class ReviewModel {
     }
   }
 
-  Future<String> deleteReview(
+  Future<int> deleteReview(
       String foodtruckid, String reviewid, String uid) async {
     try {
+      int i;
       await _store
           .collection('FoodTruck')
           .doc(foodtruckid)
@@ -183,14 +185,28 @@ class ReviewModel {
         await _store.collection('Users').doc(uid).update({
           'review_create_truckid': FieldValue.arrayRemove([foodtruckid])
         });
+        i = 0;
+      } else {
+        i = 1;
       }
+      final DocumentSnapshot foodtruckSnapshot =
+          await _store.collection('FoodTruck').doc(foodtruckid).get();
+      Map<String, dynamic> truckdata =
+          foodtruckSnapshot.data() as Map<String, dynamic>;
+
+      int reviewctn = truckdata['truck_review_ctn'];
+      reviewctn--;
+      await _store
+          .collection('FoodTruck')
+          .doc(foodtruckid)
+          .update({'truck_review_ctn': reviewctn});
 
       await updateAvgRating(foodtruckid);
 
-      return foodtruckid;
+      return i;
     } catch (e) {
       print('리뷰 삭제 오류 : $e');
-      return foodtruckid;
+      return -1;
     }
   }
 

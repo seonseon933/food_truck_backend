@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_truck/controller/foodtruckdetail_controller.dart';
-import 'package:food_truck/controller/wishlist_controller.dart';
+import 'package:food_truck/controller/writereview_controller.dart';
 import 'package:get/get.dart';
 import '../style/font_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class WishlistView extends GetView<WishlistController> {
-  const WishlistView({super.key});
+class ReviewlistView extends GetView<ReviewlistController> {
+  const ReviewlistView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +19,11 @@ class WishlistView extends GetView<WishlistController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('나의 찜'),
+        title: const Text('나의 리뷰'),
         centerTitle: true,
       ),
       body: FutureBuilder<void>(
-        future: detailController.getFavoriteFoodTruck(),
+        future: detailController.getWriteReviewFoodTruck(),
         builder: (context, favoriteSnapshot) {
           if (favoriteSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -31,13 +31,13 @@ class WishlistView extends GetView<WishlistController> {
             return Center(child: Text('Error: ${favoriteSnapshot.error}'));
           } else {
             return Obx(() {
-              final favoriteTruckIds = detailController.favoriteTruckIds;
-              if (favoriteTruckIds.isEmpty) {
+              final reviewTruckIds = detailController.reviewTruckIds;
+              if (reviewTruckIds.isEmpty) {
                 return const Center(
                   child: Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Text(
-                      '찜 목록을 찾을수 없습니다.',
+                      '리뷰 목록을 찾을수 없습니다.',
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
@@ -46,9 +46,9 @@ class WishlistView extends GetView<WishlistController> {
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ListView.builder(
-                    itemCount: favoriteTruckIds.length,
+                    itemCount: reviewTruckIds.length,
                     itemBuilder: (context, index) {
-                      final foodTruckId = favoriteTruckIds[index];
+                      final foodTruckId = reviewTruckIds[index];
                       return FutureBuilder<Map<String, dynamic>?>(
                         future: controller.getFoodTruckData(uid, foodTruckId),
                         builder: (context, foodTruckSnapshot) {

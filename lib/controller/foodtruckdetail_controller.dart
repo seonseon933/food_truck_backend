@@ -18,6 +18,7 @@ class FoodtruckdetailController extends GetxController {
       Get.find<FoodtruckController>();
   final RxMap<String, dynamic> foodtruck = <String, dynamic>{}.obs; // add
   RxList<String> favoriteTruckIds = <String>[].obs;
+  RxList<String> reviewTruckIds = <String>[].obs; // 사용자가 작성한 리뷰
 
   var foodtruckid = ''.obs;
   var menuList = <Map<String, dynamic>>[].obs;
@@ -88,9 +89,13 @@ class FoodtruckdetailController extends GetxController {
     reviewList.value = reviewData;
   }
 
-  Future<String> deleteReview(String foodtruckid, String reviewid) async {
+  Future<void> deleteReview(String foodtruckid, String reviewid) async {
     User user = _auth.currentUser!;
-    return _reviewModel.deleteReview(foodtruckid, reviewid, user.uid);
+    int i = await _reviewModel.deleteReview(foodtruckid, reviewid, user.uid);
+
+    if (i == 0) {
+      reviewTruckIds.remove(foodtruckid);
+    }
   }
 
   // 찜
@@ -111,6 +116,14 @@ class FoodtruckdetailController extends GetxController {
     List<String> favoriteTrucks =
         await _foodTruckModel.getFavoriteFoodTruck(user.uid);
     favoriteTruckIds.value = favoriteTrucks; // RxList를 업데이트
+  }
+
+  // 사용자가 리뷰 작성한 푸드트럭 불러오기
+  Future<void> getWriteReviewFoodTruck() async {
+    User user = _auth.currentUser!;
+    List<String> reviewTrucks =
+        await _foodTruckModel.getReviewFoodTruck(user.uid);
+    reviewTruckIds.value = reviewTrucks; // RxList를 업데이트
   }
 
   // 푸드트럭 삭제

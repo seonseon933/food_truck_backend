@@ -209,6 +209,28 @@ class FoodTruckModel {
     }
   }
 
+  // 내가 리뷰 쓴 푸드트럭 불러오기
+  Future<List<String>> getReviewFoodTruck(String uid) async {
+    try {
+      DocumentSnapshot documentSnapshot =
+          await _store.collection('Users').doc(uid).get();
+      List<String> reviewTrucks = [];
+
+      if (documentSnapshot.exists) {
+        Map<String, dynamic>? data =
+            documentSnapshot.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('review_create_truckid')) {
+          reviewTrucks = List<String>.from(data['review_create_truckid']);
+        }
+      }
+
+      return reviewTrucks;
+    } catch (e) {
+      print('사용자가 작성한 리뷰 푸드트럭 데이터 불러오기 에러 :$e');
+      return [];
+    }
+  }
+
 // 푸드트럭 태그를 기반으로 검색하는 함수 <- 푸드트럭 목록 페이지에 검색 기능 따로 넣어야 함. 지도 검색에 넣으면 겹쳐서 구현 어려움..
   Future<List<Map<String, String>>> searchFoodTrucksByTag(String tag) async {
     try {

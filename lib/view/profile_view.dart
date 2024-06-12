@@ -80,7 +80,7 @@ class ProfileView extends GetView<ProfileController> {
                                   ElevatedButton.icon(
                                     onPressed: () {
                                       // 내 리뷰로 이동하는 기능 추가
-                                      //controller.goToReviewPage();
+                                      controller.goToReviewPage();
                                     },
                                     icon: const Icon(Icons.rate_review),
                                     label: const Text('내 리뷰',
@@ -120,49 +120,65 @@ class ProfileView extends GetView<ProfileController> {
                               const SizedBox(height: 16.0),
                               const Divider(height: 1.0, color: Colors.grey),
                               const SizedBox(height: 16.0),
-                              const Row(
-                                children: [
-                                  Text('판매자용',
-                                      style: CustomTextStyles.bodyBold),
-                                ],
-                              ),
-                              const SizedBox(height: 8.0),
-                              GestureDetector(
-                                onTap: () {
-                                  controller
-                                      .goToFoodtruckcreatePage(snapshot.data);
-                                },
-                                child: Container(
-                                    color: Colors.white70,
-                                    child: const Row(
-                                      children: [
-                                        Text('푸드트럭 생성하기',
-                                            style: CustomTextStyles.body),
-                                        Spacer(),
-                                        Icon(Icons.arrow_forward),
-                                      ],
-                                    )),
-                              ),
-                              const SizedBox(height: 8.0),
-                              const Divider(height: 1.0, color: Colors.grey),
-                              const SizedBox(height: 16.0),
-                              GestureDetector(
-                                onTap: () {
-                                  //controller.goToMyFoodtruck();
-                                },
-                                child: Container(
-                                    color: Colors.white70,
-                                    child: const Row(
-                                      children: [
-                                        Text('나의 푸드트럭',
-                                            style: CustomTextStyles.body),
-                                        Spacer(),
-                                        Icon(Icons.arrow_forward),
-                                      ],
-                                    )),
-                              ),
-                              const SizedBox(height: 8.0),
-                              const Divider(height: 1.0, color: Colors.grey),
+
+                              // 판매자용 섹션 조건부 렌더링
+                              Obx(() {
+                                if (controller.userType.value == 1) {
+                                  return Column(
+                                    children: [
+                                      const Row(
+                                        children: [
+                                          Text('판매자용',
+                                              style: CustomTextStyles.bodyBold),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      GestureDetector(
+                                        onTap: () {
+                                          controller.goToFoodtruckcreatePage(
+                                              snapshot.data);
+                                        },
+                                        child: Container(
+                                          color: Colors.white70,
+                                          child: const Row(
+                                            children: [
+                                              Text('푸드트럭 생성하기',
+                                                  style: CustomTextStyles.body),
+                                              Spacer(),
+                                              Icon(Icons.arrow_forward),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      const Divider(
+                                          height: 1.0, color: Colors.grey),
+                                      const SizedBox(height: 16.0),
+                                      GestureDetector(
+                                        onTap: () {
+                                          controller.goToMyFoodtruck();
+                                        },
+                                        child: Container(
+                                          color: Colors.white70,
+                                          child: const Row(
+                                            children: [
+                                              Text('나의 푸드트럭',
+                                                  style: CustomTextStyles.body),
+                                              Spacer(),
+                                              Icon(Icons.arrow_forward),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      const Divider(
+                                          height: 1.0, color: Colors.grey),
+                                    ],
+                                  );
+                                } else {
+                                  return Container();
+                                }
+                              }),
                               const SizedBox(height: 16.0),
                               Padding(
                                 padding:
@@ -231,6 +247,7 @@ class ProfileView extends GetView<ProfileController> {
                                                   child: const Text('예'),
                                                   onPressed: () {
                                                     Navigator.of(context).pop();
+                                                    controller.userDelete();
                                                   },
                                                 ),
                                               ],

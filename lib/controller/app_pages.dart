@@ -2,10 +2,12 @@ import 'package:food_truck/controller/foodtruckcreatemap_controller.dart';
 import 'package:food_truck/controller/myfoodtruck_controller.dart';
 import 'package:food_truck/controller/profilesetting_controller.dart';
 import 'package:food_truck/controller/wishlist_controller.dart';
+import 'package:food_truck/controller/writereview_controller.dart';
 import 'package:food_truck/view/myfoodtruck_view.dart';
 
 import 'package:food_truck/view/profilesetting_view.dart';
 import 'package:food_truck/view/wishlist_view.dart';
+import 'package:food_truck/view/writereview_view.dart';
 import 'package:get/get.dart';
 
 import 'package:food_truck/controller/base_controller.dart';
@@ -214,6 +216,15 @@ class WishlistBinding extends Bindings {
   }
 }
 
+class ReviewlistBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<ReviewlistController>(
+      () => ReviewlistController(),
+    );
+  }
+}
+
 class AppPages {
   AppPages._();
 
@@ -307,6 +318,11 @@ class AppPages {
       name: _Paths.REVIEWUPDATE,
       page: () => const ReviewupdateView(),
       binding: ReviewupdateBinding(),
+    ),
+    GetPage(
+      name: _Paths.REVIEW,
+      page: () => const ReviewlistView(),
+      binding: ReviewlistBinding(),
     ),
   ];
 }

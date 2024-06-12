@@ -10,6 +10,7 @@ import 'dart:developer';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:http/http.dart' as http;
 
+//
 class FoodtruckcreatemapView extends GetView<FoodtruckcreatemapController> {
   const FoodtruckcreatemapView({super.key});
 

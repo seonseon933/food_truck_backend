@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:developer';
-import 'package:food_truck/controller/app_pages.dart';
 import 'package:food_truck/controller/foodtruckdetail_controller.dart';
 import 'package:food_truck/controller/foodtruckupdatemap_controller.dart';
 import 'package:get/get.dart';

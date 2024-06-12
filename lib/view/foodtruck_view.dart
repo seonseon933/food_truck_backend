@@ -13,7 +13,8 @@ class FoodtruckView extends GetView<FoodtruckController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Foodtruck'),
+        title: const Text('푸드트럭'),
+        centerTitle: true,
       ),
       body: Obx(() {
         if (controller.foodTrucks.isEmpty) {

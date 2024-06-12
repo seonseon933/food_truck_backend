@@ -5,6 +5,7 @@ import 'package:food_truck/oldcontroller/foodtruck_controller.dart';
 import 'package:get/get.dart';
 import '../style/font_style.dart';
 
+//
 class FoodtruckcreateView extends GetView<FoodTruckController> {
   const FoodtruckcreateView({super.key});
 

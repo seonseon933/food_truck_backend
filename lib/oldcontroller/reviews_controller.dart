@@ -29,9 +29,9 @@ class ReviewController {
     return _reviewModel.updateReview(
         foodtruckid, reviewid, rating, reviewContext);
   }
-
+  /*
   Future<String> deleteReview(String foodtruckid, String reviewid) async {
     User user = _auth.currentUser!;
     return _reviewModel.deleteReview(foodtruckid, reviewid, user.uid);
-  }
+  }*/
 }

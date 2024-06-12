@@ -9,7 +9,7 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size; //
 
     return Scaffold(
       appBar: AppBar(
