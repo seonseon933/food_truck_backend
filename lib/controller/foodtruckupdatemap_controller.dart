@@ -1,31 +1,30 @@
-import 'package:food_truck/model/foodtruck_model.dart';
-
-import 'app_id.dart';
-import '../view/home_view.dart';
-//import 'package:food_truck/view/search_view.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:food_truck/controller/app_pages.dart';
 import 'package:get/get.dart';
-import 'app_pages.dart';
+import 'package:food_truck/model/foodtruck_model.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FoodtruckupdatemapController extends GetxController {
+  double jlatitude = 35.139988984673806;
+  double jlongitude = 126.93423855903913;
+  RxString juso = "주소를 검색해주세요".obs;
+  late Map<String, dynamic> foodtruck;
+
+  String foodtruckid = "";
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
-  var foodtruckid = ''.obs;
 
-  void setFoodTruckId(String id) {
-    foodtruckid.value = id;
+  File? file;
+
+  gotoupdate() {
+    foodtruck["foodtruck_id"] = foodtruckid;
+    foodtruck["truck_latitude"] = jlatitude;
+    foodtruck["truck_longitude"] = jlongitude;
+    Get.offNamed(Routes.FOODTRUCKUPDATE, arguments: foodtruck);
   }
 
-  void goUpdate(foodtruckid, latitude, longitude) {
-    Get.toNamed(
-      Routes.FOODTRUCKUPDATE,
-      arguments: {
-        'foodtruck_id': foodtruckid,
-        'latitude': latitude,
-        'longitude': longitude,
-      },
-    );
-  }
-
-  getFoodTruckData() async {
-    return _foodTruckModel.getFoodTruckData();
+  Future<Map<String, dynamic>> getDetailFoodTruck(String foodtruckid) async {
+    foodtruck = await _foodTruckModel.getDetailFoodTruck(foodtruckid);
+    return foodtruck;
   }
 }

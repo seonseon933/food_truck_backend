@@ -1,3 +1,4 @@
+import 'package:food_truck/controller/foodtruckcreatemap_controller.dart';
 import 'package:food_truck/controller/profilesetting_controller.dart';
 import 'package:food_truck/controller/wishlist_controller.dart';
 import 'package:food_truck/view/profilesetting_view.dart';
@@ -183,6 +184,15 @@ class FoodtruckcreateBinding extends Bindings {
   }
 }
 
+class FoodtruckcreatemapBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<FoodtruckcreatemapController>(
+      () => FoodtruckcreatemapController(),
+    );
+  }
+}
+
 class WishlistBinding extends Bindings {
   @override
   void dependencies() {
@@ -259,7 +269,7 @@ class AppPages {
     GetPage(
       name: _Paths.FOODTRUCKCREATEMAP,
       page: () => const FoodtruckcreatemapView(),
-      binding: FoodtruckcreateBinding(),
+      binding: FoodtruckcreatemapBinding(),
     ),
     GetPage(
       name: _Paths.MENUSETTING,

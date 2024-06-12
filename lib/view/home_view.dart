@@ -46,7 +46,6 @@ class HomeView extends GetView<HomeController> {
                       ),
                     );
                     controller.juso.value = juso;
-                    print("search = $juso");
                   },
 
                   child: Container(
@@ -57,18 +56,26 @@ class HomeView extends GetView<HomeController> {
                       color: Colors.black12,
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: const Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Icon(
-                            Icons.search,
-                            color: Color(0xff7d7d7d),
-                            size: 20.0,
+                    child: Obx(
+                      () => Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Icon(
+                              Icons.search,
+                              color: Color(0xff7d7d7d),
+                              size: 20.0,
+                            ),
                           ),
-                        ),
-                        Text("주소를 입력하세요", style: CustomTextStyles.caption)
-                      ],
+                          if (controller.juso.value == "") ...[
+                            const Text("주소를 검색하세요",
+                                style: CustomTextStyles.caption),
+                          ] else ...[
+                            Text(controller.juso.value,
+                                style: CustomTextStyles.caption),
+                          ]
+                        ],
+                      ),
                     ),
                   ),
                 ),

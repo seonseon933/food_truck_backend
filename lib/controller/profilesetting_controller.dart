@@ -24,6 +24,7 @@ class ProfilesettingController extends GetxController {
 
     suser.value = await getUserData(cuser.uid);
     profileController.user.value = suser.value;
+    print(profileController.user.value);
   }
 
   // 갤러리에서 이미지 가져올 수 있도록.

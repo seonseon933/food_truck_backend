@@ -27,8 +27,9 @@ class FoodtruckView extends GetView<FoodtruckController> {
               itemCount: controller.foodTrucks.length,
               itemBuilder: (context, index) {
                 final foodtruck = controller.foodTrucks[index];
+
                 return GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     Map<String, dynamic> mapfoodtruck = {
                       'foodtruck_id': foodtruck['foodtruck_id']
                     };

@@ -104,7 +104,7 @@ class _NaverMapAppState extends State<CNaverMapApp> {
                                   cameraPosition.target.latitude;
                               fcontroller.jlongitude =
                                   cameraPosition.target.longitude;
-                              fcontroller.gocreateview();
+                              // fcontroller.gocreateview();
                             },
                             child: const Text("네"),
                           ),

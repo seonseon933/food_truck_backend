@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_truck/controller/foodtruckdetail_controller.dart';
 import 'package:get/get.dart';
+import '../controller/app_pages.dart';
 import '../style/font_style.dart';
 
 class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
@@ -9,6 +10,7 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
 
   @override
   Widget build(BuildContext context) {
+    print('Get.arguments: ${Get.arguments}');
     final Map arguments = Get.arguments as Map;
     final String select = arguments['foodtruck_id'];
     controller.setFoodTruckId(select);
@@ -106,8 +108,12 @@ class FoodtruckdetailView extends GetView<FoodtruckdetailController> {
                                         constraints: const BoxConstraints(),
                                         icon: const Icon(Icons.edit),
                                         iconSize: 30,
-                                        onPressed: () {
-                                          controller.goUpdateMap(foodtruck);
+                                        onPressed: () async {
+                                          //controller.goUpdateMap(foodtruck);
+                                          await Get.toNamed(
+                                              Routes.FOODTRUCKUPDATEMAP,
+                                              arguments: foodtruck);
+                                          controller.update();
                                         },
                                       ),
                                     ),

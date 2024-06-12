@@ -10,6 +10,7 @@ import '../model/foodtruck_model.dart';
 
 class FoodtruckController extends GetxController {
   final FoodTruckModel _foodTruckModel = FoodTruckModel();
+  var foodTrucks = <Map<String, dynamic>>[].obs;
 
   void goDetail(foodtruck) {
     Get.toNamed(Routes.FOODTRUCKDETAIL, arguments: foodtruck); // map 형태로 보냄
@@ -26,11 +27,14 @@ class FoodtruckController extends GetxController {
     foodTrucks.value = trucks;
   }
 
-  var foodTrucks = <Map<String, dynamic>>[].obs;
-
   @override
   void onInit() {
     super.onInit();
+    ObsgetFoodTruckData();
+  }
+
+  @override //add
+  void refresh() {
     ObsgetFoodTruckData();
   }
 }

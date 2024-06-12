@@ -26,10 +26,7 @@ class ProfileController extends GetxController {
     user.value = userdata;
 
     print(user);
-    Get.toNamed(
-      Routes.FOODTRUCKCREATEMAP,
-      id: profileD,
-    );
+    Get.toNamed(Routes.FOODTRUCKCREATEMAP);
   }
 
   void goToSettingPage() {
@@ -184,12 +181,12 @@ class ProfileWrapper extends StatelessWidget {
               routeName: Routes.PROFILESETTING,
               page: () => const ProfilesettingView(),
               binding: ProfilesettingBinding());
-        } else if (routeSettings.name == Routes.FOODTRUCKCREATEMAP) {
+        } /* else if (routeSettings.name == Routes.FOODTRUCKCREATEMAP) {
           return GetPageRoute(
               routeName: Routes.FOODTRUCKCREATEMAP,
               page: () => const FoodtruckcreatemapView(),
               binding: FoodtruckcreateBinding());
-        }
+        }*/
         return null;
       },
     );

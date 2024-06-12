@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:food_truck/controller/foodtruckupdate_controller.dart';
 import 'package:get/get.dart';
@@ -11,24 +9,8 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
 
   @override
   Widget build(BuildContext context) {
-    final Map arguments = Get.arguments as Map;
+    final Size size = MediaQuery.of(context).size;
 
-    final String foodtruckid = arguments['foodtruck_id'];
-    final double latitude = arguments['latitude'];
-    final double longitude = arguments['longitude'];
-    // TextEditingControllers for each text field
-    final nameController = TextEditingController();
-    final scheduleController = TextEditingController();
-    final bankController = TextEditingController();
-    final tagController = TextEditingController();
-    final phoneController = TextEditingController();
-    final accountHolderController = TextEditingController();
-    final accountNumberController = TextEditingController();
-    final descriptionController = TextEditingController();
-    File? file;
-    RxBool cash = false.obs;
-    RxBool card = false.obs;
-    RxBool bankTransfer = false.obs;
     return Scaffold(
       appBar: AppBar(
         title: const Text('푸드트럭 수정'),
@@ -43,16 +25,51 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
             children: [
               Row(
                 children: [
-                  const CircleAvatar(
-                    radius: 30,
-                    // backgroundImage: NetworkImage(profileimg), // 이미지 추가
+                  SizedBox(
+                    width: size.width * 0.9,
+                    height: size.height * 0.3,
+                    child: Stack(
+                      children: [
+                        GetBuilder<FoodtruckupdateController>(
+                          builder: (controller) => Container(
+                            decoration: BoxDecoration(
+                              image: controller.file != null
+                                  ? DecorationImage(
+                                      image: FileImage(controller.file!),
+                                      fit: BoxFit.fill,
+                                    )
+                                  : DecorationImage(
+                                      image: NetworkImage(
+                                          controller.foodtruck["truck_img"]),
+                                      fit: BoxFit.fill,
+                                    ),
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(11.0),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 8,
+                          right: 8,
+                          child: SizedBox(
+                            width: 36,
+                            height: 36,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              icon: const Icon(Icons.edit),
+                              iconSize: 30,
+                              onPressed: () async {
+                                controller.file =
+                                    await controller.getFoodTruckImgGaller();
+                                controller.update();
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(width: 16.0),
-                  ElevatedButton(
-                      onPressed: () async {
-                        file = await controller.getFoodTruckImgGaller();
-                      },
-                      child: const Text('사진 변경'))
                 ],
               ),
               const SizedBox(height: 16.0),
@@ -63,9 +80,9 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: nameController,
+                      controller: controller.nameController.value,
                       decoration: const InputDecoration(
-                        hintText: '푸드트럭 이름 입력',
+                        hintText: "푸드트럭 이름 입력",
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -76,14 +93,13 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
               const Text('푸드트럭 정보', // 시간 텍스트
                   style: CustomTextStyles.title),
               const SizedBox(height: 8.0),
-
               Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: phoneController,
+                      controller: controller.phoneController.value,
                       decoration: const InputDecoration(
-                        hintText: '전화번호 입력',
+                        hintText: "전화번호 입력",
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -91,21 +107,22 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
                   const SizedBox(width: 16.0),
                   Expanded(
                     child: TextField(
-                      controller: tagController,
+                      controller: controller.tagController.value,
                       decoration: const InputDecoration(
-                        hintText: '음식 태그',
+                        hintText: '음식 태그입력',
                         border: OutlineInputBorder(),
                       ),
                     ),
                   ),
                 ],
               ),
+
               const SizedBox(height: 8.0),
               Row(
                 children: [
                   Expanded(
                     child: TextField(
-                      controller: scheduleController,
+                      controller: controller.scheduleController.value,
                       decoration: const InputDecoration(
                         hintText: '판매요일/시간 입력',
                         border: OutlineInputBorder(),
@@ -114,7 +131,6 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 16.0),
               const Text('결제 방법', // 결제 방법 텍스트
                   style: CustomTextStyles.title),
@@ -125,30 +141,30 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
                   Row(
                     children: [
                       Obx(() => Checkbox(
-                          value: cash.value,
-                          onChanged: (bool? value) {
-                            cash.value = value!;
-                          })), // 현금 체크박스
+                          value: controller.cash.value,
+                          onChanged: (value) {
+                            controller.cash.value = value!;
+                          })),
                       const Text('현금', style: CustomTextStyles.body),
                     ],
                   ),
                   Row(
                     children: [
                       Obx(() => Checkbox(
-                          value: card.value,
+                          value: controller.card.value,
                           onChanged: (bool? value) {
-                            card.value = value!;
-                          })), // 카드 체크박스
+                            controller.card.value = value!;
+                          })),
                       const Text('카드', style: CustomTextStyles.body),
                     ],
                   ),
                   Row(
                     children: [
                       Obx(() => Checkbox(
-                          value: bankTransfer.value,
+                          value: controller.bankTransfer.value,
                           onChanged: (bool? value) {
-                            bankTransfer.value = value!;
-                          })), // 계좌이체 체크박스
+                            controller.bankTransfer.value = value!;
+                          })),
                       const Text('계좌이체', style: CustomTextStyles.body),
                     ],
                   ),
@@ -171,22 +187,22 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: TextField(
-                          controller: bankController,
+                          controller: controller.bankController.value,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             contentPadding:
                                 EdgeInsets.symmetric(horizontal: 8.0),
-                            hintText: '은행 입력', // 은행 입력 박스
+                            hintText: '은행 입력',
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(width: 16.0), // 간격 조절
+                  const SizedBox(width: 16.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('예금주', style: CustomTextStyles.body), // 성명 텍스트
+                      const Text('예금주', style: CustomTextStyles.body),
                       const SizedBox(height: 4.0),
                       Container(
                         width: 120.0,
@@ -196,12 +212,12 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: TextField(
-                          controller: accountHolderController,
+                          controller: controller.accountHolderController.value,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             contentPadding:
                                 EdgeInsets.symmetric(horizontal: 8.0),
-                            hintText: '예금주 입력', // 성명 입력 박스
+                            hintText: '성명 입력',
                           ),
                         ),
                       ),
@@ -220,11 +236,11 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: TextField(
-                  controller: accountNumberController,
+                  controller: controller.accountNumberController.value,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                    hintText: '계좌번호 입력', // 계좌번호 입력 박스
+                    hintText: '계좌번호 입력',
                   ),
                 ),
               ),
@@ -240,46 +256,41 @@ class FoodtruckupdateView extends GetView<FoodtruckupdateController> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: TextField(
-                  controller: descriptionController,
+                  controller: controller.descriptionController.value,
                   maxLines: null, // 다중 라인 입력을 가능하게 함
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(8.0),
-                    hintText: '설명 입력', // 설명 입력 박스
+                    hintText: '설명 입력',
                   ),
                 ),
               ),
+
               const SizedBox(height: 16.0),
-              Center(
+              SizedBox(
+                width: double.infinity, // 버튼 너비를 화면에 맞게 확장
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey[100],
+                    foregroundColor: Colors.black87,
+                    shadowColor: Colors.grey[300],
+                    elevation: 3,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                  ),
                   onPressed: () async {
-                    Map<String, dynamic> paymentOptions = {
-                      'cash': cash.value,
-                      'card': card.value,
-                      'bankTransfer': bankTransfer.value,
-                      'bankName': bankController.text,
-                      'accountName': accountHolderController.text,
-                      'accountNumber': accountNumberController.text,
-                    };
-                    await controller.updateFoodTruck(
-                        foodtruckid,
-                        nameController.text,
-                        descriptionController.text,
-                        scheduleController.text,
-                        phoneController.text,
-                        paymentOptions,
-                        file,
-                        tagController.text,
-                        latitude,
-                        longitude);
-                    print('등록버튼 클릭');
-                    Map<String, dynamic> foodtruck =
-                        await controller.getDetailFoodTruck(foodtruckid);
-                    controller.goDetail(foodtruck);
+                    controller.foodtruckid =
+                        controller.foodtruck["foodtruck_id"];
+                    await controller.updateFoodTruck();
+                    controller.goDetail();
                   },
-                  child: const Text('등록'),
+                  child: const Text("등 록", style: CustomTextStyles.bodyBold),
                 ),
               ),
+
               const SizedBox(height: 16.0),
             ],
           ),

@@ -1,33 +1,154 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:developer';
-import 'package:flutter/material.dart';
-import 'package:flutter_naver_map/flutter_naver_map.dart';
-import 'package:food_truck/api/detailtest.dart';
+import 'package:food_truck/controller/app_pages.dart';
+import 'package:food_truck/controller/foodtruckdetail_controller.dart';
 import 'package:food_truck/controller/foodtruckupdatemap_controller.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:http/http.dart' as http;
-// 아래는 테스트하기 위한 import 파일.
-import 'package:food_truck/api/testmap_model.dart';
+import '../view/search_view.dart';
+import '../controller/search_controller.dart';
+import '../style/font_style.dart';
 
 class FoodtruckupdatemapView extends GetView<FoodtruckupdatemapController> {
   const FoodtruckupdatemapView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final Map arguments = Get.arguments as Map;
-    final String foodtruckid = arguments['foodtruck_id'];
-    controller.setFoodTruckId(foodtruckid);
     final Size size = MediaQuery.of(context).size;
-    return const Scaffold(
-      // 기존 SafeArea 뺌. (test위해)
-      body: NaverMapApp(),
+    final dController = Get.find<FoodtruckdetailController>();
+    controller.foodtruckid = dController.foodtruckid.value;
+    return Scaffold(
+      appBar: AppBar(title: const Text('푸드트럭 수정')),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: size.height * 0.02),
+              Center(
+                child: InkWell(
+                  highlightColor: Colors.black12,
+                  borderRadius: BorderRadius.circular(8.0),
+                  onTap: () async {
+                    Get.lazyPut<Search_Controller>(
+                      () => Search_Controller(),
+                    );
+                    final juso = await Get.dialog(
+                      Theme(
+                        data: Theme.of(context),
+                        child: const AlertDialog(
+                          content: SearchView(),
+                        ),
+                      ),
+                      arguments: {'foodtruck_id': controller.foodtruckid},
+                    );
+                    controller.juso.value = juso;
+                  },
+                  child: Container(
+                    width: size.width * 0.7,
+                    padding: const EdgeInsets.all(8.0),
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Row(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Icon(
+                            Icons.search,
+                            color: Color(0xff7d7d7d),
+                            size: 20.0,
+                          ),
+                        ),
+                        if (controller.juso.isEmpty) ...[
+                          const Text("주소를 입력하세요",
+                              style: CustomTextStyles.caption)
+                        ] else ...[
+                          Text(controller.juso.value,
+                              style: CustomTextStyles.caption)
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: size.height * 0.02),
+              Center(
+                child: Container(
+                  width: size.width * 0.85,
+                  height: size.height * 0.6,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Obx(() => UNaverMapApp(
+                        juso: controller.juso.value,
+                      )),
+                ),
+              ),
+              SizedBox(height: size.height * 0.02),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FutureBuilder(
+                    future:
+                        controller.getDetailFoodTruck(controller.foodtruckid),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else if (!snapshot.hasData) {
+                        return const Text('No Data');
+                      } else {
+                        return SizedBox(
+                          width: size.width * 0.8,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: const Color(0xff7d7d7d),
+                              shadowColor: Colors.grey[300],
+                              elevation: 3,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
+                            ),
+                            onPressed: () {
+                              controller.jlatitude =
+                                  controller.foodtruck["truck_latitude"];
+                              controller.jlongitude =
+                                  controller.foodtruck["truck_longitude"];
+
+                              controller.gotoupdate();
+                            },
+                            child: const Text("위치 변경 건너뛰기",
+                                style: CustomTextStyles.bodyBold),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
 
-class NaverMapApp extends StatefulWidget {
-  const NaverMapApp({super.key});
+class UNaverMapApp extends StatefulWidget {
+  final String juso;
+
+  const UNaverMapApp({super.key, required this.juso});
 
   @override
   _NaverMapAppState createState() => _NaverMapAppState();
@@ -39,18 +160,17 @@ class NaverMapApp extends StatefulWidget {
   }
 }
 
-class _NaverMapAppState extends State<NaverMapApp> {
-  late NaverMapController _navercontroller;
-  final _searchController = TextEditingController();
+class _NaverMapAppState extends State<UNaverMapApp> {
+  final fcontroller = Get.find<FoodtruckupdatemapController>();
+  late NaverMapController _controller;
   final String clientId = 'ujb8t157zt';
   final String clientSecret = 'TMdtyDoM6PImQk8pr16gUuzpTeFjr9AkO8Cm5n3d';
+  NLatLng? _initialPosition; // 기본 위치 초기값을 null로 설정
 
-  final FoodtruckupdatemapController _updatemapController = Get.find();
-
-  NLatLng? _selectedPosition;
-
-  // 푸드트럭 상세 페이지에 넘길 Map 데이터
-  Map<String, dynamic>? foodtruck;
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Future<NLatLng> getLatLngFromAddress(String address) async {
     final requestUrl = Uri.parse(
@@ -72,94 +192,88 @@ class _NaverMapAppState extends State<NaverMapApp> {
     throw Exception('주소를 좌표로 변환하는데 실패했습니다.');
   }
 
-  void addMarkerAtAddress(String address) async {
-    try {
+  Future<NLatLng> getPosition(String address) async {
+    if (widget.juso == "") {
+      return const NLatLng(35.139988984673806, 126.93423855903913);
+    } else {
       final latLng = await getLatLngFromAddress(address);
-      _navercontroller.updateCamera(
-        NCameraUpdate.withParams(
-          target: NLatLng(latLng.latitude, latLng.longitude),
-        ),
-      );
-    } catch (e) {
-      print(e);
+      print(address);
+      return NLatLng(latLng.latitude, latLng.longitude);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: TextField(
-            controller: _searchController,
-            onSubmitted: (value) {
-              addMarkerAtAddress(value);
-            },
-            decoration: const InputDecoration(
-              hintText: '주소 검색',
-            ),
-          ),
-        ),
-        body: Stack(
-          children: [
-            NaverMap(
+    return FutureBuilder<NLatLng>(
+      future: getPosition(widget.juso),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(
+              child: Text('지도를 자유롭게 이동하고 마커를 클릭하여 푸드트럭 위치를 지정하세요'));
+        } else {
+          _initialPosition = snapshot.data!;
+          return Scaffold(
+            body: NaverMap(
               onMapReady: (controller) {
-                _navercontroller = controller;
+                _controller = controller;
               },
-              options: const NaverMapViewOptions(
-                initialCameraPosition: NCameraPosition(
-                    target: NLatLng(35.139988984673806, 126.93423855903913),
-                    zoom: 15,
-                    bearing: 0,
-                    tilt: 0),
-              ),
-              //클릭시 마커생성
-              onMapTapped: (point, latLng) async {
-                await _navercontroller.clearOverlays();
-                final marker = NMarker(
-                  id: 'marker_${latLng.latitude}_${latLng.longitude}',
-                  position: latLng,
+              onCameraChange:
+                  (NCameraUpdateReason reason, bool animated) async {
+                final cameraPosition = await _controller.getCameraPosition();
+                final centerMarker = NMarker(
+                  id: 'center_marker',
+                  position: cameraPosition.target,
                 );
+                centerMarker.setOnTapListener((NMarker marker) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: const Text("해당 위치로 지정하겠습니까?"),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              print("lat = ${cameraPosition.target.latitude}");
+                              print("lng = ${cameraPosition.target.longitude}");
+                              fcontroller.jlatitude =
+                                  cameraPosition.target.latitude;
+                              fcontroller.jlongitude =
+                                  cameraPosition.target.longitude;
+                              //Get.toNamed(Routes.FOODTRUCKUPDATE);
 
-                await _navercontroller.addOverlay(marker);
-
-                final infoWindow = NInfoWindow.onMarker(
-                  id: marker.info.id,
-                  text: "${latLng.latitude}, ${latLng.longitude}",
-                );
-                marker.openInfoWindow(infoWindow);
-                //add
-                setState(() {
-                  _selectedPosition = latLng;
-                });
-              },
-            ),
-            //(추가해야 할 점 : 마커 안 찍고 위치 지정 누르면 경고메시지 나오도록.)
-            Positioned(
-              bottom: 20,
-              left: 0,
-              right: 0,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SizedBox(
-                  width: 200, // 원하는 너비로 설정
-                  child: ElevatedButton(
-                    onPressed: () {
-                      final id = _updatemapController.foodtruckid.value;
-                      final latitude = _selectedPosition!.latitude;
-                      final longitude = _selectedPosition!.longitude;
-                      _updatemapController.goUpdate(id, latitude, longitude);
-                      print('id : $id, la : $latitude, lo : $longitude');
+                              fcontroller.gotoupdate();
+                            },
+                            child: const Text("네"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("아니요"),
+                          ),
+                        ],
+                      );
                     },
-                    child: const Text('위치 지정'),
-                  ),
+                  );
+                });
+
+                _controller.addOverlay(centerMarker);
+              },
+              options: NaverMapViewOptions(
+                initialCameraPosition: NCameraPosition(
+                  target: _initialPosition!,
+                  zoom: 15,
+                  bearing: 0,
+                  tilt: 0,
                 ),
               ),
             ),
-          ],
-        ),
-      ),
+          );
+        }
+      },
     );
   }
 }
