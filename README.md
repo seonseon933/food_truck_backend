@@ -1,6 +1,10 @@
-# food_truck
+# [뿍] FFOODD 앱 
 
-A new Flutter project.
+# 1. 프로젝트 개요
+***
+광주 내의 푸드트럭의 위치, 판매 시간 등의 정보를 소비자들이 간편하게 확인할 수 있게끔 서비스를 제공하는 어플이다.
+![image](https://github.com/user-attachments/assets/b094a2bc-1870-40f3-bf73-9775d8a5ca67)
+
 
 ## Getting Started
 
