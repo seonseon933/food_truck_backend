@@ -95,14 +95,39 @@
 
 **2. 메인화면(홈 화면)**
 ![메인화면검색](https://github.com/user-attachments/assets/d231b68d-03aa-442b-9f8b-25caa60d8774)<br>
-→ 메인 화면에선 현재 등록된 푸드트럭의 위치를 확인할 수 있다. 검색 창을 누르면 주소를 입력할 수 있는데, 간단한 검색만으로 상세한 주소를 찾을 수 있다. 해당 주소를 클릭할 시 지도의 위치가 해당 위치로 바뀐다.<br>
+→ 메인 화면에선 현재 등록된 푸드트럭의 위치를 확인할 수 있다. 검색 창을 누르면 주소를 입력할 수 있는데, 간단한 검색만으로 상세한 주소를 찾을 수 있다. 해당 주소를 클릭할 시 지도의 위치가 해당 위치로 바뀐다.<br><br>
 
 **3. 마이페이지**
-![KakaoTalk_20250113_212039056](https://github.com/user-attachments/assets/68d0f84e-3036-4028-915a-7573a95a52ff)<br>
+<img src="https://github.com/user-attachments/assets/8d0653b4-1589-4a02-96dc-455bec77f09a" width="300" height="460"><br>
 → 마이페이지에선 회원의 정보를 확인/수정할 수 있으며, 내 리뷰,  로그아웃, 계정 탈퇴하기를 할 수 있다. 최초 로그인 때 판매자를 선택하였다면 <판매자용>란이 떠 푸드트럭을 생성할 수 있다.<br>
 닉네임 아래의 빨간색 선엔 구글 계정이 나와있다.<br>
 
-* 회원정보수정
+* 회원정보수정<br>
   ![캡처](https://github.com/user-attachments/assets/0fbf4f19-8153-4dbb-9486-fe9acade3133)<br>
-  
+  → 회원정보수정에선 닉네임과 프로필 사진을 변경할 수 있다.<br><br>
+* 푸드트럭 등록<br>
+  ![푸드트럭등록1](https://github.com/user-attachments/assets/db7417d2-5c4e-4809-8643-09b0b920941b)<br>
+  → 푸드트럭 생성하기를 누르면 메인화면처럼 지도와 주소 검색 창이 나온다.<br><br>
+  <img src="https://github.com/user-attachments/assets/5b6e55ab-226d-45ca-a789-ec6fbac1e6e9" width="250" height="470"><br>
+  → 푸드트럭 이미지, 이름, 전화 번호, 음식 태그, 판매 시간, 결제 방법(현금, 카드, 계좌이체)를 적거나 선택할 수 있다.<br>
+  <img src="https://github.com/user-attachments/assets/31ef369b-bac1-471e-ad22-d7f66365e858" width="250" height="470"><br><br>
+  → 등록을 완료하면 푸드트럭 리스트에서 확인이 가능하다. <br>
+
+**4. 메뉴 등록**
+판매자는 자신이 생성한 푸드트럭에서 메뉴를 등록/수정/삭제할 수 있다. 입력으로는 사진, 이름, 가격, 소개이 있다.<br>
+![메뉴등록전체](https://github.com/user-attachments/assets/2a5648f2-8685-4237-bb53-a7538cd38dac) <br>
+
+**5. 찜 & 리뷰 작성**
+* 찜 기능<br>
+![짬](https://github.com/user-attachments/assets/58b981c7-560c-4009-b805-ed45be2e0fcf)<br>
+→ 소비자는 마음에 드는 푸드트럭에 찜을 누를 수 있다. Wishlist탭을 누르면 자신이 찜한 푸드트럭들을 볼 수 있다.<br>
+![Wishlist](https://github.com/user-attachments/assets/f2fb555b-dba9-446e-a1fd-8744d8ece681)<br><br>
+
+* 리뷰 기능<br>
+![리뷰](https://github.com/user-attachments/assets/2e6e69c8-2c9b-4738-a44b-ccd1956d7817)<br>
+→ 소비자는 푸드트럭에 리뷰를 작성하여 다른 사용자들과 푸드트럭에 대해 공유할 수 있다. 사용자들이 올린 별점의 평균이 푸드트럭의 메인에 별 모양으로 표시된다.<br>
+
+
+
+
 
