@@ -44,3 +44,5 @@ app.*.map.json
 
 # functions 
 /functions/package-lock.json
+
+.firebase_option.dart
